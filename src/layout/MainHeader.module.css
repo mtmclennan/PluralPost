@@ -1,0 +1,57 @@
+.header {
+  display: flex;
+  min-height: 6em;
+  background-color: blueviolet;
+}
+
+.logo {
+  margin-left: 10em;
+  margin-right: auto;
+}
+
+.nav {
+  margin-right: 10em;
+  display: flex;
+  align-items: center;
+}
+.nav ul {
+  margin-top: 3em;
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.nav li {
+  margin-left: 1.5rem;
+  font-size: 1.25rem;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #dfc8fd;
+}
+
+.nav a:hover,
+.nav a:active,
+.nav a.active {
+  color: #e6fcfc;
+}
+
+.logout {
+  background-color: rgb(215, 154, 221);
+  color: rgb(48, 48, 48);
+  margin-right: 3rem;
+  margin-block: auto;
+  height: 3rem;
+  padding: 1rem 1rem;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background-color: #fff;
+}
