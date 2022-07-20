@@ -4,6 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+/ckeditor5/node_modules
+/ckeditor5/sample
+/ckeditor5/src
+
 
 # testing
 /coverage
