@@ -1,0 +1,30 @@
+.deleteBtn {
+}
+
+.bottomMenu {
+  display: flex;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.description {
+  margin-bottom: 2em;
+}
+
+.title {
+  margin-bottom: 1em;
+}
+
+.featuredImage {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: 200px;
+  margin-bottom: 2em;
+  gap: 0.5em;
+}
+
+.modalMenu {
+  display: flex;
+  gap: 2em;
+}

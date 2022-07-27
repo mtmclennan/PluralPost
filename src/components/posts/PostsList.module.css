@@ -1,0 +1,9 @@
+.postList {
+}
+
+.titles {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: repeat(4, 1fr);
+}

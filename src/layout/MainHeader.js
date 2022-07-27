@@ -35,13 +35,13 @@ const MainHeader = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink to="/cms">
+              <NavLink to="/new-post">
                 <PenNibStraight size={20} color="#1864ab" weight="duotone" />
                 Add New Post
               </NavLink>
             </li>
             <li>
-              <NavLink to="/Posts">
+              <NavLink to="/posts">
                 <PenNibStraight size={20} color="#1864ab" weight="duotone" />
                 Posts
               </NavLink>

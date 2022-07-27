@@ -1,0 +1,19 @@
+.item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr;
+  align-items: center;
+  justify-items: center;
+  font-size: 1.4rem;
+  border: 1px solid #777;
+  gap: 1em;
+  border-radius: 5px;
+  width: 790px;
+  height: 40px;
+}
+
+.item:hover,
+.item:active {
+  background-color: rgb(170, 170, 170);
+  cursor: pointer;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.205);
+}

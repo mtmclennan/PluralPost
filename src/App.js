@@ -5,11 +5,12 @@ import Subscribers from './pages/subscribers';
 import Users from './pages/users';
 import Settings from './pages/settings';
 import Login from './pages/login';
-import MainHeader from './layout/MainHeader';
 import ProtectedRoute from './layout/ProtectedRoute';
 import AuthContext from './store/auth-context';
 import ManageSubs from './pages/manageSubs';
 import Cms from './pages/cms';
+import Posts from './pages/posts';
+import EditPost from './pages/edit-post';
 
 function App(props) {
   const AuthCtx = useContext(AuthContext);
@@ -21,7 +22,9 @@ function App(props) {
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute user={AuthCtx.user.name} />}>
           <Route path="/welcome" element={<HomePage />} />
-          <Route path="/cms" element={<Cms />} />
+          <Route path="/posts" element={<Posts />} />
+          <Route path="/edit-post/:postId" element={<EditPost />} />
+          <Route path="/new-post" element={<Cms />} />
           <Route path="/subscribers" element={<Subscribers />} />
           <Route path="/users" element={<Users />} />
           <Route path="/settings" element={<Settings />} />

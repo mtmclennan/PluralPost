@@ -1,4 +1,6 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import classes from './CMSForm.module.css';
 import ImageInput from '../../components/CMSInputs/ImageInput';
 import useHttp from '../../hooks/use-http';
 import LoadingSpinner from '../../UI/LoadingSpinner';
@@ -6,55 +8,160 @@ import useInput from '../../hooks/use-input';
 import RichTextEditor from '../CMSInputs/RichTextEditor';
 import Modal from '../../UI/Modal';
 
-const CMSForm = () => {
+const CMSForm = (props) => {
+  let navigate = useNavigate();
+  const [postId, setPostId] = useState();
+  const [published, setPublished] = useState();
+  const [showButtons, setShowButtons] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [uploadedFile, setUploadedFile] = useState();
   const [responceMessage, setResponceMessage] = useState();
   const { isLoading, error, sendRequest } = useHttp();
   const [editorStore, setEditorStore] = useState();
-
   const [richTextValue, setRichtextValue] = useState();
+
+  if (props.id && !postId) {
+    setPostId(props.id);
+  }
+
+  const {
+    value: enteredTitle,
+    setValue: setEnteredTitle,
+    isValid: enteredTitleIsValid,
+    hasError: titleInputHasError,
+    valueChangeHandler: titleChangeHandler,
+    inputBlurHandler: titleBlurHandler,
+    reset: resetTitleInput,
+  } = useInput((value) => value.trim() !== '');
+
+  const {
+    value: enteredPhotoCaption,
+    setValue: setEnteredPhotoCaption,
+    isValid: enteredPhotoCaptionIsValid,
+    hasError: photoCaptionInputHasError,
+    valueChangeHandler: photoCaptionChangeHandler,
+    inputBlurHandler: photoCaptionBlurHandler,
+    reset: resetPhotoCaptionInput,
+  } = useInput((value) => value.trim() !== '');
+
+  const {
+    value: enteredSlug,
+    setValue: setEnteredSlug,
+    isValid: enteredSlugIsValid,
+    hasError: slugInputHasError,
+    valueChangeHandler: slugChangeHandler,
+    inputBlurHandler: slugBlurHandler,
+    reset: resetslugInput,
+  } = useInput((value) => value.trim() !== '');
+
+  const {
+    value: enteredTags,
+    setValue: setEnteredTags,
+    isValid: enteredTagsIsValid,
+    hasError: tagsInputHasError,
+    valueChangeHandler: tagsChangeHandler,
+    inputBlurHandler: tagsBlurHandler,
+    reset: resetTagsInput,
+  } = useInput((value) => value !== '');
+
+  const {
+    value: enteredAuthor,
+    setValue: setEnteredAuthor,
+    isValid: enteredAuthorIsValid,
+    hasError: authorInputHasError,
+    valueChangeHandler: authorChangeHandler,
+    inputBlurHandler: authorBlurHandler,
+    reset: resetAuthorInput,
+  } = useInput((value) => value.trim() !== '');
+
+  const {
+    value: enteredDate,
+    setValue: setEnteredDate,
+    isValid: enteredDateIsValid,
+    hasError: dateInputHasError,
+    valueChangeHandler: dateChangeHandler,
+    inputBlurHandler: dateBlurHandler,
+    reset: resetDateInput,
+  } = useInput((value) => value.trim() !== '');
+
+  const {
+    value: enteredDescription,
+    setValue: setEnteredDescription,
+    isValid: enteredDescriptionIsValid,
+    hasError: descriptionInputHasError,
+    valueChangeHandler: descriptionChangeHandler,
+    inputBlurHandler: descriptionBlurHandler,
+    reset: resetDescriptionInput,
+  } = useInput((value) => value.trim() !== '');
 
   const editorStoreHandler = (editor) => {
     setEditorStore(editor);
   };
+
+  useEffect(() => {
+    if (!props.id) {
+      return;
+    }
+    const responce = (data) => {
+      setPublished(data.data.published);
+      setUploadedFile(data.data.featuredImage);
+      setEnteredTitle(data.data.title);
+      setEnteredAuthor(data.data.author);
+      setEnteredDate(data.data.date.split('T')[0]);
+      setEnteredDescription(data.data.description);
+      setEnteredSlug(data.data.slug);
+      setEnteredPhotoCaption(data.data.photoCaption);
+      setEnteredTags(data.data.tags);
+      editorStore.setData(data.data.postBody);
+    };
+
+    sendRequest(
+      {
+        url: `http://localhost:3030/api/v1/content/posts/${props.id}`,
+        method: 'POST',
+      },
+      responce
+    );
+  }, [sendRequest, props.id, editorStore]);
 
   const valueChangeHandler = (data) => {
     setRichtextValue(data);
   };
 
   const cmsFormSumbitHandler = (e) => {
+    console.log(postId);
+    const httpMethod = postId ? 'PATCH' : 'POST';
+    const id = postId ? `/${postId}` : '';
     e.preventDefault();
 
-    if (
-      !enteredTitleIsValid ||
-      !enteredAuthorIsValid ||
-      !enteredDateIsValid ||
-      !enteredDescriptionIsValid ||
-      !enteredSlugIsValid ||
-      !enteredPhotoCaptionIsValid ||
-      !enteredTagsIsValid
-    ) {
-      return;
-    }
+    console.log(enteredDate);
 
     const response = (res) => {
+      console.log(res.data);
       setShowModal(true);
-      if (res.status === 'success') setResponceMessage('Post Published!');
-      else {
+      if (res.status === 'success') {
+        setResponceMessage('Post Saved');
+        setTimeout(() => {
+          setShowModal(false);
+        }, 1000);
+        if (!postId) {
+          setPostId(res.data._id);
+        }
+      } else {
         setResponceMessage('Something went wrong!');
       }
     };
     sendRequest(
       {
-        url: 'http://localhost:3030/api/v1/content/posts',
-        method: 'POST',
+        url: `http://localhost:3030/api/v1/content/posts${id}`,
+        method: httpMethod,
         headers: {
           'Content-Type': 'application/json',
         },
         body: {
           title: enteredTitle,
           photoCaption: enteredPhotoCaption,
+          featuredImage: uploadedFile,
           slug: enteredSlug,
           tags: enteredTags,
           author: enteredAuthor,
@@ -65,79 +172,7 @@ const CMSForm = () => {
       },
       response
     );
-
-    resetAuthorInput();
-    resetDateInput();
-    resetDescriptionInput();
-    resetPhotoCaptionInput();
-    resetTagsInput();
-    resetTitleInput();
-    resetslugInput();
-    editorStore.setData('');
   };
-
-  const {
-    value: enteredTitle,
-    isValid: enteredTitleIsValid,
-    hasError: titleInputHasError,
-    valueChangeHandler: titleChangeHandler,
-    inputBlurHandler: titleBlurHandler,
-    reset: resetTitleInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const {
-    value: enteredPhotoCaption,
-    isValid: enteredPhotoCaptionIsValid,
-    hasError: photoCaptionInputHasError,
-    valueChangeHandler: photoCaptionChangeHandler,
-    inputBlurHandler: photoCaptionBlurHandler,
-    reset: resetPhotoCaptionInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const {
-    value: enteredSlug,
-    isValid: enteredSlugIsValid,
-    hasError: slugInputHasError,
-    valueChangeHandler: slugChangeHandler,
-    inputBlurHandler: slugBlurHandler,
-    reset: resetslugInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const {
-    value: enteredTags,
-    isValid: enteredTagsIsValid,
-    hasError: tagsInputHasError,
-    valueChangeHandler: tagsChangeHandler,
-    inputBlurHandler: tagsBlurHandler,
-    reset: resetTagsInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const {
-    value: enteredAuthor,
-    isValid: enteredAuthorIsValid,
-    hasError: authorInputHasError,
-    valueChangeHandler: authorChangeHandler,
-    inputBlurHandler: authorBlurHandler,
-    reset: resetAuthorInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const {
-    value: enteredDate,
-    isValid: enteredDateIsValid,
-    hasError: dateInputHasError,
-    valueChangeHandler: dateChangeHandler,
-    inputBlurHandler: dateBlurHandler,
-    reset: resetDateInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const {
-    value: enteredDescription,
-    isValid: enteredDescriptionIsValid,
-    hasError: descriptionInputHasError,
-    valueChangeHandler: descriptionChangeHandler,
-    inputBlurHandler: descriptionBlurHandler,
-    reset: resetDescriptionInput,
-  } = useInput((value) => value.trim() !== '');
 
   const titleInputClasses = titleInputHasError
     ? 'form__input invalid'
@@ -165,25 +200,128 @@ const CMSForm = () => {
 
   const showModalHandler = () => {
     setShowModal(false);
+    setShowButtons(false);
   };
 
-  const responseHandler = (data) => {
-    setUploadedFile(data);
-    console.log(data);
+  const featuredImageResponseHandler = (data) => {
+    setUploadedFile(data.url);
+  };
+
+  const confirmDeletePost = (e) => {
+    e.preventDefault();
+    setShowModal(true);
+    setShowButtons(true);
+    setResponceMessage('Are you sure you want to DELETE This post');
+  };
+
+  const deletePostHandler = (e) => {
+    e.preventDefault();
+    setShowButtons(false);
+    const response = (res) => {
+      if (res.status === 'success') {
+        setResponceMessage('Post Deleted');
+        setTimeout(() => {
+          navigate('/posts');
+        }, 1000);
+      } else {
+        setResponceMessage('Something went wrong!');
+      }
+    };
+
+    sendRequest(
+      {
+        url: `http://localhost:3030/api/v1/content/posts/${props.id}`,
+        method: 'DELETE',
+      },
+      response
+    );
+  };
+
+  const publishPostHandler = () => {
+    if (
+      !enteredTitleIsValid ||
+      !enteredAuthorIsValid ||
+      !enteredDateIsValid ||
+      !enteredDescriptionIsValid ||
+      !enteredSlugIsValid ||
+      !enteredPhotoCaptionIsValid ||
+      !enteredTagsIsValid
+    ) {
+      titleBlurHandler();
+      authorBlurHandler();
+      tagsBlurHandler();
+      descriptionBlurHandler();
+      slugBlurHandler();
+      photoCaptionBlurHandler();
+
+      setShowModal(true);
+      setResponceMessage(
+        'There can not be empty fields in Post! Must be complete before Pubishing'
+      );
+      setTimeout(() => {
+        setShowModal(false);
+      }, 3000);
+      return;
+    }
+
+    const response = (res) => {
+      setShowModal(true);
+      if (res.status === 'success') setResponceMessage('Post published');
+      else {
+        setResponceMessage('Something went wrong!');
+      }
+    };
+
+    console.log(published);
+    const publish = published === 'published' ? 'draft' : 'published';
+    sendRequest(
+      {
+        url: `http://localhost:3030/api/v1/content/posts/${props.id}`,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          published: publish,
+        },
+      },
+      response
+    );
+
+    resetAuthorInput();
+    resetDateInput();
+    resetDescriptionInput();
+    resetPhotoCaptionInput();
+    resetTagsInput();
+    resetTitleInput();
+    resetslugInput();
+    editorStore.setData('');
+
+    setTimeout(() => {
+      navigate('/posts');
+    }, 1000);
   };
 
   return (
     <Fragment>
       {showModal && (
         <Modal onClose={showModalHandler}>
-          <div>
-            <h1>{responceMessage}</h1>
+          <div className="modal">
+            <h3>{responceMessage}</h3>
+            {showButtons && (
+              <div className={classes.modalMenu}>
+                <button onClick={deletePostHandler}>OK</button>
+                <button onClick={showModalHandler}>Cancel</button>
+              </div>
+            )}
           </div>
         </Modal>
       )}
       {isLoading && <LoadingSpinner />}
-      <form onSubmit={cmsFormSumbitHandler}>
-        <h2>Add New Post</h2>
+      <form id="postForm" onSubmit={cmsFormSumbitHandler}>
+        <h2 className={classes.title}>
+          {props.id ? 'Edit Post' : 'Add new Post'}
+        </h2>
         <div className="form__grid">
           <div className="wide">
             <label className="form__label" htmlFor="title">
@@ -198,12 +336,15 @@ const CMSForm = () => {
               value={enteredTitle}
             ></input>
           </div>
-          <ImageInput response={responseHandler} />
-          {uploadedFile && (
-            <div>
-              <img alt="some here" src={uploadedFile.url} />
-            </div>
-          )}
+          <ImageInput response={featuredImageResponseHandler}>
+            {uploadedFile && (
+              <div className={classes.featuredImage}>
+                <p>Featured Image</p>
+                <img alt="some here" src={uploadedFile} />
+              </div>
+            )}
+          </ImageInput>
+
           <div>
             <label className="form__label" htmlFor="photo-caption">
               Photo Caption
@@ -270,7 +411,7 @@ const CMSForm = () => {
             ></input>
           </div>
         </div>
-        <div>
+        <div className={classes.description}>
           <label className="form__label" htmlFor="description">
             Meta Description
           </label>
@@ -286,13 +427,25 @@ const CMSForm = () => {
             cols="80"
           ></textarea>
         </div>
-
+        <h3 className={classes.title}>Post Body</h3>
         <RichTextEditor
           valueChangeHandler={valueChangeHandler}
           editor={editorStoreHandler}
         />
-        <button>Save</button>
       </form>
+      <div className={classes.bottomMenu}>
+        <button type="submit" form="postForm" className={classes.saveBtn}>
+          Save
+        </button>
+        <button className={classes.publishBtn} onClick={publishPostHandler}>
+          {published === 'published' ? 'Unpublish' : 'Publish'}
+        </button>
+        {props.id && (
+          <button className={classes.deleteBtn} onClick={confirmDeletePost}>
+            Delete
+          </button>
+        )}
+      </div>
     </Fragment>
   );
 };
