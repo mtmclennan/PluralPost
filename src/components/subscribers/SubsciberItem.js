@@ -1,8 +1,6 @@
-import classes from './SubscriberItem.module.css';
-
 const SubsciberItem = (props) => {
   return (
-    <li className={classes.item}>
+    <li className="sub-item">
       <p>{props.name}</p>
       <p>{props.email}</p>
       <p>{props.website}</p>

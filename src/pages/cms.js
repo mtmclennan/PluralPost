@@ -1,13 +1,7 @@
-import { Fragment } from 'react';
-
-import CMSFormNew from '../components/forms/CMSFormNew';
+import CMSForm from '../components/forms/CMSForm';
 
 const Cms = () => {
-  return (
-    <Fragment>
-      <CMSFormNew />
-    </Fragment>
-  );
+  return <CMSForm />;
 };
 
 export default Cms;

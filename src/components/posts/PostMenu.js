@@ -1,18 +1,16 @@
-import { Fragment } from 'react';
-
 const PostMenu = (props) => {
   return (
-    <Fragment>
-      <div>
+    <div className="side-bar__container">
+      <div className="side-bar__messages">
         <h3>Post Status</h3>
         <p>{props.postStatus}</p>
       </div>
-      {/* <div>
-        <button onClick={props.onClickPublish}>Publish</button>
-        <button onClick={props.onClickSave}>Save</button>
-        <button onClick={props.onClickDelete}>Delete</button>
-      </div> */}
-    </Fragment>
+      <div className="side-bar__buttons">
+        <button onClick={props.onPublish}>Publish</button>
+        <button onClick={props.onSave}>Save</button>
+        <button onClick={props.onDelete}>Delete</button>
+      </div>
+    </div>
   );
 };
 

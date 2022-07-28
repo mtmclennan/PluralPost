@@ -1,5 +1,6 @@
 * {
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -23,7 +24,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f1f3f5;
 }
-
+.btn,
 button {
   display: flex;
   font: inherit;
@@ -36,6 +37,12 @@ button {
   margin: auto;
 }
 
+.btn {
+  text-decoration: none;
+}
+
+.btn:hover,
+.btn:active,
 button:hover,
 button:active {
   background-color: #1971c2;
@@ -57,11 +64,57 @@ code {
     monospace;
 }
 .centered {
-  margin: 3rem auto;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.container-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-item,
+.user-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  font-size: 1.4rem;
+  border: 1px solid #777;
+  gap: 1em;
+
+  width: 1100px;
+  height: 70px;
+}
+
+.title-bar {
+  width: 1100px;
+  height: 3em;
+  border: 1px solid #636363;
+  display: grid;
+  background-color: rgb(255, 255, 255);
+  align-items: center;
+  /* justify-items: center; */
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.title-bar p,
+.sub-item p,
+.user-item p {
+  margin-left: 1em;
+}
+
+.sub-item:nth-child(odd) {
+  background-color: rgb(238, 238, 238);
+}
+
+.sub-item:hover,
+.sub-item:active {
+  background-color: rgb(170, 170, 170);
+  cursor: pointer;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.205);
 }
 
 .modal {
@@ -92,6 +145,33 @@ code {
   -ms-flex: 1;
   flex: 1;
   padding: 7rem 0;
+}
+
+.side-bar__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.heading {
+  display: flex;
+  gap: 1em;
+  align-self: flex-start;
+}
+
+.side-bar__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.side-bar__messages {
+  margin-top: 1em;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  align-items: center;
 }
 
 .main {

@@ -6,7 +6,13 @@ const SubscriberList = (props) => {
 
   console.log(subscribers);
   return (
-    <Card>
+    <div className="container-flex">
+      <div className="title-bar">
+        <p>Name</p>
+        <p>Email</p>
+        <p>Website</p>
+        <p>Date Joined</p>
+      </div>
       {subscribers.map((subscriber) => (
         <SubscriberItem
           key={subscriber._id}
@@ -17,7 +23,7 @@ const SubscriberList = (props) => {
           website={subscriber.websiteFrom}
         />
       ))}
-    </Card>
+    </div>
   );
 };
 

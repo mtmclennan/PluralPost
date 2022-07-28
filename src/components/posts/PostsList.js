@@ -1,12 +1,12 @@
 import Card from '../../UI/Card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import PostListItem from './PostListItem';
 import useHttp from '../../hooks/use-http';
 import classes from './PostsList.module.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../UI/LoadingSpinner';
 
 const PostsList = () => {
-  const params = useParams();
   const navigate = useNavigate();
   const { isLoading, sendRequest } = useHttp();
   const [allPosts, setAllPosts] = useState();
@@ -26,27 +26,33 @@ const PostsList = () => {
   };
 
   return (
-    <Card>
-      <div className={classes.titles}>
-        <span>Title</span>
-        <span>Date</span>
-        <span>State</span>
-        <span>ID</span>
+    <Fragment>
+      {isLoading && <LoadingSpinner />}
+      <div className={classes.postList}>
+        <div className={classes.titles}>
+          <span>Title</span>
+          <span>Date</span>
+          <span>Author</span>
+          <span>State</span>
+          <span>Tags</span>
+        </div>
+        <ul>
+          {allPosts &&
+            allPosts.data.map((post) => (
+              <PostListItem
+                onClick={onClickHandler}
+                key={post._id}
+                id={post._id}
+                title={post.title}
+                date={post.dateModified}
+                author={post.author}
+                published={post.published}
+                tags={post.tags}
+              />
+            ))}
+        </ul>
       </div>
-      <ul className={classes.postList}>
-        {allPosts &&
-          allPosts.data.map((post) => (
-            <PostListItem
-              onClick={onClickHandler}
-              key={post._id}
-              id={post._id}
-              title={post.title}
-              date={post.dateModified}
-              published={post.published}
-            />
-          ))}
-      </ul>
-    </Card>
+    </Fragment>
   );
 };
 

@@ -24,14 +24,16 @@ const useHttp = () => {
       if (!response.ok) {
         throw new Error('Request failed!');
       }
+      console.log(response.status);
+
       if (response.status === 204) {
         const data = { status: 'success' };
         applyData(data);
+      } else {
+        const data = await response.json();
+
+        applyData(data);
       }
-
-      const data = await response.json();
-
-      applyData(data);
     } catch (err) {
       setError(err.message || 'Something went wrong!');
     }

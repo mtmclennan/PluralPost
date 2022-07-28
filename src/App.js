@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect } from 'react';
+import { Fragment, useContext } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/home';
 import Subscribers from './pages/subscribers';
@@ -14,7 +14,7 @@ import EditPost from './pages/edit-post';
 
 function App(props) {
   const AuthCtx = useContext(AuthContext);
-  console.log(AuthCtx.user);
+
   return (
     <Fragment>
       <Routes>

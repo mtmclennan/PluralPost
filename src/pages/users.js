@@ -15,18 +15,18 @@ const Users = () => {
     });
   }, [sendRequest]);
 
-  console.log(users);
-
   const createUserShowHandler = () => {
     setShowCreateUserMenu((current) => !current);
   };
 
   return (
     <Fragment>
-      <button onClick={createUserShowHandler}>Create New User</button>
-      {showCreateUserMenu && <SignupUserForm />}
-      <h1 className="centered">Users</h1>
-      {isLoading && <LoadingSpinner />}
+      <div className="heading">
+        <h2 className="centered">Users</h2>
+        <button onClick={createUserShowHandler}>Create New User</button>
+        {showCreateUserMenu && <SignupUserForm />}
+        {isLoading && <LoadingSpinner />}
+      </div>
       {users && <UsersList users={users} />}
     </Fragment>
   );

@@ -10,8 +10,9 @@ const PostListItem = (props) => {
     <li className={classes.item} onClick={props.onClick} id={props.id}>
       <p>{props.title}</p>
       {date && <p>{date}</p>}
+      <p>{props.author}</p>
       <p>{props.published}</p>
-      <p>{props.id}</p>
+      <p>{props.tags}</p>
     </li>
   );
 };

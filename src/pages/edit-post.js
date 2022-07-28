@@ -1,4 +1,4 @@
-import CMSForm from '../components/forms/CMSFormNew';
+import CMSForm from '../components/forms/CMSForm';
 import { useParams } from 'react-router-dom';
 
 const EditPost = () => {
