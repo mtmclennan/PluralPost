@@ -11,15 +11,20 @@
   border-radius: 5px;
 }
 
+.formContainer {
+  width: 500px;
+  background-color: #fff;
+  padding: 3em;
+  border: 1px solid #c0c0c0;
+  margin-top: 1em;
+}
+
 .form__input {
   display: block;
-  border: 1px solid #ccc;
+  border: 1px solid rgb(92, 91, 91);
   padding: 1.25rem 1.75rem;
   width: 100%;
   background-color: #fff;
-  background-color: #f2f2f2;
-  border-top: 3px solid transparent;
-  border-bottom: 3px solid transparent;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
   border-radius: 4px;

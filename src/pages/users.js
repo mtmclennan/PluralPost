@@ -3,31 +3,54 @@ import useHttp from '../hooks/use-http';
 import UsersList from '../components/users/UsersList';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import SignupUserForm from '../components/forms/SignupUserForm';
+import useModal from '../hooks/use-modal';
+import Modal from '../UI/Modal';
 
 const Users = () => {
-  const { isLoading, sendRequest } = useHttp();
+  const { isLoading, error, sendRequest } = useHttp();
   const [users, setUsers] = useState();
+  const [reload, setReload] = useState(false);
   const [showCreateUserMenu, setShowCreateUserMenu] = useState(false);
+  const { showModal, modalMessage, hideModal } = useModal(error);
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users/`;
 
   useEffect(() => {
-    sendRequest({ url: 'http://localhost:3030/api/v1/users/' }, (data) => {
+    sendRequest({ url: SERVER_URL }, (data) => {
       setUsers(data);
+      console.log('data');
     });
-  }, [sendRequest]);
+  }, [sendRequest, reload, SERVER_URL]);
 
   const createUserShowHandler = () => {
     setShowCreateUserMenu((current) => !current);
   };
 
+  const hideModalHandler = () => {
+    hideModal();
+  };
+
   return (
     <Fragment>
-      <div className="heading">
-        <h2 className="centered">Users</h2>
-        <button onClick={createUserShowHandler}>Create New User</button>
-        {showCreateUserMenu && <SignupUserForm />}
+      {showModal && (
+        <Modal onClose={hideModalHandler}>
+          <div className="modal">
+            <h3>{modalMessage}</h3>
+          </div>
+        </Modal>
+      )}
+      <div className="containter-flex">
+        <div className="heading">
+          <h2 className="centered">Users</h2>
+          <button onClick={createUserShowHandler}>
+            {showCreateUserMenu ? 'Close' : 'Create New User'}
+          </button>
+        </div>
+        {showCreateUserMenu && (
+          <SignupUserForm showForm={setShowCreateUserMenu} reload={setReload} />
+        )}
         {isLoading && <LoadingSpinner />}
       </div>
-      {users && <UsersList users={users} />}
+      {users && <UsersList users={users} reload={setReload} />}
     </Fragment>
   );
 };

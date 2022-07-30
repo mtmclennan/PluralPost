@@ -1,9 +1,16 @@
-import Card from '../../UI/Card';
 import classes from './SignupForm.module.css';
+import Modal from '../../UI/Modal';
 import useHttp from '../../hooks/use-http';
 import useInput from '../../hooks/use-input';
-const SignupUserForm = () => {
+import { Fragment } from 'react';
+import LoadingSpinner from '../../UI/LoadingSpinner';
+import useModal from '../../hooks/use-modal';
+
+const SignupUserForm = (props) => {
   const { isLoading, error, sendRequest } = useHttp();
+  const { setModalMessage, showModal, modalMessage, hideModal } =
+    useModal(error);
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users/signup`;
 
   const emailValidate = (value) => {
     const emailFormat = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -55,8 +62,31 @@ const SignupUserForm = () => {
     reset: resetConfirmPasswordInput,
   } = useInput((value) => value.trim() !== '');
 
+  const showModalHandler = () => {
+    hideModal();
+  };
+
   const response = (res) => {
     console.log(res.status);
+    if (res.status === 'success') {
+      setModalMessage(`User ${enteredName} Added Successfuly`);
+      props.reload((currentState) => !currentState);
+      setTimeout(() => {
+        hideModal();
+        resetNameInput();
+        resetEmailInput();
+        resetRoleInput();
+        resetPasswordInput();
+        resetConfirmPasswordInput();
+        props.showForm(false);
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        hideModal();
+      }, 3000);
+
+      setModalMessage(error || 'Something went wrong!');
+    }
   };
 
   const signupFormSubmitHandler = (e) => {
@@ -74,7 +104,7 @@ const SignupUserForm = () => {
 
     sendRequest(
       {
-        url: 'http://localhost:3030/api/v1/users/signup',
+        url: SERVER_URL,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,12 +120,6 @@ const SignupUserForm = () => {
       },
       response
     );
-
-    resetNameInput();
-    resetEmailInput();
-    resetRoleInput();
-    resetPasswordInput();
-    resetConfirmPasswordInput();
   };
 
   const emailInputClasses = emailInputHasError
@@ -118,85 +142,99 @@ const SignupUserForm = () => {
     : `${classes['form__input']}`;
 
   return (
-    <Card className={classes.formContainer}>
-      <form
-        onSubmit={signupFormSubmitHandler}
-        className={classes['form--login']}
-      >
-        <div className={classes['form__group']}>
-          <label className={classes['form__label']} htmlFor="name">
-            Name
-          </label>
-          <input
-            className={nameInputClasses}
-            type="text"
-            id="name"
-            onChange={nameChangeHandler}
-            onBlur={nameBlurHandler}
-            value={enteredName}
-          ></input>
-        </div>
-        <div className={classes['form__group']}>
-          <label className={classes['form__label']} htmlFor="email">
-            Email
-          </label>
-          <input
-            className={emailInputClasses}
-            type="email"
-            id="email"
-            onChange={emailChangeHandler}
-            onBlur={emailBlurHandler}
-            value={enteredEmail}
-          ></input>
-        </div>
-        <div className={classes['form__group']}>
-          <label className={classes['form__label']} htmlFor="role">
-            Role
-          </label>
-          <input
-            className={roleInputClasses}
-            type="text"
-            id="role"
-            onChange={roleChangeHandler}
-            onBlur={roleBlurHandler}
-            value={enteredRole}
-          ></input>
-        </div>
-        <div className={classes['form__group']}>
-          <label className={classes['form__label']} htmlFor="password">
-            Password
-          </label>
-          <input
-            className={passwordInputClasses}
-            type="password"
-            id="password"
-            onChange={passwordChangeHandler}
-            onBlur={passwordBlurHandler}
-            value={enteredPassword}
-          ></input>
-        </div>
-        <div className={classes['form__group']}>
-          <label className={classes['form__label']} htmlFor="confirm-password">
-            Role
-          </label>
-          <input
-            className={confirmPasswordInputClasses}
-            type="password"
-            id="confirm-password"
-            onChange={confirmPasswordChangeHandler}
-            onBlur={confirmPasswordBlurHandler}
-            value={enteredConfirmPassword}
-          ></input>
-        </div>
-        <div className={classes['form__group']}>
-          <button
-            className={`${classes['form__group center']} ${classes['center']}`}
-          >
-            Create Account
-          </button>
-        </div>
-      </form>
-    </Card>
+    <Fragment>
+      {showModal && (
+        <Modal onClose={showModalHandler}>
+          <div className="modal">
+            <h3>{modalMessage}</h3>
+          </div>
+        </Modal>
+      )}
+      {isLoading && <LoadingSpinner />}
+
+      <div className={classes.formContainer}>
+        <form
+          onSubmit={signupFormSubmitHandler}
+          className={classes['form--login']}
+        >
+          <div className={classes['form__group']}>
+            <label className={classes['form__label']} htmlFor="name">
+              Name
+            </label>
+            <input
+              className={nameInputClasses}
+              type="text"
+              id="name"
+              onChange={nameChangeHandler}
+              onBlur={nameBlurHandler}
+              value={enteredName}
+            ></input>
+          </div>
+          <div className={classes['form__group']}>
+            <label className={classes['form__label']} htmlFor="email">
+              Email
+            </label>
+            <input
+              className={emailInputClasses}
+              type="email"
+              id="email"
+              onChange={emailChangeHandler}
+              onBlur={emailBlurHandler}
+              value={enteredEmail}
+            ></input>
+          </div>
+          <div className={classes['form__group']}>
+            <label className={classes['form__label']} htmlFor="role">
+              Role
+            </label>
+            <input
+              className={roleInputClasses}
+              type="text"
+              id="role"
+              onChange={roleChangeHandler}
+              onBlur={roleBlurHandler}
+              value={enteredRole}
+            ></input>
+          </div>
+          <div className={classes['form__group']}>
+            <label className={classes['form__label']} htmlFor="password">
+              Password
+            </label>
+            <input
+              className={passwordInputClasses}
+              type="password"
+              id="password"
+              onChange={passwordChangeHandler}
+              onBlur={passwordBlurHandler}
+              value={enteredPassword}
+            ></input>
+          </div>
+          <div className={classes['form__group']}>
+            <label
+              className={classes['form__label']}
+              htmlFor="confirm-password"
+            >
+              Confirm Password
+            </label>
+            <input
+              className={confirmPasswordInputClasses}
+              type="password"
+              id="confirm-password"
+              onChange={confirmPasswordChangeHandler}
+              onBlur={confirmPasswordBlurHandler}
+              value={enteredConfirmPassword}
+            ></input>
+          </div>
+          <div className={classes['form__group']}>
+            <button
+              className={`${classes['form__group center']} ${classes['center']}`}
+            >
+              Create Account
+            </button>
+          </div>
+        </form>
+      </div>
+    </Fragment>
   );
 };
 

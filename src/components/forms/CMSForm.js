@@ -12,20 +12,16 @@ import Modal from '../../UI/Modal';
 
 const CMSForm = (props) => {
   let navigate = useNavigate();
-  const [postId, setPostId] = useState();
   const [post, setPost] = useState();
   const [published, setPublished] = useState('');
   const [showButtons, setShowButtons] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState();
+  const [uploadedFile, setUploadedFile] = useState('');
   const [responceMessage, setResponceMessage] = useState();
   const { isLoading, error, sendRequest } = useHttp();
   const [editorStore, setEditorStore] = useState();
   const [richTextValue, setRichtextValue] = useState();
-
-  if (props.id && !postId) {
-    setPostId(props.id);
-  }
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/posts`;
 
   const {
     value: enteredTitle,
@@ -107,28 +103,30 @@ const CMSForm = (props) => {
 
   const cmsFormSumbitHandler = (e) => {
     e.preventDefault();
-    console.log(postId);
-    const httpMethod = postId ? 'PATCH' : 'POST';
-    const id = postId ? `/${postId}` : '';
+    const httpMethod = props.id ? 'PATCH' : 'POST';
+    const id = props.id ? `/${props.id}` : '';
+    setShowModal(true);
 
     const response = (res) => {
-      setShowModal(true);
       if (res.status === 'success') {
         setResponceMessage('Post Saved');
         setTimeout(() => {
           setShowModal(false);
         }, 1000);
-        if (!postId) {
-          setPostId(res.data._id);
-          setPublished('draft');
+        if (!props.id) {
+          navigate(`/edit-post/${res.data._id}`, { replace: true });
         }
       } else {
-        setResponceMessage('Something went wrong!');
+        setTimeout(() => {
+          showModal(false);
+        }, 3000);
+        console.log(error);
+        setResponceMessage(error || 'Something went wrong!');
       }
     };
     sendRequest(
       {
-        url: `http://localhost:3030/api/v1/content/posts${id}`,
+        url: `${SERVER_URL}${id}`,
         method: httpMethod,
         headers: {
           'Content-Type': 'application/json',
@@ -148,6 +146,13 @@ const CMSForm = (props) => {
       response
     );
   };
+
+  useEffect(() => {
+    if (error) {
+      setShowModal(true);
+      setResponceMessage(error);
+    }
+  }, [error]);
 
   const titleInputClasses = titleInputHasError
     ? 'form__input invalid'
@@ -192,20 +197,26 @@ const CMSForm = (props) => {
   const deletePostHandler = (e) => {
     e.preventDefault();
     setShowButtons(false);
+    showModal(true);
     const response = (res) => {
       if (res.status === 'success') {
         setResponceMessage('Post Deleted');
         setTimeout(() => {
+          showModal(false);
           navigate('/posts');
         }, 1000);
       } else {
-        setResponceMessage('Something went wrong!');
+        setTimeout(() => {
+          showModal(false);
+        }, 3000);
+
+        setResponceMessage(error || 'Something went wrong!');
       }
     };
 
     sendRequest(
       {
-        url: `http://localhost:3030/api/v1/content/posts/${props.id}`,
+        url: `${SERVER_URL}/${props.id}`,
         method: 'DELETE',
       },
       response
@@ -238,11 +249,12 @@ const CMSForm = (props) => {
       }, 3000);
       return;
     }
+    const publish = published === 'published' ? 'draft' : 'published';
 
     const response = (res) => {
       setShowModal(true);
       if (res.status === 'success') {
-        setResponceMessage('Post published');
+        setResponceMessage(`Post Status Changed To: ${publish.toUpperCase()}`);
         resetAuthorInput();
         resetDateInput();
         resetDescriptionInput();
@@ -251,38 +263,42 @@ const CMSForm = (props) => {
         resetTitleInput();
         resetslugInput();
         editorStore.setData('');
+
+        setTimeout(() => {
+          setShowModal(false);
+          navigate('/posts');
+        }, 1000);
       } else {
-        setResponceMessage('Something went wrong!');
+        setResponceMessage(error || 'Something went wrong!');
+
+        setTimeout(() => {
+          showModal(false);
+        }, 3000);
       }
     };
 
-    const publish = published === 'published' ? 'draft' : 'published';
     sendRequest(
       {
-        url: `http://localhost:3030/api/v1/content/posts/${props.id}`,
+        url: `${SERVER_URL}/${props.id}`,
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: {
           published: publish,
+          title: enteredTitle,
+          photoCaption: enteredPhotoCaption,
+          featuredImage: uploadedFile,
+          slug: enteredSlug,
+          tags: enteredTags,
+          author: enteredAuthor,
+          dateModified: enteredDate,
+          description: enteredDescription,
+          postBody: richTextValue,
         },
       },
       response
     );
-
-    resetAuthorInput();
-    resetDateInput();
-    resetDescriptionInput();
-    resetPhotoCaptionInput();
-    resetTagsInput();
-    resetTitleInput();
-    resetslugInput();
-    editorStore.setData('');
-
-    setTimeout(() => {
-      navigate('/posts');
-    }, 1000);
   };
 
   useEffect(() => {
@@ -296,18 +312,19 @@ const CMSForm = (props) => {
 
     sendRequest(
       {
-        url: `http://localhost:3030/api/v1/content/posts/${props.id}`,
+        url: `${SERVER_URL}/${props.id}`,
         method: 'POST',
       },
       applyPost
     );
-  }, [sendRequest, props.id]);
+  }, [sendRequest, props.id, SERVER_URL]);
 
   useEffect(() => {
     if (post) {
       console.log(post);
+
       setPublished(post.published);
-      setUploadedFile(post.featuredImage);
+      setUploadedFile(post.featuredImage ? post.featuredImage : '');
       setEnteredTitle(post.title);
       setEnteredAuthor(post.author);
       setEnteredDate(post.dateModified.split('T')[0]);
@@ -315,7 +332,7 @@ const CMSForm = (props) => {
       setEnteredSlug(post.slug);
       setEnteredPhotoCaption(post.photoCaption);
       setEnteredTags(post.tags);
-      editorStore.setData(post.postBody);
+      editorStore.setData(post.postBody ? post.postBody : '');
     }
   }, [post]);
 
@@ -338,7 +355,7 @@ const CMSForm = (props) => {
 
       <form id="postForm" onSubmit={cmsFormSumbitHandler}>
         <h2 className={classes.title}>
-          {props.id || postId ? 'Edit Post' : 'Add new Post'}
+          {props.id ? 'Edit Post' : 'Add new Post'}
         </h2>
         <div className="form__grid">
           <div className="wide">
@@ -468,6 +485,7 @@ const CMSForm = (props) => {
       <RightSideBar>
         <PostMenu
           onPublish={publishPostHandler}
+          publishBtnText={published === 'published' ? 'Unpublish' : 'Publish'}
           onSave={cmsFormSumbitHandler}
           onDelete={confirmDeletePost}
           postStatus={

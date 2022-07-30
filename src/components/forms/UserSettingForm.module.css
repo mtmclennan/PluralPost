@@ -75,7 +75,11 @@
 }
 
 .formContainer {
-  max-width: 68rem;
-  margin: 0 auto;
-  padding: 0 8rem;
+  max-width: 100%;
+
+  padding: 1em;
+}
+
+.formContainer h3 {
+  margin: 1em;
 }

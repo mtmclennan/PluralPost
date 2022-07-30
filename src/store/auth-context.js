@@ -11,7 +11,8 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
-  const { isLoading, error, sendRequest } = useHttp();
+  const { sendRequest } = useHttp();
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users`;
 
   const loginHandler = (data) => {
     setUser({
@@ -25,7 +26,7 @@ export const AuthContextProvider = (props) => {
   useEffect(() => {
     sendRequest(
       {
-        url: 'http://localhost:3030/api/v1/users/getUser',
+        url: `${SERVER_URL}/getUser`,
       },
       (data) => {
         setUser({
@@ -38,8 +39,7 @@ export const AuthContextProvider = (props) => {
         }
       }
     );
-    console.log('sending');
-  }, [sendRequest]);
+  }, [sendRequest, SERVER_URL]);
 
   const logoutHandler = () => {
     const logout = (res) => {
@@ -50,7 +50,7 @@ export const AuthContextProvider = (props) => {
 
     sendRequest(
       {
-        url: 'http://localhost:3030/api/v1/users/logout',
+        url: `${SERVER_URL}/logout`,
       },
       logout
     );

@@ -1,10 +1,8 @@
 import SubscriberItem from './SubsciberItem';
-import Card from '../../UI/Card';
 
 const SubscriberList = (props) => {
   const subscribers = props.subscribers.data;
 
-  console.log(subscribers);
   return (
     <div className="container-flex">
       <div className="title-bar">
@@ -15,6 +13,7 @@ const SubscriberList = (props) => {
       </div>
       {subscribers.map((subscriber) => (
         <SubscriberItem
+          reload={props.reload}
           key={subscriber._id}
           id={subscriber._id}
           dateJoined={subscriber.createdAt}

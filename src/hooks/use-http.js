@@ -22,9 +22,10 @@ const useHttp = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Request failed!');
+        const res = await response.json();
+
+        throw new Error(res.message);
       }
-      console.log(response.status);
 
       if (response.status === 204) {
         const data = { status: 'success' };
@@ -36,6 +37,7 @@ const useHttp = () => {
       }
     } catch (err) {
       setError(err.message || 'Something went wrong!');
+      console.log(err.message);
     }
     setIsLoading(false);
   }, []);

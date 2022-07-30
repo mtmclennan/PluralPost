@@ -7,6 +7,7 @@ const UserList = (props) => {
     <div className="container-flex">
       {users.map((user) => (
         <UsersItem
+          reload={props.reload}
           key={user._id}
           id={user._id}
           email={user.email}

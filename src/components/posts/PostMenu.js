@@ -6,7 +6,7 @@ const PostMenu = (props) => {
         <p>{props.postStatus}</p>
       </div>
       <div className="side-bar__buttons">
-        <button onClick={props.onPublish}>Publish</button>
+        <button onClick={props.onPublish}>{props.publishBtnText}</button>
         <button onClick={props.onSave}>Save</button>
         <button onClick={props.onDelete}>Delete</button>
       </div>

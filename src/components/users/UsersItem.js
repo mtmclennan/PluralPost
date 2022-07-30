@@ -3,58 +3,71 @@ import useHttp from '../../hooks/use-http';
 import SlideDownMenu from '../../UI/SlideDownMenu';
 import classes from './UsersItem.module.css';
 import Modal from '../../UI/Modal';
+import useModal from '../../hooks/use-modal';
 
 const UsersItem = (props) => {
   const [showMenu, setShowMenu] = useState(false);
-  const { sendRequest } = useHttp();
-  const [showButtons, setShowButtons] = useState(false);
+  const { sendRequest, error } = useHttp();
   const [userId, setUserId] = useState();
-  const [showModal, setShowModal] = useState(false);
-  const [responceMessage, setResponceMessage] = useState();
+
+  const {
+    setModalMessage,
+    showModal,
+    modalMessage,
+    hideModal,
+    setShowModalButtons,
+    showModalButtons,
+  } = useModal(error);
+
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users/`;
 
   const showMenuHandler = (e) => {
     setShowMenu((current) => !current);
   };
 
-  const mouseOutHandler = () => {
-    return;
-  };
-
   const showModalHandler = () => {
-    setShowModal(false);
-    setShowButtons(false);
+    hideModal();
   };
 
   const confirmDeleteUser = (e) => {
     e.preventDefault();
     setUserId(e.target.id);
 
-    setShowModal(true);
-    setShowButtons(true);
-    setResponceMessage('Are you sure you want to DELETE This User');
+    setShowModalButtons(true);
+    setModalMessage('Are you sure you want to DELETE This User');
   };
 
   const deleteUserHandler = (e) => {
     const responce = (res) => {
-      console.log(res.status);
+      if (res.status === 'success') {
+        setShowModalButtons(false);
+        setModalMessage(`User Deleted Successfuly`);
+
+        setTimeout(() => {
+          hideModal();
+          props.reload((currentState) => !currentState);
+        }, 1000);
+      }
     };
 
     sendRequest(
       {
-        url: `http://localhost:3030/api/v1/users/${userId}`,
+        url: `${SERVER_URL}${userId}`,
         method: 'DELETE',
       },
       responce
     );
   };
 
+  console.log('render');
+
   return (
     <Fragment>
       {showModal && (
         <Modal onClose={showModalHandler}>
           <div className="modal">
-            <h3>{responceMessage}</h3>
-            {showButtons && (
+            <h3>{modalMessage}</h3>
+            {showModalButtons && (
               <div className={classes.modalMenu}>
                 <button onClick={deleteUserHandler}>OK</button>
                 <button onClick={showModalHandler}>Cancel</button>
@@ -63,11 +76,7 @@ const UsersItem = (props) => {
           </div>
         </Modal>
       )}
-      <li
-        className="user-item"
-        onClick={showMenuHandler}
-        onMouseLeave={mouseOutHandler}
-      >
+      <li className="user-item" onClick={showMenuHandler}>
         <p>{props.name}</p>
         <p>{props.email}</p>
         <p>{props.role}</p>
