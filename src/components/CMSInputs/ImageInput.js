@@ -7,6 +7,8 @@ const ImageInput = (props) => {
 
   const { isLoading, sendRequest } = useHttp();
 
+  const TOKEN = process.env.REACT_APP_PHOTO_TOKEN;
+
   const inputRef = useRef(null);
 
   // handle drag events
@@ -30,6 +32,10 @@ const ImageInput = (props) => {
         {
           url: 'http://localhost:3030/api/v1/content/photo',
           method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': 'CSRF-Token',
+            Authorization: `Bearer ${TOKEN}`,
+          },
           body: data,
           photo: true,
         },
@@ -57,7 +63,6 @@ const ImageInput = (props) => {
     if (e.target.files && e.target.files[0]) {
       // handleFiles(e.target.files);
 
-      console.log(e.target.files[0]);
       const file = e.target.files[0];
 
       sendImageHandler(file);

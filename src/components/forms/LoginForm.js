@@ -6,11 +6,14 @@ import useInput from '../../hooks/use-input';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import Card from '../../UI/Card';
 import classes from './LoginForm.module.css';
+import useModal from '../../hooks/use-modal';
 
 const LoginForm = (props) => {
   const AuthCtx = useContext(AuthContext);
   const { isLoading, error, sendRequest: LoginRequest } = useHttp();
   const navigate = useNavigate();
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users/login`;
+  const {} = useModal(error);
 
   useEffect(() => {
     if (AuthCtx.isLoggedIn) {
@@ -41,10 +44,14 @@ const LoginForm = (props) => {
     reset: resetPasswordInput,
   } = useInput((value) => value.trim() !== '');
 
-  const responseData = (data) => {
-    const { data: user } = data;
-    console.log(user.user);
-    AuthCtx.onLogin(user.user);
+  const response = (data) => {
+    if (data.status === 'success') {
+      const { data: user } = data;
+
+      AuthCtx.onLogin(user.user);
+      resetPasswordInput();
+      resetEmailInput();
+    }
   };
 
   const LoginFormSubmitHandler = (e) => {
@@ -56,7 +63,7 @@ const LoginForm = (props) => {
 
     LoginRequest(
       {
-        url: 'http://localhost:3030/api/v1/users/login',
+        url: SERVER_URL,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,12 +73,8 @@ const LoginForm = (props) => {
           password: enteredPassword,
         },
       },
-      responseData
+      response
     );
-
-    resetPasswordInput();
-    resetEmailInput();
-    console.log('navigate');
   };
 
   const emailInputClasses = emailInputHasError

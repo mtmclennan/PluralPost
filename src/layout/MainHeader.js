@@ -14,6 +14,19 @@ const MainHeader = () => {
         <Newspaper size={32} color="#1864ab" weight="duotone" />
         <h3>CSMS</h3>
       </div>
+      {AuthCtx.website.name && (
+        <div className="logo-container">
+          <NavLink className="logo-link" to="/start">
+            <img
+              className="logo-small"
+              src={`${AuthCtx.website.logo}`}
+              alt="logo"
+            />
+            <h3>{AuthCtx.website.name}</h3>
+          </NavLink>
+        </div>
+      )}
+
       {AuthCtx.isLoggedIn && (
         <nav className={classes.nav}>
           <ul>
@@ -28,24 +41,36 @@ const MainHeader = () => {
                 Home
               </NavLink>
             </li>
-            <li>
-              <NavLink to="/subscribers">
-                <At size={20} color="#1864ab" weight="duotone" />
-                All Subscribers
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/new-post">
-                <PenNibStraight size={20} color="#1864ab" weight="duotone" />
-                Add New Post
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/posts">
-                <PenNibStraight size={20} color="#1864ab" weight="duotone" />
-                Posts
-              </NavLink>
-            </li>
+            {AuthCtx.website.name && (
+              <Fragment>
+                <li>
+                  <NavLink to="/subscribers">
+                    <At size={20} color="#1864ab" weight="duotone" />
+                    All Subscribers
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/new-post">
+                    <PenNibStraight
+                      size={20}
+                      color="#1864ab"
+                      weight="duotone"
+                    />
+                    Add New Post
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/posts">
+                    <PenNibStraight
+                      size={20}
+                      color="#1864ab"
+                      weight="duotone"
+                    />
+                    Posts
+                  </NavLink>
+                </li>
+              </Fragment>
+            )}
             <li>
               <NavLink to="/settings">
                 <Gear size={20} color="#1864ab" weight="duotone" />

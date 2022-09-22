@@ -51,9 +51,6 @@
   border-radius: 4px;
 }
 
-.icons {
-}
-
 .logout {
   background-color: #1864ab;
   color: #edf2ff;
@@ -80,12 +77,13 @@
 /* //////////////////////////////////////////////////////////////// */
 
 .header {
+  grid-column: 1 / 2;
   position: fixed;
   height: 100vh;
   width: 210px;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 70px 350px 50px 50px;
+  grid-template-rows: 70px 50px 350px 50px 50px;
   justify-items: center;
   align-items: center;
   border-right: 1px solid rgba(0, 0, 0, 0.151);

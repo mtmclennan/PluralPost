@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+
 const PostMenu = (props) => {
   return (
     <div className="side-bar__container">
@@ -6,9 +8,13 @@ const PostMenu = (props) => {
         <p>{props.postStatus}</p>
       </div>
       <div className="side-bar__buttons">
-        <button onClick={props.onPublish}>{props.publishBtnText}</button>
         <button onClick={props.onSave}>Save</button>
-        <button onClick={props.onDelete}>Delete</button>
+        {props.id && (
+          <Fragment>
+            <button onClick={props.onPublish}>{props.publishBtnText}</button>
+            <button onClick={props.onDelete}>Delete</button>
+          </Fragment>
+        )}
       </div>
     </div>
   );

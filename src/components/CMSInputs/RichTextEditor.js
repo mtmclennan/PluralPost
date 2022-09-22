@@ -2,13 +2,15 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from 'ckeditor5-custom-build/build/ckeditor';
 
 const RichTextEditor = (props) => {
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/photo`;
+  const TOKEN = process.env.REACT_APP_PHOTO_TOKEN;
   return (
     <CKEditor
       editor={ClassicEditor}
       config={{
         simpleUpload: {
           // The URL that the images are uploaded to.
-          uploadUrl: 'http://localhost:3030/api/v1/content/photo',
+          uploadUrl: SERVER_URL,
 
           // Enable the XMLHttpRequest.withCredentials property.
           withCredentials: true,
@@ -16,25 +18,21 @@ const RichTextEditor = (props) => {
           // Headers sent along with the XMLHttpRequest to the upload server.
           headers: {
             'X-CSRF-TOKEN': 'CSRF-Token',
-            Authorization: 'Bearer <JSON Web Token>',
+            Authorization: `Bearer ${TOKEN}`,
           },
         },
       }}
       onReady={(editor) => {
         // You can store the "editor" and use when it is needed.
-        console.log('Editor is ready to use!', editor);
-        props.editor(editor);
+
+        props.setEditor(editor);
       }}
       onChange={(event, editor) => {
         const data = editor.getData();
         props.valueChangeHandler(data);
       }}
-      onBlur={(event, editor) => {
-        console.log('Blur.', editor);
-      }}
-      onFocus={(event, editor) => {
-        console.log('Focus.', editor);
-      }}
+      // onBlur={(event, editor) => {}}
+      // onFocus={(event, editor) => {}}
     />
   );
 };

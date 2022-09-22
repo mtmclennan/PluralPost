@@ -8,7 +8,6 @@ const initialModalState = {
 
 const modalStateReducer = (state, action) => {
   if (action.type === 'SHOW_MODAL_BUTTONS') {
-    console.log('Show Buttons');
     return { ...state, showButtons: action.value };
   }
   if (action.type === 'HIDE_MODAL') {

@@ -67,7 +67,6 @@ const SignupUserForm = (props) => {
   };
 
   const response = (res) => {
-    console.log(res.status);
     if (res.status === 'success') {
       setModalMessage(`User ${enteredName} Added Successfuly`);
       props.reload((currentState) => !currentState);

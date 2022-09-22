@@ -1,17 +1,54 @@
-import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import PostsList from '../components/posts/PostsList';
+import { Fragment, useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Card from '../UI/Card';
+import PostPreview from '../components/posts/PostPreview';
+import AuthContext from '../store/auth-context';
 
 const Posts = () => {
+  const AuthCtx = useContext(AuthContext);
+  const [postTotal, setPostTotal] = useState();
+  const navigate = useNavigate();
+
+  const postTotalHandler = (total) => {
+    setPostTotal(total);
+  };
+
+  const addNewPostHandler = () => {
+    navigate('/new-post');
+  };
+
   return (
     <Fragment>
-      <div className="heading">
-        <h2>Posts</h2>
-        <Link className="btn" to="/new-post">
-          Add New Post
-        </Link>
+      <div className="title">
+        {AuthCtx.website.logo && (
+          <img className="logo" src={`${AuthCtx.website.logo}`} alt="logo" />
+        )}
+        <h2>{AuthCtx.website.name}</h2>
       </div>
-      <PostsList />
+      <div className="container">
+        <div className="heading">
+          <h3>Posts</h3>
+        </div>
+        <Card className="">
+          <div className="preview-post__heading">
+            <div className="centered">
+              <button onClick={addNewPostHandler}>Add New Post</button>
+            </div>
+            <div className="centered">
+              <p className="preview__total">Total Posts:</p>
+              {postTotal && (
+                <p className="preview__total">{postTotal.toString()}</p>
+              )}
+            </div>
+          </div>
+          {AuthCtx.website.name && (
+            <PostPreview
+              total={postTotalHandler}
+              website={AuthCtx.website.name}
+            />
+          )}
+        </Card>
+      </div>
     </Fragment>
   );
 };

@@ -16,7 +16,8 @@ const SubsciberItem = (props) => {
     setShowModalButtons,
     showModalButtons,
   } = useModal(error);
-  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/subscribers/`;
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/subscribers/${props.website}/delete/
+  `;
 
   const showModalHandler = () => {
     hideModal();
@@ -35,6 +36,7 @@ const SubsciberItem = (props) => {
   };
 
   const deleteHandler = (e) => {
+    console.log(subscriberId);
     const responce = (res) => {
       if (res.status === 'success') {
         setShowModalButtons(false);

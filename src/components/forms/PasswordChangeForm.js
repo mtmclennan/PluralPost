@@ -63,7 +63,7 @@ const PasswordChangeForm = (props) => {
 
     if (enteredNewPassword !== enteredConfirmPassword) {
       setModalMessage('Passwords Do NOT Match!');
-      console.log('passwords dont match');
+
       return;
     }
 

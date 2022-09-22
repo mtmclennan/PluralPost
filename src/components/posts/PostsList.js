@@ -1,4 +1,3 @@
-import Card from '../../UI/Card';
 import { useState, useEffect, Fragment } from 'react';
 import PostListItem from './PostListItem';
 import useHttp from '../../hooks/use-http';
@@ -6,19 +5,19 @@ import classes from './PostsList.module.css';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 
-const PostsList = () => {
+const PostsList = (props) => {
   const navigate = useNavigate();
   const { isLoading, sendRequest } = useHttp();
   const [allPosts, setAllPosts] = useState();
 
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/${props.website}/posts`;
+
   useEffect(() => {
-    sendRequest(
-      { url: 'http://localhost:3030/api/v1/content/posts' },
-      (data) => {
-        setAllPosts(data);
-      }
-    );
-  }, [sendRequest]);
+    sendRequest({ url: SERVER_URL }, (data) => {
+      setAllPosts(data);
+      console.log(data.data[0].postBody.substr(0, 50));
+    });
+  }, [sendRequest, SERVER_URL]);
 
   const onClickHandler = (e) => {
     navigate(`/edit-post/${e.currentTarget.id}`);

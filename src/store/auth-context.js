@@ -3,14 +3,18 @@ import useHttp from '../hooks/use-http';
 
 const AuthContext = React.createContext({
   isLoggedIn: false,
+  website: {},
   user: {},
   onLogin: (user) => {},
   onLogout: () => {},
+  onWebsiteSelect: () => {},
+  onWebsiteReset: () => {},
 });
 
 export const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
+  const [website, setWebsite] = useState({});
   const { sendRequest } = useHttp();
   const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users`;
 
@@ -22,6 +26,23 @@ export const AuthContextProvider = (props) => {
     });
 
     setIsLoggedIn(true);
+  };
+
+  const resetWebsite = () => {
+    setWebsite({});
+  };
+
+  const websiteSelectHandler = (website) => {
+    const { data } = website;
+
+    setWebsite({
+      _id: data._id,
+      name: data.name,
+      url: data.url,
+      category: data.category,
+      logo: data.logo,
+      createAt: data.createAt,
+    });
   };
   useEffect(() => {
     sendRequest(
@@ -63,6 +84,9 @@ export const AuthContextProvider = (props) => {
         isLoggedIn: isLoggedIn,
         onLogout: logoutHandler,
         onLogin: loginHandler,
+        onWebsiteSelect: websiteSelectHandler,
+        onWebsiteReset: resetWebsite,
+        website,
         user,
       }}
     >

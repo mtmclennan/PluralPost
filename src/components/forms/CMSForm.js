@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useContext, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './CMSForm.module.css';
 import ImageInput from '../CMSInputs/ImageInput';
@@ -9,9 +9,13 @@ import PostMenu from '../../components/posts/PostMenu';
 import RightSideBar from '../../layout/RightSideBar';
 import RichTextEditor from '../CMSInputs/RichTextEditor';
 import Modal from '../../UI/Modal';
+import AuthContext from '../../store/auth-context';
+import useFirstRender from '../../hooks/use-FirstRender';
 
 const CMSForm = (props) => {
   let navigate = useNavigate();
+  const AuthCtx = useContext(AuthContext);
+  const firstRender = useFirstRender();
   const [post, setPost] = useState();
   const [published, setPublished] = useState('');
   const [showButtons, setShowButtons] = useState(false);
@@ -21,7 +25,7 @@ const CMSForm = (props) => {
   const { isLoading, error, sendRequest } = useHttp();
   const [editorStore, setEditorStore] = useState();
   const [richTextValue, setRichtextValue] = useState();
-  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/posts`;
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/${AuthCtx.website.name}/posts`;
 
   const {
     value: enteredTitle,
@@ -93,16 +97,17 @@ const CMSForm = (props) => {
     reset: resetDescriptionInput,
   } = useInput((value) => value.trim() !== '');
 
-  const editorStoreHandler = (editor) => {
-    setEditorStore(editor);
-  };
-
   const valueChangeHandler = (data) => {
     setRichtextValue(data);
   };
 
+  /////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
+
   const cmsFormSumbitHandler = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
+
+    console.log(enteredDate);
     const httpMethod = props.id ? 'PATCH' : 'POST';
     const id = props.id ? `/${props.id}` : '';
     setShowModal(true);
@@ -112,10 +117,10 @@ const CMSForm = (props) => {
         setResponceMessage('Post Saved');
         setTimeout(() => {
           setShowModal(false);
-        }, 1000);
-        if (!props.id) {
-          navigate(`/edit-post/${res.data._id}`, { replace: true });
-        }
+          if (!props.id) {
+            navigate(`/edit-post/${res.data._id}`, { replace: true });
+          }
+        }, 300);
       } else {
         setTimeout(() => {
           showModal(false);
@@ -146,6 +151,9 @@ const CMSForm = (props) => {
       response
     );
   };
+
+  //////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   useEffect(() => {
     if (error) {
@@ -194,20 +202,23 @@ const CMSForm = (props) => {
     setResponceMessage('Are you sure you want to DELETE This post');
   };
 
+  /////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////
+
   const deletePostHandler = (e) => {
     e.preventDefault();
     setShowButtons(false);
-    showModal(true);
+    setShowModal(true);
     const response = (res) => {
       if (res.status === 'success') {
         setResponceMessage('Post Deleted');
         setTimeout(() => {
-          showModal(false);
+          setShowModal(false);
           navigate('/posts');
         }, 1000);
       } else {
         setTimeout(() => {
-          showModal(false);
+          setShowModal(false);
         }, 3000);
 
         setResponceMessage(error || 'Something went wrong!');
@@ -222,6 +233,9 @@ const CMSForm = (props) => {
       response
     );
   };
+
+  ////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////
 
   const publishPostHandler = () => {
     if (
@@ -253,8 +267,19 @@ const CMSForm = (props) => {
 
     const response = (res) => {
       setShowModal(true);
+      console.log(res);
       if (res.status === 'success') {
-        setResponceMessage(`Post Status Changed To: ${publish.toUpperCase()}`);
+        const postStatus =
+          publish === 'published' ? 'Post Published' : 'Saved as Draft';
+        const message =
+          res.response === 'success'
+            ? 'Site ReBuilding'
+            : 'Error Building Site';
+
+        setResponceMessage(
+          `${postStatus} 
+          ${message}`
+        );
         resetAuthorInput();
         resetDateInput();
         resetDescriptionInput();
@@ -301,9 +326,22 @@ const CMSForm = (props) => {
     );
   };
 
+  //Autosave /////////////////////////////
+
+  // useEffect(() => {
+  //   if (firstRender) return;
+  //   let timer = setTimeout(() => {
+  //     cmsFormSumbitHandler();
+  //     console.log('save');
+  //   }, 10000);
+  //   return () => {
+  //     console.log('clear');
+  //     clearTimeout(timer);
+  //   };
+  // }, [richTextValue, firstRender, cmsFormSumbitHandler]);
+
   useEffect(() => {
     if (!props.id) {
-      console.log('No Props ID');
       return;
     }
     const applyPost = (data) => {
@@ -321,8 +359,6 @@ const CMSForm = (props) => {
 
   useEffect(() => {
     if (post) {
-      console.log(post);
-
       setPublished(post.published);
       setUploadedFile(post.featuredImage ? post.featuredImage : '');
       setEnteredTitle(post.title);
@@ -339,9 +375,9 @@ const CMSForm = (props) => {
   return (
     <Fragment>
       {showModal && (
-        <Modal onClose={showModalHandler}>
-          <div className="modal">
-            <h3>{responceMessage}</h3>
+        <Modal className={'modal'} onClose={showModalHandler}>
+          <div className="modal__content">
+            <p>{responceMessage}</p>
             {showButtons && (
               <div className={classes.modalMenu}>
                 <button onClick={deletePostHandler}>OK</button>
@@ -352,138 +388,145 @@ const CMSForm = (props) => {
         </Modal>
       )}
       {isLoading && <LoadingSpinner />}
+      <div className="container">
+        <form id="postForm" onSubmit={cmsFormSumbitHandler}>
+          <h2 className={classes.title}>
+            {props.id ? 'Edit Post' : 'Add new Post'}
+          </h2>
+          <div className="form__grid">
+            <div className="wide">
+              <label className="form__label" htmlFor="title">
+                Title
+              </label>
+              <input
+                className={titleInputClasses}
+                type="text"
+                id="title"
+                onChange={titleChangeHandler}
+                onBlur={titleBlurHandler}
+                value={enteredTitle}
+              ></input>
+            </div>
+            <ImageInput response={featuredImageResponseHandler}>
+              {uploadedFile && (
+                <div className={classes.featuredImage}>
+                  <p>Featured Image</p>
+                  <img alt="some here" src={uploadedFile} />
+                </div>
+              )}
+            </ImageInput>
 
-      <form id="postForm" onSubmit={cmsFormSumbitHandler}>
-        <h2 className={classes.title}>
-          {props.id ? 'Edit Post' : 'Add new Post'}
-        </h2>
-        <div className="form__grid">
-          <div className="wide">
-            <label className="form__label" htmlFor="title">
-              Title
-            </label>
-            <input
-              className={titleInputClasses}
-              type="text"
-              id="title"
-              onChange={titleChangeHandler}
-              onBlur={titleBlurHandler}
-              value={enteredTitle}
-            ></input>
+            <div>
+              <label className="form__label" htmlFor="photo-caption">
+                Photo Caption
+              </label>
+              <input
+                className={photoCaptionInputClasses}
+                type="text"
+                id="photo-caption"
+                onChange={photoCaptionChangeHandler}
+                onBlur={photoCaptionBlurHandler}
+                value={enteredPhotoCaption}
+              ></input>
+            </div>
+            <div>
+              <label className="form__label" htmlFor="slug">
+                Slug
+              </label>
+              <input
+                className={slugInputClasses}
+                type="text"
+                id="slug"
+                onChange={slugChangeHandler}
+                onBlur={slugBlurHandler}
+                value={enteredSlug}
+              ></input>
+            </div>
+            <div>
+              <label className="form__label" htmlFor="tags">
+                Tags
+              </label>
+              <input
+                className={tagsInputClasses}
+                type="text"
+                id="tags"
+                onChange={tagsChangeHandler}
+                onBlur={tagsBlurHandler}
+                value={enteredTags}
+              ></input>
+            </div>
+            <div>
+              <label className="form__label" htmlFor="author">
+                Author
+              </label>
+              <input
+                className={authorInputClasses}
+                type="text"
+                id="author"
+                onChange={authorChangeHandler}
+                onBlur={authorBlurHandler}
+                value={enteredAuthor}
+              ></input>
+            </div>
+            <div>
+              <label className="form__label" htmlFor="date">
+                Date
+              </label>
+              <input
+                className={dateInputClasses}
+                type="date"
+                id="date"
+                onChange={dateChangeHandler}
+                onBlur={dateBlurHandler}
+                value={enteredDate}
+              ></input>
+            </div>
           </div>
-          <ImageInput response={featuredImageResponseHandler}>
-            {uploadedFile && (
-              <div className={classes.featuredImage}>
-                <p>Featured Image</p>
-                <img alt="some here" src={uploadedFile} />
-              </div>
-            )}
-          </ImageInput>
+          <div className={classes.description}>
+            <label className="form__label" htmlFor="description">
+              Meta Description
+            </label>
+            <textarea
+              className={descriptionInputClasses}
+              id="description"
+              spellCheck="true"
+              autoCorrect="on"
+              onChange={descriptionChangeHandler}
+              onBlur={descriptionBlurHandler}
+              value={enteredDescription}
+              rows="5"
+              cols="80"
+            ></textarea>
+          </div>
+          <h3 className={classes.title}>Post Body</h3>
+          <RichTextEditor
+            valueChangeHandler={valueChangeHandler}
+            setEditor={setEditorStore}
+          />
+        </form>
 
-          <div>
-            <label className="form__label" htmlFor="photo-caption">
-              Photo Caption
-            </label>
-            <input
-              className={photoCaptionInputClasses}
-              type="text"
-              id="photo-caption"
-              onChange={photoCaptionChangeHandler}
-              onBlur={photoCaptionBlurHandler}
-              value={enteredPhotoCaption}
-            ></input>
-          </div>
-          <div>
-            <label className="form__label" htmlFor="slug">
-              Slug
-            </label>
-            <input
-              className={slugInputClasses}
-              type="text"
-              id="slug"
-              onChange={slugChangeHandler}
-              onBlur={slugBlurHandler}
-              value={enteredSlug}
-            ></input>
-          </div>
-          <div>
-            <label className="form__label" htmlFor="tags">
-              Tags
-            </label>
-            <input
-              className={tagsInputClasses}
-              type="text"
-              id="tags"
-              onChange={tagsChangeHandler}
-              onBlur={tagsBlurHandler}
-              value={enteredTags}
-            ></input>
-          </div>
-          <div>
-            <label className="form__label" htmlFor="author">
-              Author
-            </label>
-            <input
-              className={authorInputClasses}
-              type="text"
-              id="author"
-              onChange={authorChangeHandler}
-              onBlur={authorBlurHandler}
-              value={enteredAuthor}
-            ></input>
-          </div>
-          <div>
-            <label className="form__label" htmlFor="date">
-              Date
-            </label>
-            <input
-              className={dateInputClasses}
-              type="date"
-              id="date"
-              onChange={dateChangeHandler}
-              onBlur={dateBlurHandler}
-              value={enteredDate}
-            ></input>
-          </div>
-        </div>
-        <div className={classes.description}>
-          <label className="form__label" htmlFor="description">
-            Meta Description
-          </label>
-          <textarea
-            className={descriptionInputClasses}
-            id="description"
-            spellCheck="true"
-            autoCorrect="on"
-            onChange={descriptionChangeHandler}
-            onBlur={descriptionBlurHandler}
-            value={enteredDescription}
-            rows="5"
-            cols="80"
-          ></textarea>
-        </div>
-        <h3 className={classes.title}>Post Body</h3>
-        <RichTextEditor
-          valueChangeHandler={valueChangeHandler}
-          editor={editorStoreHandler}
-        />
-      </form>
-
-      <div className={classes.bottomMenu}>
-        <button type="submit" form="postForm" className={classes.saveBtn}>
-          Save
-        </button>
-        <button className={classes.publishBtn} onClick={publishPostHandler}>
-          {published === 'published' ? 'Unpublish' : 'Publish'}
-        </button>
-        {props.id && (
-          <button className={classes.deleteBtn} onClick={confirmDeletePost}>
-            Delete
+        <div className={classes.bottomMenu}>
+          <button type="submit" form="postForm" className={classes.saveBtn}>
+            Save
           </button>
-        )}
+          {props.id && (
+            <Fragment>
+              <button
+                className={classes.publishBtn}
+                onClick={publishPostHandler}
+              >
+                {published === 'published' ? 'Unpublish' : 'Publish'}
+              </button>
+              <button className={classes.deleteBtn} onClick={confirmDeletePost}>
+                Delete
+              </button>
+            </Fragment>
+          )}
+        </div>
       </div>
       <RightSideBar>
         <PostMenu
+          id={props.id}
           onPublish={publishPostHandler}
           publishBtnText={published === 'published' ? 'Unpublish' : 'Publish'}
           onSave={cmsFormSumbitHandler}

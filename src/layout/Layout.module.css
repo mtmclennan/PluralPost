@@ -1,11 +1,11 @@
 .main {
-  margin: auto;
+  /* margin: auto; */
   display: flex;
+  grid-column: 2 / 4;
   flex-direction: column;
   gap: 1em;
-  margin-top: 1em;
-  grid-column: 2 / 3;
+  /* margin-top: 1em; */
+
   justify-content: center;
   align-items: center;
-  max-width: 850px;
 }

@@ -59,8 +59,6 @@ const UsersItem = (props) => {
     );
   };
 
-  console.log('render');
-
   return (
     <Fragment>
       {showModal && (

@@ -17,7 +17,6 @@ const Users = () => {
   useEffect(() => {
     sendRequest({ url: SERVER_URL }, (data) => {
       setUsers(data);
-      console.log('data');
     });
   }, [sendRequest, reload, SERVER_URL]);
 

@@ -1,10 +1,13 @@
-.deleteBtn {
-}
-
 .bottomMenu {
   display: flex;
+  justify-content: center;
   gap: 1em;
   margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.bottomMenu button {
+  margin: 0;
 }
 
 .description {
@@ -13,6 +16,7 @@
 
 .title {
   margin-bottom: 1em;
+  margin-top: 1em;
 }
 
 .featuredImage {

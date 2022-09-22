@@ -3,17 +3,19 @@ import classes from './SubscriberForm.module.css';
 import useInput from '../../hooks/use-input';
 import useHttp from '../../hooks/use-http';
 import Modal from '../../UI/Modal';
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import useModal from '../../hooks/use-modal';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
+import AuthContext from '../../store/auth-context';
 
 const SubscriberForm = () => {
   const { isLoading, error, sendRequest } = useHttp();
   const { showModal, hideModal, modalMessage, setModalMessage } =
     useModal(error);
+  const AuthCtx = useContext(AuthContext);
   const navigate = useNavigate();
-  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/subscribers`;
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/subscribers/${AuthCtx.website.name}/subscribers`;
 
   const emailValidate = (value) => {
     const emailFormat = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -50,7 +52,7 @@ const SubscriberForm = () => {
   const accountSettingFormSubmitHandler = (e) => {
     e.preventDefault();
 
-    if (!enteredNameIsValid || !enteredEmailIsValid || !enteredWebsiteIsValid) {
+    if (!enteredNameIsValid || !enteredEmailIsValid) {
       return;
     }
 
@@ -61,7 +63,7 @@ const SubscriberForm = () => {
           hideModal();
           resetNameInput();
           resetEmailInput();
-          resetWebsiteeInput();
+          // resetWebsiteeInput();
           navigate('/subscribers');
         }, 1000);
       } else {
@@ -81,7 +83,6 @@ const SubscriberForm = () => {
         body: {
           name: enteredName,
           email: enteredEmail,
-          websiteFrom: enteredWebsite,
         },
       },
       response
@@ -100,9 +101,9 @@ const SubscriberForm = () => {
     ? `${classes['form__input']} ${classes.invalid}`
     : `${classes['form__input']}`;
 
-  const websiteInputClasses = websiteInputHasError
-    ? `${classes['form__input']} ${classes.invalid}`
-    : `${classes['form__input']}`;
+  // const websiteInputClasses = websiteInputHasError
+  //   ? `${classes['form__input']} ${classes.invalid}`
+  //   : `${classes['form__input']}`;
 
   return (
     <Fragment>
@@ -148,7 +149,7 @@ const SubscriberForm = () => {
               value={enteredEmail}
             ></input>
           </div>
-          <div className={classes['form__group']}>
+          {/* <div className={classes['form__group']}>
             <label className={classes['form__label']} htmlFor="website">
               Website Subscribed To
             </label>
@@ -160,7 +161,7 @@ const SubscriberForm = () => {
               onBlur={websiteBlurHandler}
               value={enteredWebsite}
             ></input>
-          </div>
+          </div> */}
           <div className={classes['form__group']}>
             <button
               className={`${classes['form__group center']} ${classes['center']}`}
