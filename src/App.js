@@ -15,7 +15,7 @@ import EditPost from './pages/edit-post';
 import SiteSettings from './pages/siteSettings';
 import RestrictedRoute from './layout/RestrictedRoute';
 
-function App(props) {
+function App() {
   const AuthCtx = useContext(AuthContext);
 
   return (
@@ -39,6 +39,7 @@ function App(props) {
               <RestrictedRoute
                 user={AuthCtx.user}
                 allowedRoles={['admin', 'editor']}
+                redirectPath={'/start'}
               />
             }
           >
