@@ -1,11 +1,8 @@
 import { useState, useCallback } from 'react';
-import { ErrorWithMessage } from '../types/interfaces';
 
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  // type JSONValue = { [x: string]: JSONValue } | Array<JSONValue>;
 
   interface RequestConfig {
     url: string;
@@ -49,7 +46,7 @@ const useHttp = () => {
           console.log(data);
           applyData(data);
         }
-      } catch (err: ErrorWithMessage | any) {
+      } catch (err: any) {
         setError(err.message || 'Something went wrong!');
         console.log(err.message);
       }

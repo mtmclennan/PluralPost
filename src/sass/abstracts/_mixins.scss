@@ -1,0 +1,14 @@
+@mixin gradient {
+  background: linear-gradient(
+    295deg,
+    rgba(224, 59, 251, 1) 0%,
+    rgba(134, 38, 250, 1) 100%
+  );
+}
+
+@mixin flexCenter($direction: row) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: $direction;
+}

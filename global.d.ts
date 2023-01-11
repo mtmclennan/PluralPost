@@ -4,4 +4,11 @@ declare module '*.module.css' {
   export default classes;
 }
 
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
+}
+
 // declare module 'path/to/your/js/or/jsx';
+
+declare module '*.png';

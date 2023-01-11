@@ -1,18 +1,20 @@
-import classes from './MainHeader.module.css';
+import classes from './MainHeader.module.scss';
 import { NavLink } from 'react-router-dom';
 import { House, At, PenNibStraight, Gear, UsersThree } from 'phosphor-react';
-import { Newspaper } from 'phosphor-react';
 import { Fragment, useContext } from 'react';
+import pluarlPostLogo from '../assets/images/PPlogoonly.png';
 import AuthContext from '../store/auth-context';
 
 const MainHeader = () => {
   const AuthCtx = useContext(AuthContext);
 
+  const iconColor = '#8626fa';
+
   return (
     <header className={classes.header}>
       <div className={classes.logo}>
-        <Newspaper size={32} color="#1864ab" weight="duotone" />
-        <h3>CSMS</h3>
+        <img src={pluarlPostLogo} alt="PluarlPost" />
+        <h2>PluralPost</h2>
       </div>
       {AuthCtx.website.name && (
         <div className="logo-container">
@@ -34,7 +36,7 @@ const MainHeader = () => {
               <NavLink to="/welcome">
                 <House
                   size={20}
-                  color="#1864ab"
+                  color={iconColor}
                   weight="duotone"
                   className={classes.icons}
                 />
@@ -45,7 +47,7 @@ const MainHeader = () => {
               <Fragment>
                 <li>
                   <NavLink to="/subscribers">
-                    <At size={20} color="#1864ab" weight="duotone" />
+                    <At size={20} color={iconColor} weight="duotone" />
                     All Subscribers
                   </NavLink>
                 </li>
@@ -53,7 +55,7 @@ const MainHeader = () => {
                   <NavLink to="/new-post">
                     <PenNibStraight
                       size={20}
-                      color="#1864ab"
+                      color={iconColor}
                       weight="duotone"
                     />
                     Add New Post
@@ -63,7 +65,7 @@ const MainHeader = () => {
                   <NavLink to="/posts">
                     <PenNibStraight
                       size={20}
-                      color="#1864ab"
+                      color={iconColor}
                       weight="duotone"
                     />
                     Posts
@@ -73,14 +75,14 @@ const MainHeader = () => {
             )}
             <li>
               <NavLink to="/settings">
-                <Gear size={20} color="#1864ab" weight="duotone" />
+                <Gear size={20} color={iconColor} weight="duotone" />
                 Settings
               </NavLink>
             </li>
             {AuthCtx.user.role === 'admin' && (
               <li>
                 <NavLink to="/users">
-                  <UsersThree size={20} color="#1864ab" weight="duotone" />
+                  <UsersThree size={20} color={iconColor} weight="duotone" />
                   Users
                 </NavLink>
               </li>
@@ -94,7 +96,7 @@ const MainHeader = () => {
             <p className={classes.welcome}>Welcome</p>
             <p className={classes.username}>{AuthCtx.user.name}</p>
           </div>
-          <button onClick={AuthCtx.onLogout} className={classes.logout}>
+          <button onClick={AuthCtx.onLogout} className={classes.btn}>
             Logout
           </button>
         </Fragment>

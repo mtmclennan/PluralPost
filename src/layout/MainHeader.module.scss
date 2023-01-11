@@ -1,16 +1,26 @@
+@import '../sass/abstracts/variables';
+@import '../sass/abstracts/mixins';
 .header {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1em;
-  /* min-height: 6em; */
-  background-color: rgb(255, 255, 255);
+
+  background-color: $text-color-light;
 }
 
-/* .logo {
-  margin-left: 10em;
-  margin-right: auto;
-} */
+.logo {
+  & img {
+    width: 5rem;
+  }
+  & h2 {
+    color: $text-color-dark;
+
+    // font-size: 1rem;
+    margin-left: 0.5rem;
+    font-family: 'Oswald', sans-serif;
+  }
+}
 
 .nav {
   align-self: start;
@@ -45,28 +55,28 @@
 .nav a:hover,
 .nav a:active,
 .nav a.active {
-  color: #1864ab;
+  color: $accent-color;
 
   background-color: #f1f3f5;
   border-radius: 4px;
 }
 
-.logout {
-  background-color: #1864ab;
+.btn {
+  background-color: $accent-color;
   color: #edf2ff;
   font-size: 1.4rem;
   font-weight: 500;
   padding: 8px 10px;
-  border-radius: 100px;
-  border-color: #1864ab;
+  // border-radius: 10px;
+  // border-color: #1864ab;
   text-transform: uppercase;
-  text-decoration: none;
   cursor: pointer;
 }
 
-.logout:hover {
-  background-color: #1c7ed6;
-  border-color: #1c7ed6;
+.btn:hover {
+  background-color: $light-accent-color;
+  color: $accent-color;
+  border: 1px solid $accent-color;
   box-shadow: 0 10px 15px 0 rgba(0, 0, 0, 0.253);
 }
 
@@ -101,10 +111,8 @@
 
 .logo {
   border-bottom: 1px solid #e0e0e0;
+  @include flexCenter();
   text-align: center;
   align-self: stretch;
   justify-self: stretch;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
