@@ -1,0 +1,18 @@
+extends baseEmail  
+
+block content 
+  p Hi #{firstName},
+  p Welcome to #{url} 🎉🙏
+  p Thank you for subscribing.  You will be notified when we post new content. 
+  p Our mission goal here at YardOasis is to help you create your own oasis.
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank') Thank You!
+  p If you have questions, or have a request for article content, please don't hestitate to contact me! 
+  p - Matthew McLennan, CEO
