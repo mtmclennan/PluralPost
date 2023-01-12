@@ -1,0 +1,12 @@
+@use '../../sass/abstracts/variables' as v;
+@use '../../sass/abstracts/mixins' as m;
+
+.container {
+  border-radius: 5px;
+  background-color: v.$light-background-color;
+  @include m.flexCenter();
+  padding: 1rem;
+  // &:hover {
+  //   background-color: v.$light-primary-color;
+  // }
+}

@@ -12,6 +12,7 @@ export type User = {
   email: string;
   name: string;
   role: string;
+  photo?: string;
 };
 
 export type Website = {

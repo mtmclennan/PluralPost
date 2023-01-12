@@ -5,16 +5,13 @@ import './sass/main.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './store/auth-context';
-import Layout from './layout/Layout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthContextProvider>
-        <Layout>
-          <App />
-        </Layout>
+        <App />
       </AuthContextProvider>
     </BrowserRouter>
   </React.StrictMode>

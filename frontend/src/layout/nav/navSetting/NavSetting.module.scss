@@ -1,0 +1,22 @@
+@use '../../../sass/abstracts/mixins' as m;
+@use '../../../sass/abstracts/variables' as v;
+
+.container {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.user {
+  @include m.flexCenter(column);
+  gap: 1rem;
+  margin-top: 10rem;
+}
+
+.website {
+  text-align: center;
+  margin: auto 0 10rem 0;
+}

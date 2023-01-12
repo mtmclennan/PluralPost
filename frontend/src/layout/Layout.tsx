@@ -1,15 +1,18 @@
 import { Fragment } from 'react';
-import MainHeader from './MainHeader';
+import LeftSideBar from './LeftSideBar';
 import classes from './Layout.module.css';
+import NavMain from './nav/navmain/NavMain';
+import NavSetting from './nav/navSetting/NavSetting';
 
 type LayoutProps = {
   children: React.ReactNode;
+  settings?: boolean;
 };
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, settings }: LayoutProps) => {
   return (
     <Fragment>
-      <MainHeader />
+      <LeftSideBar>{settings ? <NavSetting /> : <NavMain />}</LeftSideBar>
       <main className={classes.main}>{children}</main>
     </Fragment>
   );

@@ -6,6 +6,7 @@ type LoginHandlerProps = {
   email: string;
   name: string;
   role: string;
+  photo?: string;
 };
 
 type Website = {
@@ -30,6 +31,7 @@ const userInital = {
   name: '',
   email: '',
   role: '',
+  photo: '',
 };
 
 const AuthContext = React.createContext<Context>({
@@ -53,11 +55,12 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const { sendRequest } = useHttp();
   const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/users`;
 
-  const loginHandler = ({ email, name, role }: LoginHandlerProps) => {
+  const loginHandler = ({ email, name, role, photo }: LoginHandlerProps) => {
     setUser({
       email: email,
       name: name,
       role: role,
+      photo: photo ? photo : '',
     });
 
     setIsLoggedIn(true);
@@ -88,6 +91,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           email: data.data.email,
           name: data.data.name,
           role: data.data.role,
+          photo: data.data.photo,
         });
         if (data) {
           setIsLoggedIn(true);

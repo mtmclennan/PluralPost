@@ -1,13 +1,5 @@
 @import '../sass/abstracts/variables';
 @import '../sass/abstracts/mixins';
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1em;
-
-  background-color: $text-color-light;
-}
 
 .logo {
   & img {
@@ -27,38 +19,11 @@
 }
 
 .nav ul {
-  list-style: none;
-  gap: 1em;
   display: flex;
+  gap: 1em;
+  margin-top: 1rem;
   justify-content: center;
   align-items: center;
-  margin: 0;
-  padding: 0;
-}
-
-.nav li {
-  font-size: 1.5rem;
-  width: 170px;
-  line-height: 1.7;
-}
-
-.nav a {
-  text-decoration: none;
-  display: flex;
-  gap: 0.3em;
-  padding: 5px 10px;
-  border-radius: 5px;
-  width: 100%;
-  color: #383838;
-}
-
-.nav a:hover,
-.nav a:active,
-.nav a.active {
-  color: $accent-color;
-
-  background-color: #f1f3f5;
-  border-radius: 4px;
 }
 
 .btn {
@@ -67,8 +32,6 @@
   font-size: 1.4rem;
   font-weight: 500;
   padding: 8px 10px;
-  // border-radius: 10px;
-  // border-color: #1864ab;
   text-transform: uppercase;
   cursor: pointer;
 }
@@ -84,16 +47,14 @@
   text-align: center;
 }
 
-/* //////////////////////////////////////////////////////////////// */
-
 .header {
+  display: grid;
   grid-column: 1 / 2;
   position: fixed;
   height: 100vh;
   width: 210px;
-  display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 70px 50px 350px 50px 50px;
+  grid-template-rows: 70px;
   justify-items: center;
   align-items: center;
   border-right: 1px solid rgba(0, 0, 0, 0.151);

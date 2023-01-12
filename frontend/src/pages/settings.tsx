@@ -1,12 +1,19 @@
-import UserSettingForm from '../components/forms/UserSettingForm';
-import PasswordChangeForm from '../components/forms/PasswordChangeForm';
+import { Fragment } from 'react';
+import SettingsContainer from '../layout/main/SettingsContainer';
+import ListItemContainer from '../UI/listItemContainer/ListItemContainer';
 
 const Settings = () => {
   return (
-    <div className="user-view">
-      <UserSettingForm />
-      <PasswordChangeForm />
-    </div>
+    <Fragment>
+      <SettingsContainer heading="General">
+        <ListItemContainer>
+          <p>Settings</p>
+        </ListItemContainer>
+        <ListItemContainer>
+          <p>Settings</p>
+        </ListItemContainer>
+      </SettingsContainer>
+    </Fragment>
   );
 };
 

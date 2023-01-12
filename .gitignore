@@ -2,6 +2,9 @@
 
 # dependencies
 /frontend/node_modules
+
+*public
+*dist
 node_modules
 /node_modules
 /.pnp

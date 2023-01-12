@@ -24,6 +24,10 @@ body {
   background-color: #f1f3f5;
 }
 
+li {
+  list-style: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -424,12 +428,9 @@ button:disabled:active {
   display: none;
 }
 .logo-container {
+  @include flexCenter();
   text-align: center;
-  align-self: stretch;
-  justify-self: stretch;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  max-height: 10rem;
 }
 
 .logo {

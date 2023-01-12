@@ -1,0 +1,24 @@
+@import '../../../sass/abstracts/mixins';
+@import '../../../sass/abstracts/variables';
+
+.nav {
+  align-self: start;
+  & ul {
+    display: grid;
+    grid-template-rows: repeat(5 1fr);
+    gap: 1em;
+    margin-top: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.user {
+  @include flexCenter(column);
+  gap: 1rem;
+  & p:first-child {
+    color: $accent-color;
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+  }
+}

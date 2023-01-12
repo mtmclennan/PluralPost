@@ -1,0 +1,8 @@
+.imageContainer {
+  height: 100%;
+  width: fit-content;
+  & img {
+    border-radius: 100rem;
+    height: 100%;
+  }
+}

@@ -1,5 +1,5 @@
 import { Fragment, useContext } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, Outlet } from 'react-router-dom';
 import HomePage from './pages/home';
 import Subscribers from './pages/subscribers';
 import Users from './pages/users';
@@ -12,8 +12,11 @@ import ManageSubs from './pages/manageSubs';
 import Cms from './pages/cms';
 import Posts from './pages/posts';
 import EditPost from './pages/edit-post';
+import SettingsUser from './pages/settingsUser.tsx';
 import SiteSettings from './pages/siteSettings';
 import RestrictedRoute from './layout/RestrictedRoute';
+import Layout from './layout/Layout';
+import NotFound from './pages/notFound';
 
 function App() {
   const AuthCtx = useContext(AuthContext);
@@ -21,35 +24,52 @@ function App() {
   return (
     <Fragment>
       <Routes>
-        <Route path="/" element={<Navigate to="/welcome" replace />} exact />
-        <Route path="/login" element={<Login />} />
         <Route
           element={
-            <ProtectedRoute user={AuthCtx.user.name} redirectPath="/login" />
+            <Layout>
+              <Outlet />
+            </Layout>
           }
         >
-          <Route path="/welcome" element={<HomePage />} />
-          <Route path="/start" element={<StartPage />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/edit-post/:postId" element={<EditPost />} />
-          <Route path="/new-post" element={<Cms />} />
-          <Route path="/subscribers" element={<Subscribers />} />
+          <Route path="/" element={<Navigate to="/welcome" replace />} exact />
+          <Route path="/login" element={<Login />} />
           <Route
             element={
-              <RestrictedRoute
-                user={AuthCtx.user}
-                allowedRoles={['admin', 'editor']}
-                redirectPath={'/start'}
-              />
+              <ProtectedRoute user={AuthCtx.user.name} redirectPath="/login" />
             }
           >
-            <Route path="/siteSettings" element={<SiteSettings />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/ManageSubs" element={<ManageSubs />} />
+            <Route path="/welcome" element={<HomePage />} />
+            <Route path="/start" element={<StartPage />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/edit-post/:postId" element={<EditPost />} />
+            <Route path="/new-post" element={<Cms />} />
+            <Route path="/subscribers" element={<Subscribers />} />
+            <Route
+              element={
+                <RestrictedRoute
+                  user={AuthCtx.user}
+                  allowedRoles={['admin', 'editor']}
+                  redirectPath={'/start'}
+                />
+              }
+            >
+              <Route path="/siteSettings" element={<SiteSettings />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/ManageSubs" element={<ManageSubs />} />
+            </Route>
           </Route>
-
-          <Route path="/settings" element={<Settings />} />
         </Route>
+        <Route
+          element={
+            <Layout settings={true}>
+              <Outlet />
+            </Layout>
+          }
+        >
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings-user" element={<SettingsUser />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Fragment>
   );
