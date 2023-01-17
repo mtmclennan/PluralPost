@@ -1,11 +1,10 @@
 import React from 'react';
-import defaultUserPhoto from '../../../assets/users/photos/default.png';
 import classes from './UserPhoto.module.scss';
 
-const UserPhoto = ({ photo }: { photo?: string }) => {
+const UserPhoto = ({ photo }: { photo: string }) => {
   return (
     <div className={classes.imageContainer}>
-      <img src={photo ? photo : defaultUserPhoto} alt="User" />
+      <img src={photo} alt="User" key={photo} />
     </div>
   );
 };

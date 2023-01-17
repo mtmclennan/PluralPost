@@ -1,0 +1,18 @@
+@use '../sass/abstracts/mixins' as m;
+@use '../sass/abstracts/variables' as v;
+
+.topBar {
+  display: flex;
+  position: sticky;
+  top: 0rem;
+  left: 0;
+  background-color: v.$light-primary-color;
+  height: 7rem;
+  width: 100%;
+  transition: top 0.6s ease;
+  z-index: 10;
+}
+
+.hidden {
+  top: -7rem;
+}

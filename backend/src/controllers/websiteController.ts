@@ -21,12 +21,16 @@ export const createWebsite = catchAsync(
 
 export const editWebsite = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const updatedWebsite = await Website.findByIdAndUpdate(req.params.id, {
-      name: req.body.name,
-      url: req.body.url,
-      category: req.body.category,
-      logo: req.body.logo,
-    });
+    const updatedWebsite = await Website.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+        url: req.body.url,
+        category: req.body.category,
+        logo: req.body.logo,
+      },
+      { new: true }
+    );
 
     res.status(200).json({
       status: 'success',

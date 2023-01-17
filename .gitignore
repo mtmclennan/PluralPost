@@ -3,7 +3,7 @@
 # dependencies
 /frontend/node_modules
 
-*public
+/backend/public
 *dist
 node_modules
 /node_modules

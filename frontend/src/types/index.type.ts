@@ -12,7 +12,7 @@ export type User = {
   email: string;
   name: string;
   role: string;
-  photo?: string;
+  photo: string;
 };
 
 export type Website = {
@@ -36,5 +36,5 @@ export type Context = {
 
 export type UserRes = {
   status: string;
-  user: { email: string; name: string; role: string };
+  user: { email: string; name: string; role: string; photo: string };
 };

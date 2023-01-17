@@ -4,8 +4,8 @@
 .container {
   border-radius: 5px;
   background-color: v.$light-background-color;
-  @include m.flexCenter();
-  padding: 1rem;
+  @include m.flexCenter(column);
+  padding: 1.5rem;
   // &:hover {
   //   background-color: v.$light-primary-color;
   // }

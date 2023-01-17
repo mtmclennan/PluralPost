@@ -41,17 +41,17 @@ const HomePage = () => {
           <p>For your Blog/Marketing site</p>
         </div>
 
-        {AuthCtx.user.role === 'admin' && (
-          <button className="btn__website" onClick={showFormHandler}>
-            Add A New Website
-          </button>
-        )}
-        {showForm && <NewWebsiteForm setShowForm={showFormHandler} />}
         {isLoading && <LoadingSpinner />}
         <Card>
           <div className="website-list__heading">
-            <h3>Websites</h3>
+            {websites && <h3>Choose a site To Begin</h3>}
+            {AuthCtx.user.role === 'admin' && (
+              <button className="btn__website" onClick={showFormHandler}>
+                Add A New Website
+              </button>
+            )}
           </div>
+          {showForm && <NewWebsiteForm setShowForm={showFormHandler} />}
           {websites && <WebsiteList websites={websites} />}
         </Card>
       </div>

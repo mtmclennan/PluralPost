@@ -1,20 +1,24 @@
-import { Fragment, useEffect } from 'react';
+import React, { useContext, useEffect, useTransition } from 'react';
 import useHttp from '../../hooks/use-http';
+import classes from './form.module.scss';
 import Modal from '../../UI/Modal';
 import useInput from '../../hooks/use-input';
 import useModal from '../../hooks/use-modal';
 import LoadingSpinner from '../../UI/LoadingSpinner';
-import { Res, Website } from '../../types/interfaces';
+import { Res, Website, WebsiteRes } from '../../types/interfaces';
+import SmallTextBox from '../inputs/SmallTextBox';
+import AuthContext from '../../store/auth-context';
 
 type NewWebsiteFormProps = {
   website?: Website;
-  setShowForm?: () => void;
+  setShowForm: () => void;
 };
 
 const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
   const { isLoading, error, sendRequest } = useHttp();
   const { setModalMessage, showModal, modalMessage, hideModal } =
     useModal(error);
+  const AuthCtx = useContext(AuthContext);
 
   const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/websites/${
     website ? website._id : ''
@@ -73,14 +77,20 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
     hideModal();
   };
 
+  const closeFormHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    setShowForm();
+  };
+
   const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const method = website ? 'PATCH' : 'POST';
 
-    const response = (res: Res) => {
+    const response = (res: WebsiteRes) => {
       if (res.status === 'success') {
         setModalMessage(`Website ${enteredWebsiteName} Added Successfuly`);
+        AuthCtx.onWebsiteSelect(res.data);
         // props.reload((currentState) => !currentState);
         setTimeout(() => {
           hideModal();
@@ -119,8 +129,24 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
     );
   };
 
+  const nameInputClasses = websiteNameInputHasError
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
+
+  const urlInputClasses = websiteUrlInputHasError
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
+
+  const logoInputClasses = logoUrlInputHasError
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
+
+  const categoryInputClasses = categoryInputHasError
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
+
   return (
-    <Fragment>
+    <div className={classes.container}>
       {showModal && (
         <Modal onClose={showModalHandler}>
           <div className="modal">
@@ -130,49 +156,41 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
       )}
       {isLoading && <LoadingSpinner />}
       <form onSubmit={formSubmitHandler}>
-        <div>
-          <label htmlFor="website-name">Website Name</label>
-          <input
-            id="website-name"
-            type="text"
-            onChange={websiteNameChangeHandler}
-            onBlur={websiteNameBlurHandler}
-            value={enteredWebsiteName}
-          ></input>
+        <SmallTextBox
+          className={nameInputClasses}
+          fieldName="Website Name"
+          onChange={websiteNameChangeHandler}
+          onBlur={websiteNameBlurHandler}
+          value={enteredWebsiteName}
+        />
+        <SmallTextBox
+          className={logoInputClasses}
+          fieldName="Website Logo"
+          onChange={logoUrlChangeHandler}
+          onBlur={logoUrlBlurHandler}
+          value={enteredLogoUrl}
+        />
+        <SmallTextBox
+          className={urlInputClasses}
+          fieldName="Website Url"
+          onChange={websiteUrlChangeHandler}
+          onBlur={websiteUrlBlurHandler}
+          value={enteredWebsiteUrl}
+        />
+
+        <SmallTextBox
+          className={categoryInputClasses}
+          fieldName="Category"
+          onChange={categoryChangeHandler}
+          onBlur={categoryBlurHandler}
+          value={enteredCategory}
+        />
+        <div className={classes.btnContainer}>
+          <button>Save</button>
+          <button onClick={closeFormHandler}>Cancel</button>
         </div>
-        <div>
-          <label htmlFor="url">Url</label>
-          <input
-            id="url"
-            type="text"
-            onChange={websiteUrlChangeHandler}
-            onBlur={websiteUrlBlurHandler}
-            value={enteredWebsiteUrl}
-          ></input>
-        </div>
-        <div>
-          <label htmlFor="logo-url">Logo Url</label>
-          <input
-            id="logo-url"
-            type="text"
-            onChange={logoUrlChangeHandler}
-            onBlur={logoUrlBlurHandler}
-            value={enteredLogoUrl}
-          ></input>
-        </div>
-        <div>
-          <label htmlFor="category">Cateogory</label>
-          <input
-            id="category"
-            type="text"
-            onChange={categoryChangeHandler}
-            onBlur={categoryBlurHandler}
-            value={enteredCategory}
-          ></input>
-        </div>
-        <button>Save</button>
       </form>
-    </Fragment>
+    </div>
   );
 };
 export default NewWebsiteForm;

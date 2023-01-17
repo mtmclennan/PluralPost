@@ -2,12 +2,9 @@
   "name": "pluralpostbackend",
   "version": "1.0.0",
   "description": "Complete site management system for blogs - NodeJS Backend",
-  "source": "public/js/index.js",
-  "module": "public/js/bundle.js",
   "type": "commonjs",
   "scripts": {
     "start": "nodemon dist/server.js",
-    "watch:js": "parcel watch ./public/js/index.js --dist-dir ./public/js",
     "build": "npx tsc",
     "watch:ts": "npx tsc --watch",
     "dev": "concurrently \"npm run watch:ts\" \"wait-on -d 5000 dist/server.js && nodemon dist/server.js\""

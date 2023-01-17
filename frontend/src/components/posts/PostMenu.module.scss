@@ -1,0 +1,13 @@
+@use '../../sass/abstracts/mixins' as m;
+
+.container {
+  @include m.flexCenter();
+  width: 100%;
+  gap: 15rem;
+}
+
+.flex {
+  @include m.flexCenter();
+  width: fit-content;
+  gap: 1rem;
+}

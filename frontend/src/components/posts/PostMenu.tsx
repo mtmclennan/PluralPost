@@ -1,4 +1,5 @@
 import { Fragment } from 'react';
+import classes from './PostMenu.module.scss';
 
 type PostMenuProps = {
   onSave: (event: React.UIEvent<HTMLButtonElement>) => void;
@@ -18,12 +19,12 @@ const PostMenu = ({
   publishBtnText,
 }: PostMenuProps) => {
   return (
-    <div className="side-bar__container">
-      <div className="side-bar__messages">
+    <div className={classes.container}>
+      <div className={classes.flex}>
         <h3>Post Status</h3>
         <p>{postStatus}</p>
       </div>
-      <div className="side-bar__buttons">
+      <div className={classes.flex}>
         <button onClick={onSave}>Save</button>
         {id && (
           <Fragment>

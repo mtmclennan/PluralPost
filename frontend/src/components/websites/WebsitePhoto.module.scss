@@ -1,0 +1,10 @@
+@use '../../sass/abstracts/mixins' as m;
+
+.imageContainer {
+  @include m.flexCenter();
+  margin: 1rem;
+  gap: 4rem;
+  & img {
+    max-height: 15rem;
+  }
+}

@@ -30,6 +30,7 @@ const handleJWTExpiredError = () =>
 
 const sendErrorDev = (err: any, req: Request, res: Response) => {
   // API
+
   if (req.originalUrl.startsWith('/api')) {
     return res.status(err.statusCode).json({
       status: err.status,
@@ -48,6 +49,7 @@ const sendErrorDev = (err: any, req: Request, res: Response) => {
 
 const sendErrorProd = (err: any, req: Request, res: Response) => {
   // API
+
   if (req.originalUrl.startsWith('/api')) {
     // Operantional, trusted error: send message to client
     if (err.isOperational) {

@@ -1,5 +1,5 @@
-@import '../abstracts/variables';
-@import '../abstracts/mixins';
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
 
 *,
 *::before,
@@ -43,8 +43,8 @@ code {
 button {
   display: flex;
   font: inherit;
-  background-color: $accent-color;
-  border: 1px solid $accent-color;
+  background-color: v.$accent-color;
+  border: 1px solid v.$accent-color;
   color: white;
   letter-spacing: 0.1rem;
   padding: 0.5rem 1.5rem;
@@ -61,9 +61,9 @@ button {
 .btn:active,
 button:hover,
 button:active {
-  background-color: $light-accent-color;
-  border: 1px solid $accent-color;
-  color: $accent-color;
+  background-color: v.$light-accent-color;
+  border: 1px solid v.$accent-color;
+  color: v.$accent-color;
   box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.219);
 }
 
@@ -428,7 +428,7 @@ button:disabled:active {
   display: none;
 }
 .logo-container {
-  @include flexCenter();
+  @include m.flexCenter();
   text-align: center;
   max-height: 10rem;
 }
@@ -460,8 +460,8 @@ button:disabled:active {
   padding: 0.5em;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  background-color: $primary-color;
-  color: $text-color-light;
+  background-color: v.$primary-color;
+  color: v.$text-color-light;
   & h3 {
     letter-spacing: 0.15rem;
   }
@@ -474,7 +474,7 @@ button:disabled:active {
 }
 
 .preview-post__title {
-  color: $accent-color;
+  color: v.$accent-color;
   line-height: 1.9;
 }
 
@@ -482,7 +482,7 @@ button:disabled:active {
 .preview-post__edit {
   text-decoration: none;
 
-  color: $accent-color;
+  color: v.$accent-color;
 }
 
 .preview-post__draft {
@@ -531,7 +531,7 @@ button:disabled:active {
 }
 
 .welcome {
-  @include flexCenter(column);
+  @include m.flexCenter(column);
   height: 50vh;
 
   gap: 1rem;
@@ -564,9 +564,9 @@ button:disabled:active {
 
 .website-list__row:hover,
 .website-list__row:focus {
-  background-color: $light-accent-color;
-  color: $accent-color;
-  border-color: $accent-color;
+  background-color: v.$light-accent-color;
+  color: v.$accent-color;
+  border-color: v.$accent-color;
 }
 
 .heading {
@@ -574,4 +574,34 @@ button:disabled:active {
   justify-content: center;
   margin-bottom: 1em;
   margin-top: 1em;
+}
+
+.login__container {
+  grid-column: 1 / -1;
+  display: grid;
+  width: 100%;
+  align-items: center;
+  background-color: v.$light-primary-color;
+  grid-template-columns: 4fr 5fr;
+  & img {
+    height: 10rem;
+  }
+}
+
+.logo {
+  font-family: 'Oswald', sans-serif;
+  margin-bottom: 3rem;
+}
+
+.login-form__container {
+  @include m.flexCenter(column);
+  width: 80%;
+  margin-inline: auto;
+}
+
+.login__hero {
+  @include m.flexCenter(column);
+  height: 95%;
+  border-radius: 10px 0 0 10px;
+  background: v.$gradient-color;
 }

@@ -23,7 +23,7 @@ const NavMain = () => {
               <Fragment>
                 <NavItem
                   to="/subscribers"
-                  text="All Subscribers"
+                  text="Subscribers"
                   icon={<At size={20} color={iconColor} weight="duotone" />}
                 />
                 <NavItem

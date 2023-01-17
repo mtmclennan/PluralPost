@@ -31,7 +31,7 @@ const modalStateReducer = (state: State, action: Action) => {
   return initialModalState;
 };
 
-const useModal = (error: string | null) => {
+const useModal = (error?: string | null) => {
   const [modalState, dispatch] = useReducer(
     modalStateReducer,
     initialModalState

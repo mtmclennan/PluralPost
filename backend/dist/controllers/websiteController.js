@@ -34,7 +34,7 @@ exports.editWebsite = (0, catchAsync_1.default)((req, res, next) => __awaiter(vo
         url: req.body.url,
         category: req.body.category,
         logo: req.body.logo,
-    });
+    }, { new: true });
     res.status(200).json({
         status: 'success',
         data: updatedWebsite,

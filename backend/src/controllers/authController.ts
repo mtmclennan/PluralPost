@@ -320,6 +320,10 @@ export const resetPassword = catchAsync(
   }
 );
 
+export const consoleLog = () => {
+  console.log('MADE IT HERE');
+};
+
 export const updatePassword = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserModel.findById(req.user.id).select('+password');

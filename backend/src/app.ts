@@ -65,7 +65,7 @@ app.use(
     },
   })
 );
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 // Development logging
 console.log(process.env.NODE_ENV);
@@ -99,7 +99,7 @@ app.use(xss());
 app.use(hpp());
 
 // Serving static files
-// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/public`));
 
 //Test middlware
 // app.use((req, res, next) => {

@@ -1,3 +1,5 @@
+import WebsiteList from '../components/websites/WebsiteList';
+
 export interface Website {
   _id: string;
   name: string;
@@ -26,6 +28,11 @@ export interface UserData {
 
 export interface Res {
   status: string;
+}
+
+export interface WebsiteRes {
+  status: string;
+  data: Website;
 }
 
 export type ErrorWithMessage = {

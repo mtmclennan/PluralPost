@@ -6,7 +6,7 @@ type LoginHandlerProps = {
   email: string;
   name: string;
   role: string;
-  photo?: string;
+  photo: string;
 };
 
 type Website = {
@@ -60,7 +60,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       email: email,
       name: name,
       role: role,
-      photo: photo ? photo : '',
+      photo: photo,
     });
 
     setIsLoggedIn(true);

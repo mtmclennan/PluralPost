@@ -60,7 +60,7 @@ app.use(helmet_1.default.contentSecurityPolicy({
         styleSrc: styleSources,
     },
 }));
-app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
+app.use(express_1.default.static('public'));
 // Development logging
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
@@ -87,7 +87,7 @@ app.use((0, xss_clean_1.default)());
 // Protection from HTTP paramater pollution (hpp)
 app.use((0, hpp_1.default)());
 // Serving static files
-// app.use(express.static(`${__dirname}/public`));
+app.use(express_1.default.static(`${__dirname}/public`));
 //Test middlware
 // app.use((req, res, next) => {
 //   req.requestTime = new Date().toISOString();

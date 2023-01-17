@@ -31,11 +31,13 @@ const NavSetting = () => {
             <IdentificationCard size={20} color={iconColor} weight="duotone" />
           }
         />
-        <NavItem
-          to="/settings-website"
-          text="Website"
-          icon={<Browser size={20} color={iconColor} weight="duotone" />}
-        />
+        {AuthCtx.website.name && (
+          <NavItem
+            to="/settings-website"
+            text="Website"
+            icon={<Browser size={20} color={iconColor} weight="duotone" />}
+          />
+        )}
       </ul>
       <ul></ul>
       {AuthCtx.isLoggedIn && (

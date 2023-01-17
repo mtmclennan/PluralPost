@@ -1,0 +1,30 @@
+.input {
+  width: 100%;
+  height: 100%;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.wrapper {
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.iconContainer {
+  height: 2rem;
+}
+
+.icon {
+  position: absolute;
+  cursor: pointer;
+  top: 1rem;
+  right: 1rem;
+}

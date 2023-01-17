@@ -1,15 +1,16 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classes from './CMSForm.module.css';
-import ImageInput from '../CMSInputs/ImageInput';
+import ImageInput from '../inputs/ImageInput';
 import useHttp from '../../hooks/use-http';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInput from '../../hooks/use-input';
 import PostMenu from '../../components/posts/PostMenu';
-import RightSideBar from '../../layout/RightSideBar';
-import RichTextEditor from '../CMSInputs/RichTextEditor';
+import RightSideBar from '../../layout/TopBar';
+import RichTextEditor from '../inputs/RichTextEditor';
 import Modal from '../../UI/Modal';
 import AuthContext from '../../store/auth-context';
+import TopBar from '../../layout/TopBar';
 
 type CMSFormProps = {
   id?: string;
@@ -429,6 +430,22 @@ const CMSForm = ({ id }: CMSFormProps) => {
         </Modal>
       )}
       {isLoading && <LoadingSpinner />}
+      <TopBar>
+        <PostMenu
+          id={id ? id : ''}
+          onPublish={publishPostHandler}
+          publishBtnText={published === 'published' ? 'Unpublish' : 'Publish'}
+          onSave={cmsFormSumbitHandler}
+          onDelete={confirmDeletePost}
+          postStatus={
+            published === 'published'
+              ? 'Published'
+              : published === 'draft'
+              ? 'Saved as Draft'
+              : 'Unsaved'
+          }
+        />
+      </TopBar>
       <div className="container">
         <form id="postForm" onSubmit={cmsFormSumbitHandler}>
           <h2 className={classes.title}>{id ? 'Edit Post' : 'Add new Post'}</h2>
@@ -563,7 +580,7 @@ const CMSForm = ({ id }: CMSFormProps) => {
           )}
         </div>
       </div>
-      <RightSideBar>
+      {/* <RightSideBar>
         <PostMenu
           id={id ? id : ''}
           onPublish={publishPostHandler}
@@ -578,7 +595,7 @@ const CMSForm = ({ id }: CMSFormProps) => {
               : 'Unsaved'
           }
         />
-      </RightSideBar>
+      </RightSideBar> */}
     </Fragment>
   );
 };

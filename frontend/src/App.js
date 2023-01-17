@@ -6,6 +6,7 @@ import Users from './pages/users';
 import Settings from './pages/settings';
 import StartPage from './pages/startPage';
 import Login from './pages/login';
+import SettingsWebsite from './pages/Settings-website.tsx';
 import ProtectedRoute from './layout/ProtectedRoute';
 import AuthContext from './store/auth-context';
 import ManageSubs from './pages/manageSubs';
@@ -13,7 +14,6 @@ import Cms from './pages/cms';
 import Posts from './pages/posts';
 import EditPost from './pages/edit-post';
 import SettingsUser from './pages/settingsUser.tsx';
-import SiteSettings from './pages/siteSettings';
 import RestrictedRoute from './layout/RestrictedRoute';
 import Layout from './layout/Layout';
 import NotFound from './pages/notFound';
@@ -24,6 +24,8 @@ function App() {
   return (
     <Fragment>
       <Routes>
+        <Route path="/" element={<Navigate to="/welcome" replace />} exact />
+        <Route path="/login" element={<Login />} />
         <Route
           element={
             <Layout>
@@ -31,8 +33,6 @@ function App() {
             </Layout>
           }
         >
-          <Route path="/" element={<Navigate to="/welcome" replace />} exact />
-          <Route path="/login" element={<Login />} />
           <Route
             element={
               <ProtectedRoute user={AuthCtx.user.name} redirectPath="/login" />
@@ -53,7 +53,6 @@ function App() {
                 />
               }
             >
-              <Route path="/siteSettings" element={<SiteSettings />} />
               <Route path="/users" element={<Users />} />
               <Route path="/ManageSubs" element={<ManageSubs />} />
             </Route>
@@ -68,6 +67,7 @@ function App() {
         >
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings-user" element={<SettingsUser />} />
+          <Route path="/settings-website" element={<SettingsWebsite />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

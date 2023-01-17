@@ -1,0 +1,39 @@
+@use '../../sass/abstracts/mixins' as m;
+@use '../../sass/abstracts/variables' as v;
+
+.container {
+  padding: 1rem 3rem 1rem;
+  & .btnContainer {
+    max-width: fit-content;
+    gap: 1rem;
+  }
+}
+
+.btnContainer {
+  @include m.flexCenter();
+  margin-top: 1rem;
+}
+
+.input {
+  display: block;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  background-color: #fff;
+  border: 2px solid v.$light-accent-color;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+    border: 2px solid v.$accent-color;
+  }
+  &:focus:invalid {
+    border: 2px solid v.$alert-color;
+  }
+}
+
+.invalid {
+  border: 2px solid v.$alert-color;
+}

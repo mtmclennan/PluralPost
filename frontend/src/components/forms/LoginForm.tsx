@@ -5,10 +5,11 @@ import AuthContext from '../../store/auth-context';
 import useInput from '../../hooks/use-input';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import Card from '../../UI/Card';
-import classes from './LoginForm.module.css';
+import classes from './LoginForm.module.scss';
 import useModal from '../../hooks/use-modal';
 import Modal from '../../UI/Modal';
 import { UserRes } from '../../types/index.type';
+import SmallTextBox from '../inputs/SmallTextBox';
 
 const LoginForm = () => {
   const AuthCtx = useContext(AuthContext);
@@ -87,15 +88,15 @@ const LoginForm = () => {
   };
 
   const emailInputClasses = emailInputHasError
-    ? `${classes['form__input']} ${classes.invalid}`
-    : `${classes['form__input']}`;
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
 
   const passwordInputClasses = passwordInputHasError
-    ? `${classes['form__input']} ${classes.invalid}`
-    : `${classes['form__input']}`;
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
 
   return (
-    <Card className={classes['login-form']}>
+    <Card className={classes.container}>
       {isLoading && (
         <div className={classes.loading}>
           <LoadingSpinner />
@@ -108,24 +109,25 @@ const LoginForm = () => {
         </Modal>
       )}
       {!isLoading && (
-        <form
-          onSubmit={LoginFormSubmitHandler}
-          className={classes['form--login']}
-        >
-          <div className={classes['form__group']}>
-            <label className={classes['form__label']} htmlFor="email">
-              Email
-            </label>
-            <input
-              className={emailInputClasses}
-              type="email"
-              id="email"
-              onChange={emailChangeHandler}
-              onBlur={emailBlurHandler}
-              value={enteredEmail}
-            ></input>
-          </div>
-          <div className={classes['form__group']}>
+        <form onSubmit={LoginFormSubmitHandler} className={classes.form}>
+          <p>Please enter your details</p>
+
+          <SmallTextBox
+            className={emailInputClasses}
+            onBlur={emailBlurHandler}
+            onChange={emailChangeHandler}
+            value={enteredEmail}
+            fieldName="Email"
+          />
+          <SmallTextBox
+            className={passwordInputClasses}
+            onBlur={passwordBlurHandler}
+            onChange={passwordChangeHandler}
+            value={enteredPassword}
+            fieldName="Password"
+            type="password"
+          />
+          {/* <div className={classes['form__group']}>
             <label className={classes['form__label']} htmlFor="password">
               Password
             </label>
@@ -137,20 +139,14 @@ const LoginForm = () => {
               onBlur={passwordBlurHandler}
               value={enteredPassword}
             ></input>
-          </div>
-          <div className={classes['form__group']}>
-            <button
-              className={`${classes['form__group center']} ${classes['center']}`}
-            >
-              Submit
-            </button>
+          </div> */}
+          <div className={classes.btnContainer}>
+            <button>Sign in</button>
           </div>
         </form>
       )}
-      <div className={classes['form__group']}>
-        <button className={`${classes['forgot']} ${classes['center']}`}>
-          Forgot Password?
-        </button>
+      <div className={classes.btnContainer}>
+        <button className={classes.btnForgot}>Forgot Password?</button>
       </div>
     </Card>
   );

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkIfAdminExists = exports.renderLoginView = exports.updatePassword = exports.resetPassword = exports.restrictTo = exports.forgotPassword = exports.logout = exports.isLoggedIn = exports.protect = exports.protectPhoto = exports.signUp = exports.login = void 0;
+exports.checkIfAdminExists = exports.renderLoginView = exports.updatePassword = exports.consoleLog = exports.resetPassword = exports.restrictTo = exports.forgotPassword = exports.logout = exports.isLoggedIn = exports.protect = exports.protectPhoto = exports.signUp = exports.login = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const jwt_promisify_1 = __importDefault(require("jwt-promisify"));
 const crypto_1 = __importDefault(require("crypto"));
@@ -241,6 +241,10 @@ exports.resetPassword = (0, catchAsync_1.default)((req, res, next) => __awaiter(
     yield user.save();
     createSendToken(user, 200, res);
 }));
+const consoleLog = () => {
+    console.log('MADE IT HERE');
+};
+exports.consoleLog = consoleLog;
 exports.updatePassword = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield userModel_1.UserModel.findById(req.user.id).select('+password');
     if (user) {
