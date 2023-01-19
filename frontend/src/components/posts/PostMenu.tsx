@@ -21,7 +21,7 @@ const PostMenu = ({
   return (
     <div className={classes.container}>
       <div className={classes.flex}>
-        <h3>Post Status</h3>
+        <h3>Post Status:</h3>
         <p>{postStatus}</p>
       </div>
       <div className={classes.flex}>

@@ -8,23 +8,22 @@ import htmlToText from 'html-to-text';
 
 interface Message {
   subject: string;
-  sender: string;
-  message: string;
+  sender?: string;
+  message?: string;
+  firstName?: string;
 }
 
-export class Email {
-  to: string;
-  firstName: string;
+export class sendEmail {
+  to: string | string[];
   url: string;
   from: string;
 
-  constructor(user: EmailUser, url: string) {
-    this.to = user.email;
-    this.firstName = user.name.split(' ')[0];
+  constructor(options: EmailUser, url: string) {
+    this.to = options.email;
     this.url = url;
-    this.from = user.from
-      ? `${user.firstName} ${user.lastName} <${user.from}>`
-      : `Matt McLennan <${process.env.EMAIL_FROM}>`;
+    this.from = options.from
+      ? `${options.firstName} ${options.lastName} <${options.from}>`
+      : `PluralPost<${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
@@ -41,29 +40,24 @@ export class Email {
     });
   }
   //Send actual email
-  async send(
-    template: string,
-    subject: string,
-    message?: string,
-    sender?: string
-  ) {
+  async send(template: string, message: Message) {
     //1) Render HTML based on a pug template
 
     const html = pug.renderFile(
       `${__dirname}/../views/emails/${template}.pug`,
       {
-        firstName: this.firstName,
+        firstName: message.firstName,
         url: this.url,
-        subject,
-        message,
-        sender,
+        subject: message.subject,
+        message: message.message,
+        sender: message.sender,
       }
     );
     // 2) Define the email options
     const mailOptions = {
       from: this.from,
       to: this.to,
-      subject,
+      message: message.message,
       html,
       text: htmlToText.fromString(html),
     };
@@ -73,22 +67,14 @@ export class Email {
   }
 
   async sendWelcome() {
-    await this.send('welcome', 'Welcome to Sub List!', 'Hi Welcome', this.from);
+    await this.send('welcome', {
+      subject: `Welcome to ${this.url}!`,
+      message: 'Hi Welcome',
+      sender: this.from,
+    });
   }
 
-  async sendContactMessage(message: Message) {
-    await this.send(
-      'contact',
-      message.subject,
-      message.message,
-      message.sender
-    );
-  }
-
-  async sendPasswordReset() {
-    await this.send(
-      'passwordReset',
-      'Your password reset token (only valid for 10 mins)'
-    );
+  async sendContactMessage({ subject, message, sender }: Message) {
+    await this.send('contact', { subject, message, sender });
   }
 }

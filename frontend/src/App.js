@@ -17,6 +17,8 @@ import SettingsUser from './pages/settingsUser.tsx';
 import RestrictedRoute from './layout/RestrictedRoute';
 import Layout from './layout/Layout';
 import NotFound from './pages/notFound';
+import ResetPassword from './pages/ResetPassword';
+import Email from './pages/email';
 
 function App() {
   const AuthCtx = useContext(AuthContext);
@@ -26,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/welcome" replace />} exact />
         <Route path="/login" element={<Login />} />
+        <Route path="/resetPassword/:token" element={<ResetPassword />} />
         <Route
           element={
             <Layout>
@@ -38,6 +41,8 @@ function App() {
               <ProtectedRoute user={AuthCtx.user.name} redirectPath="/login" />
             }
           >
+            <Route path="/email" element={<Email />} />
+            <Route path="/edit-email/:id" element={<Email />} />
             <Route path="/welcome" element={<HomePage />} />
             <Route path="/start" element={<StartPage />} />
             <Route path="/posts" element={<Posts />} />

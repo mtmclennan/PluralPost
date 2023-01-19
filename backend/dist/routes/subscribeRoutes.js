@@ -38,9 +38,5 @@ router
 router
     .route('/:website/delete/:id')
     .delete(subscribeController.deleteSubscriber);
-router.route('/email').post(subscribeController.sendSubscriberEmail);
-// router
-//   .route('/ByWebsite/:website')
-//   .get(subscribeController.getSubscribersByWebsite)
-//   .post(subscribeController.emailSubscribersByWebsite);
+router.route('/:website/email').post(subscribeController.sendSubscriberEmail);
 exports.default = router;

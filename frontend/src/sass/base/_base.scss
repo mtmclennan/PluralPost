@@ -11,6 +11,7 @@
 
 html {
   font-size: 62.5%;
+  cursor: default;
 }
 
 body {
@@ -510,10 +511,28 @@ button:disabled:active {
   font-size: 1.4rem;
 }
 
+.preview-email {
+  @include m.flexCenter();
+  gap: 1em;
+  border-radius: 5px;
+  padding: 1em;
+  border: 1px solid #d3d0d0;
+  margin: 0.5em;
+  background-color: #f8f9fa;
+  font-size: 1.4rem;
+}
+
 .preview-sub__card {
   cursor: pointer;
   border-radius: 5px;
   max-width: 300px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+.preview-email__card {
+  border-radius: 5px;
+  max-width: 900px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   background-color: white;
 }
@@ -604,4 +623,11 @@ button:disabled:active {
   height: 95%;
   border-radius: 10px 0 0 10px;
   background: v.$gradient-color;
+}
+
+.container-email {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }

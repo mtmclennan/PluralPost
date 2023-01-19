@@ -5,9 +5,9 @@
   "type": "commonjs",
   "scripts": {
     "start": "nodemon dist/server.js",
-    "build": "npx tsc",
-    "watch:ts": "npx tsc --watch",
-    "dev": "concurrently \"npm run watch:ts\" \"wait-on -d 5000 dist/server.js && nodemon dist/server.js\""
+    "build": "npx tsc && tscp",
+    "watch:ts": "npx tsc --watch && tscp --watch",
+    "dev": "concurrently \"npm run watch:ts\"  \"wait-on -d 5000 dist/server.js && nodemon dist/server.js\""
   },
   "author": "Matthew McLennan",
   "license": "ISC",

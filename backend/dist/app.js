@@ -21,7 +21,7 @@ const helmet_1 = __importDefault(require("helmet"));
 const appError_1 = __importDefault(require("./utils/appError"));
 const errorController_1 = __importDefault(require("./controllers/errorController"));
 const app = (0, express_1.default)();
-app.set('views', path_1.default.join(__dirname, 'views'));
+app.set('views', path_1.default.join(__dirname, './views/emails'));
 //Globel Middleware
 // Set security headers
 // app.use(

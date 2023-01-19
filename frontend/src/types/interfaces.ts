@@ -35,6 +35,10 @@ export interface WebsiteRes {
   data: Website;
 }
 
+export interface EmailRes {
+  status: string;
+  data: Email;
+}
 export type ErrorWithMessage = {
   message: String;
 };
@@ -66,4 +70,14 @@ export interface Subscriber {
 
 export interface SubscriberData {
   data: Subscriber[];
+}
+
+export interface Email {
+  _id: string;
+  subject: string;
+  author: User;
+  dateModified: string;
+  dateSent?: string;
+  status: string;
+  message: string;
 }

@@ -2,6 +2,7 @@ import Website from '../models/websiteModel';
 import { getAll } from './handlerFactory';
 import catchAsync from '../utils/catchAsync';
 import { Request, Response, NextFunction } from 'express';
+import { WebsiteType } from '../types/interfaces';
 
 export const createWebsite = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -38,6 +39,13 @@ export const editWebsite = catchAsync(
     });
   }
 );
+
+export const findWebsiteByName = async (website: string) => {
+  const data = await Website.find<WebsiteType>({ name: website });
+
+  return data;
+};
+
 export const getWebsite = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const data = await Website.findById(req.params.id);

@@ -8,10 +8,14 @@ import Card from '../../UI/Card';
 import classes from './LoginForm.module.scss';
 import useModal from '../../hooks/use-modal';
 import Modal from '../../UI/Modal';
-import { UserRes } from '../../types/index.type';
+import { SetStateBoolean, UserRes } from '../../types/index.type';
 import SmallTextBox from '../inputs/SmallTextBox';
 
-const LoginForm = () => {
+const LoginForm = ({
+  setShowResetForm,
+}: {
+  setShowResetForm: SetStateBoolean;
+}) => {
   const AuthCtx = useContext(AuthContext);
   const { isLoading, error, sendRequest: LoginRequest } = useHttp();
   const navigate = useNavigate();
@@ -87,6 +91,10 @@ const LoginForm = () => {
     hideModal();
   };
 
+  const onClickHandler = () => {
+    setShowResetForm((currentState) => !currentState);
+  };
+
   const emailInputClasses = emailInputHasError
     ? `${classes.input} ${classes.invalid}`
     : `${classes.input}`;
@@ -127,26 +135,15 @@ const LoginForm = () => {
             fieldName="Password"
             type="password"
           />
-          {/* <div className={classes['form__group']}>
-            <label className={classes['form__label']} htmlFor="password">
-              Password
-            </label>
-            <input
-              className={passwordInputClasses}
-              type="password"
-              id="password"
-              onChange={passwordChangeHandler}
-              onBlur={passwordBlurHandler}
-              value={enteredPassword}
-            ></input>
-          </div> */}
           <div className={classes.btnContainer}>
             <button>Sign in</button>
           </div>
         </form>
       )}
       <div className={classes.btnContainer}>
-        <button className={classes.btnForgot}>Forgot Password?</button>
+        <button onClick={onClickHandler} className={classes.btnForgot}>
+          Forgot Password?
+        </button>
       </div>
     </Card>
   );

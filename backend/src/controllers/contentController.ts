@@ -150,7 +150,9 @@ export const getWebsiteUrl = catchAsync(
     const website = req.params.website;
     const data = await Website.findOne({ name: website });
 
-    res.locals.url = data.url;
+    if (data && data.url) {
+      res.locals.url = data.url;
+    }
 
     next();
   }

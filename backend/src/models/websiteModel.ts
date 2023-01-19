@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { WebsiteType } from '../types/interfaces';
 
 const websiteSchema = new mongoose.Schema({
   name: {
@@ -16,6 +17,18 @@ const websiteSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  sloggan: {
+    type: String,
+    trim: true,
+  },
+  emailAddress: {
+    type: String,
+    trim: true,
+  },
+  emailFromSiteName: {
+    type: Boolean,
+    default: true,
+  },
   logo: {
     type: String,
     default: 'http://localhost:3030/img/websites/default.svg',
@@ -26,6 +39,8 @@ const websiteSchema = new mongoose.Schema({
   },
 });
 
-const Website = mongoose.model('Website', websiteSchema);
+const Website = mongoose.model<WebsiteType>('Website', websiteSchema);
 
 export default Website;
+
+// export type WebsiteType = typeof Website;

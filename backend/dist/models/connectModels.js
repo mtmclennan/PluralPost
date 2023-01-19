@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect2DB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+const emailModel_1 = require("./emailModel");
 const contentModel_1 = require("./contentModel");
 const subscriberModel_1 = require("./subscriberModel");
 const connect2DB = (website) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,6 +24,7 @@ const connect2DB = (website) => __awaiter(void 0, void 0, void 0, function* () {
     // const conn = await mongoDb.useDb(website);
     conn.model('Subscribers', subscriberModel_1.subscriberSchema);
     conn.model('Post', contentModel_1.postSchema);
+    conn.model('Email', emailModel_1.emailSchema);
     return conn;
 });
 exports.connect2DB = connect2DB;

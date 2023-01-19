@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import { emailSchema } from './emailModel';
 import { postSchema } from './contentModel';
 import { subscriberSchema } from './subscriberModel';
 
@@ -14,6 +14,7 @@ export const connect2DB = async (website: string) => {
   // const conn = await mongoDb.useDb(website);
   conn.model('Subscribers', subscriberSchema);
   conn.model('Post', postSchema);
+  conn.model('Email', emailSchema);
 
   return conn;
 };

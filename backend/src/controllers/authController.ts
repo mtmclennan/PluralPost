@@ -4,10 +4,11 @@ import { User } from '../types/interfaces';
 import catchAsync from '../utils/catchAsync';
 import jwt from 'jwt-promisify';
 import crypto from 'crypto';
-import { Email } from '../utils/email';
+import { sendEmail } from '../utils/sendEmail';
 import { UserModel } from '../models/userModel';
 import AppError from '../utils/appError';
-import { CLIENT_RENEG_LIMIT } from 'tls';
+import { sendEmailOne } from '../utils/sendEmailOne';
+
 // import { token } from 'morgan';
 
 const signToken = (id: string) => {
@@ -187,6 +188,7 @@ export const protect = catchAsync(
     //Grant ACCESS To PROTECTED ROUTE
     req.user = freshUser;
     res.locals.user = freshUser;
+    console.log(req.user);
     next();
   }
 );
@@ -253,32 +255,31 @@ export const forgotPassword = catchAsync(
       //3 ) Send it to user's email
 
       try {
-        const resetURL = `${req.protocol}://${req.get(
-          'host'
-        )}/resetPassword/${resetToken}`;
+        const resetURL = `${process.env.CLIENT_URL}/resetPassword/${resetToken}`;
 
         const mailUser = {
           name: user.name,
           email: user.email,
         };
 
-        await new Email(mailUser, resetURL).sendPasswordReset();
+        await new sendEmailOne(mailUser, resetURL).sendPasswordReset();
         res.status(200).json({
           status: 'success',
           message: 'Token sent to email',
         });
       } catch (err) {
+        console.log(err);
         user.passwordResetToken = undefined;
         user.passwordResetExpires = undefined;
         await user.save({ validateBeforeSave: false });
-      }
 
-      return next(
-        new AppError(
-          'There was an error sending the email. Try again later!',
-          500
-        )
-      );
+        return next(
+          new AppError(
+            'There was an error sending the email. Try again later!',
+            500
+          )
+        );
+      }
     }
   }
 );

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllWebsites = exports.getWebsite = exports.editWebsite = exports.createWebsite = void 0;
+exports.getAllWebsites = exports.getWebsite = exports.findWebsiteByName = exports.editWebsite = exports.createWebsite = void 0;
 const websiteModel_1 = __importDefault(require("../models/websiteModel"));
 const handlerFactory_1 = require("./handlerFactory");
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
@@ -40,6 +40,11 @@ exports.editWebsite = (0, catchAsync_1.default)((req, res, next) => __awaiter(vo
         data: updatedWebsite,
     });
 }));
+const findWebsiteByName = (website) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield websiteModel_1.default.find({ name: website });
+    return data;
+});
+exports.findWebsiteByName = findWebsiteByName;
 exports.getWebsite = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const data = yield websiteModel_1.default.findById(req.params.id);
     res.status(200).json({

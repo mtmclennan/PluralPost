@@ -1,7 +1,7 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from 'ckeditor5-custom-build/build/ckeditor';
 
-const RichTextEditor = (props) => {
+const RichTextEditor = ({ setEditor, valueChangeHandler }) => {
   const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/photo`;
   const TOKEN = process.env.REACT_APP_PHOTO_TOKEN;
   return (
@@ -25,11 +25,11 @@ const RichTextEditor = (props) => {
       onReady={(editor) => {
         // You can store the "editor" and use when it is needed.
 
-        props.setEditor(editor);
+        setEditor(editor);
       }}
       onChange={(event, editor) => {
         const data = editor.getData();
-        props.valueChangeHandler(data);
+        valueChangeHandler(data);
       }}
       // onBlur={(event, editor) => {}}
       // onFocus={(event, editor) => {}}

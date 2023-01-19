@@ -16,9 +16,9 @@ exports.checkIfAdminExists = exports.renderLoginView = exports.updatePassword = 
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const jwt_promisify_1 = __importDefault(require("jwt-promisify"));
 const crypto_1 = __importDefault(require("crypto"));
-const email_1 = require("../utils/email");
 const userModel_1 = require("../models/userModel");
 const appError_1 = __importDefault(require("../utils/appError"));
+const sendEmailOne_1 = require("../utils/sendEmailOne");
 // import { token } from 'morgan';
 const signToken = (id) => {
     console.log('here id', id);
@@ -141,6 +141,7 @@ exports.protect = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0
     //Grant ACCESS To PROTECTED ROUTE
     req.user = freshUser;
     res.locals.user = freshUser;
+    console.log(req.user);
     next();
 }));
 const isLoggedIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -193,23 +194,24 @@ exports.forgotPassword = (0, catchAsync_1.default)((req, res, next) => __awaiter
         yield user.save({ validateBeforeSave: false });
         //3 ) Send it to user's email
         try {
-            const resetURL = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
+            const resetURL = `${process.env.CLIENT_URL}/resetPassword/${resetToken}`;
             const mailUser = {
                 name: user.name,
                 email: user.email,
             };
-            yield new email_1.Email(mailUser, resetURL).sendPasswordReset();
+            yield new sendEmailOne_1.sendEmailOne(mailUser, resetURL).sendPasswordReset();
             res.status(200).json({
                 status: 'success',
                 message: 'Token sent to email',
             });
         }
         catch (err) {
+            console.log(err);
             user.passwordResetToken = undefined;
             user.passwordResetExpires = undefined;
             yield user.save({ validateBeforeSave: false });
+            return next(new appError_1.default('There was an error sending the email. Try again later!', 500));
         }
-        return next(new appError_1.default('There was an error sending the email. Try again later!', 500));
     }
 }));
 const restrictTo = (...roles) => {

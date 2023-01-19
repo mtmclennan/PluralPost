@@ -1,9 +1,11 @@
 import catchAsync from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import { connect2DB } from '../models/connectModels';
-import { Email } from '../utils/email';
+import { sendEmail } from '../utils/sendEmail';
 import { NextFunction, Request, Response } from 'express';
 import { Subscriber } from '../types/interfaces';
+import MailMessage from 'nodemailer/lib/mailer/mail-message';
+import { sendEmailOne } from '../utils/sendEmailOne';
 
 export const createSubscriber = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -18,6 +20,15 @@ export const createSubscriber = catchAsync(
       websiteFrom: req.body.website || req.hostname,
     });
 
+    console.log(data);
+
+    const mailSub = {
+      name: data.name,
+      email: data.email,
+    };
+
+    await new sendEmailOne(mailSub, website).sendWelcome();
+
     res.status(201).json({
       status: 'success',
       data,
@@ -25,12 +36,18 @@ export const createSubscriber = catchAsync(
   }
 );
 
+export const findSubscribers = async (website: string) => {
+  const DBConnection = await connect2DB(website);
+  const Subscriber = DBConnection.model<Subscriber>('Subscribers');
+  const data = await Subscriber.find();
+  return data;
+};
+
 export const getAllSubscribers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const website = req.params.website;
-    const DBConnection = await connect2DB(website);
-    const Subscriber = DBConnection.model<Subscriber>('Subscribers');
-    const data = await Subscriber.find();
+    const { website } = req.params;
+
+    const data = await findSubscribers(website);
 
     res.status(200).json({
       status: 'success',
@@ -41,7 +58,7 @@ export const getAllSubscribers = catchAsync(
 
 export const deleteSubscriber = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const website = req.params.website;
+    const { website } = req.params;
 
     const DBConnection = await connect2DB(website);
     const Subscriber = DBConnection.model<Subscriber>('Subscribers');
@@ -60,12 +77,21 @@ export const deleteSubscriber = catchAsync(
 
 export const sendSubscriberEmail = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const subscribers: Subscriber[] = req.body.data.data;
-    const url = `http://yardoasis.info`;
+    const { website } = req.params;
+    const subscribers = await findSubscribers(website);
+    const mailList = subscribers.map((sub) => sub.email);
 
-    subscribers.forEach(async (subscriber: Subscriber) => {
-      await new Email(subscriber, url).sendWelcome();
-    });
+    const MailOptions = {
+      email: mailList,
+    };
+
+    const message = {
+      subject: req.body.subject,
+      message: req.body.message,
+      sender: req.body.sender,
+    };
+
+    await new sendEmail(MailOptions, website).sendContactMessage(message);
 
     res.status(200).json({
       status: 'success',

@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendSubscriberEmail = exports.deleteSubscriber = exports.getAllSubscribers = exports.createSubscriber = void 0;
+exports.sendSubscriberEmail = exports.deleteSubscriber = exports.getAllSubscribers = exports.findSubscribers = exports.createSubscriber = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const appError_1 = __importDefault(require("../utils/appError"));
 const connectModels_1 = require("../models/connectModels");
-const email_1 = require("../utils/email");
+const sendEmail_1 = require("../utils/sendEmail");
+const sendEmailOne_1 = require("../utils/sendEmailOne");
 exports.createSubscriber = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const website = req.params.website;
     const DBConnection = yield (0, connectModels_1.connect2DB)(website);
@@ -26,23 +27,34 @@ exports.createSubscriber = (0, catchAsync_1.default)((req, res, next) => __await
         email: req.body.email,
         websiteFrom: req.body.website || req.hostname,
     });
+    console.log(data);
+    const mailSub = {
+        name: data.name,
+        email: data.email,
+    };
+    yield new sendEmailOne_1.sendEmailOne(mailSub, website).sendWelcome();
     res.status(201).json({
         status: 'success',
         data,
     });
 }));
-exports.getAllSubscribers = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const website = req.params.website;
+const findSubscribers = (website) => __awaiter(void 0, void 0, void 0, function* () {
     const DBConnection = yield (0, connectModels_1.connect2DB)(website);
     const Subscriber = DBConnection.model('Subscribers');
     const data = yield Subscriber.find();
+    return data;
+});
+exports.findSubscribers = findSubscribers;
+exports.getAllSubscribers = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { website } = req.params;
+    const data = yield (0, exports.findSubscribers)(website);
     res.status(200).json({
         status: 'success',
         data,
     });
 }));
 exports.deleteSubscriber = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const website = req.params.website;
+    const { website } = req.params;
     const DBConnection = yield (0, connectModels_1.connect2DB)(website);
     const Subscriber = DBConnection.model('Subscribers');
     const doc = yield Subscriber.findByIdAndDelete(req.params.id.trim());
@@ -55,11 +67,18 @@ exports.deleteSubscriber = (0, catchAsync_1.default)((req, res, next) => __await
     });
 }));
 exports.sendSubscriberEmail = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const subscribers = req.body.data.data;
-    const url = `http://yardoasis.info`;
-    subscribers.forEach((subscriber) => __awaiter(void 0, void 0, void 0, function* () {
-        yield new email_1.Email(subscriber, url).sendWelcome();
-    }));
+    const { website } = req.params;
+    const subscribers = yield (0, exports.findSubscribers)(website);
+    const mailList = subscribers.map((sub) => sub.email);
+    const MailOptions = {
+        email: mailList,
+    };
+    const message = {
+        subject: req.body.subject,
+        message: req.body.message,
+        sender: req.body.sender,
+    };
+    yield new sendEmail_1.sendEmail(MailOptions, website).sendContactMessage(message);
     res.status(200).json({
         status: 'success',
         data: null,

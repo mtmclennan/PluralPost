@@ -123,7 +123,9 @@ exports.editPost = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 
 exports.getWebsiteUrl = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const website = req.params.website;
     const data = yield websiteModel_1.default.findOne({ name: website });
-    res.locals.url = data.url;
+    if (data && data.url) {
+        res.locals.url = data.url;
+    }
     next();
 }));
 exports.createPost = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

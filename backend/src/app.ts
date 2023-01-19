@@ -19,7 +19,7 @@ import globalErrorHandler from './controllers/errorController';
 
 const app = express();
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, './views/emails'));
 
 //Globel Middleware
 // Set security headers

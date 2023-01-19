@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import classes from './CMSForm.module.css';
+import classes from './CMSForm.module.scss';
 import ImageInput from '../inputs/ImageInput';
 import useHttp from '../../hooks/use-http';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import useInput from '../../hooks/use-input';
 import PostMenu from '../../components/posts/PostMenu';
-import RightSideBar from '../../layout/TopBar';
 import RichTextEditor from '../inputs/RichTextEditor';
 import Modal from '../../UI/Modal';
 import AuthContext from '../../store/auth-context';
@@ -403,16 +402,7 @@ const CMSForm = ({ id }: CMSFormProps) => {
       setEnteredTags(post.tags);
       editorStore.setData(post.postBody ? post.postBody : '');
     }
-  }, [
-    post,
-    // setEnteredAuthor,
-    // setEnteredDate,
-    // setEnteredDescription,
-    // setEnteredPhotoCaption,
-    // setEnteredSlug,
-    // setEnteredTags,
-    // setEnteredTitle,
-  ]);
+  }, [post]);
 
   return (
     <Fragment>
@@ -580,22 +570,6 @@ const CMSForm = ({ id }: CMSFormProps) => {
           )}
         </div>
       </div>
-      {/* <RightSideBar>
-        <PostMenu
-          id={id ? id : ''}
-          onPublish={publishPostHandler}
-          publishBtnText={published === 'published' ? 'Unpublish' : 'Publish'}
-          onSave={cmsFormSumbitHandler}
-          onDelete={confirmDeletePost}
-          postStatus={
-            published === 'published'
-              ? 'Published'
-              : published === 'draft'
-              ? 'Saved as Draft'
-              : 'Unsaved'
-          }
-        />
-      </RightSideBar> */}
     </Fragment>
   );
 };

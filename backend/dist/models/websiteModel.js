@@ -20,6 +20,18 @@ const websiteSchema = new mongoose_1.default.Schema({
         type: String,
         trim: true,
     },
+    sloggan: {
+        type: String,
+        trim: true,
+    },
+    emailAddress: {
+        type: String,
+        trim: true,
+    },
+    emailFromSiteName: {
+        type: Boolean,
+        default: true,
+    },
     logo: {
         type: String,
         default: 'http://localhost:3030/img/websites/default.svg',
@@ -31,3 +43,4 @@ const websiteSchema = new mongoose_1.default.Schema({
 });
 const Website = mongoose_1.default.model('Website', websiteSchema);
 exports.default = Website;
+// export type WebsiteType = typeof Website;

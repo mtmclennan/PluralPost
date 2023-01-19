@@ -49,9 +49,20 @@ export interface Contactor {
 }
 
 export interface EmailUser {
-  name: string;
+  name?: string;
   firstName?: string;
   lastName?: string;
-  email: string;
+  email: string | string[];
   from?: string;
+}
+
+export interface WebsiteType {
+  name: string;
+  url: string;
+  category: string;
+  sloggan: string;
+  emailAddress: string;
+  emailFromSiteName: Boolean;
+  logo: string;
+  createdAt: Date;
 }
