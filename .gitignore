@@ -22,6 +22,8 @@ node_modules
 # production
 /frontend/build
 # misc
+/backend/*.config
+config.env
 .DS_Store
 .env.local
 .env.development.local
