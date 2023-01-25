@@ -10,6 +10,7 @@ import RichTextEditor from '../inputs/RichTextEditor';
 import Modal from '../../UI/Modal';
 import AuthContext from '../../store/auth-context';
 import TopBar from '../../layout/TopBar';
+import useModal from '../../hooks/use-modal';
 
 type CMSFormProps = {
   id?: string;
@@ -42,13 +43,19 @@ const CMSForm = ({ id }: CMSFormProps) => {
 
   const [post, setPost] = useState<Post>();
   const [published, setPublished] = useState('');
-  const [showButtons, setShowButtons] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [uploadedFile, setUploadedFile] = useState('');
-  const [responceMessage, setResponceMessage] = useState('');
   const { isLoading, error, sendRequest } = useHttp();
   const [editorStore, setEditorStore] = useState<any>(null);
   const [richTextValue, setRichtextValue] = useState('');
+
+  const {
+    setModalMessage,
+    showModal,
+    hideModal,
+    showModalButtons,
+    modalMessage,
+    setShowModalButtons,
+  } = useModal(error);
 
   const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/${AuthCtx.website.name}/posts`;
 
@@ -136,23 +143,22 @@ const CMSForm = ({ id }: CMSFormProps) => {
 
     const httpMethod = id ? 'PATCH' : 'POST';
     const idFromProps = id ? `/${id}` : '';
-    setShowModal(true);
 
     const response = (res: Res) => {
       if (res.status === 'success') {
-        setResponceMessage('Post Saved');
+        setModalMessage('Post Saved');
         setTimeout(() => {
-          setShowModal(false);
+          hideModal();
           if (!id) {
             navigate(`/edit-post/${res.data!._id}`, { replace: true });
           }
         }, 300);
       } else {
         setTimeout(() => {
-          setShowModal(false);
+          hideModal();
         }, 3000);
         console.log(error);
-        setResponceMessage(error || 'Something went wrong!');
+        setModalMessage(error || 'Something went wrong!');
       }
     };
     sendRequest(
@@ -181,13 +187,6 @@ const CMSForm = ({ id }: CMSFormProps) => {
   //////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////
 
-  useEffect(() => {
-    if (error) {
-      setShowModal(true);
-      setResponceMessage(error);
-    }
-  }, [error]);
-
   const titleInputClasses = titleInputHasError
     ? 'form__input invalid'
     : 'form__input';
@@ -213,18 +212,17 @@ const CMSForm = ({ id }: CMSFormProps) => {
     : 'form__input';
 
   const showModalHandler = () => {
-    setShowModal(false);
-    setShowButtons(false);
+    hideModal();
   };
 
   const featuredImageResponseHandler = (data: { url: string }) => {
     setUploadedFile(data.url);
+    console.log(data);
   };
 
   const confirmDeletePost = () => {
-    setShowModal(true);
-    setShowButtons(true);
-    setResponceMessage('Are you sure you want to DELETE This post');
+    setModalMessage('Are you sure you want to DELETE This post');
+    setShowModalButtons(true);
   };
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -232,8 +230,6 @@ const CMSForm = ({ id }: CMSFormProps) => {
 
   const deletePostHandler = (event: React.UIEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setShowButtons(false);
-    setShowModal(true);
 
     interface Res {
       status: string;
@@ -241,17 +237,17 @@ const CMSForm = ({ id }: CMSFormProps) => {
 
     const response = (res: Res) => {
       if (res.status === 'success') {
-        setResponceMessage('Post Deleted');
+        setModalMessage('Post Deleted');
         setTimeout(() => {
-          setShowModal(false);
+          hideModal();
           navigate('/posts');
         }, 1000);
       } else {
         setTimeout(() => {
-          setShowModal(false);
+          hideModal();
         }, 3000);
 
-        setResponceMessage(error || 'Something went wrong!');
+        setModalMessage(error || 'Something went wrong!');
       }
     };
 
@@ -284,20 +280,17 @@ const CMSForm = ({ id }: CMSFormProps) => {
       slugBlurHandler();
       photoCaptionBlurHandler();
 
-      setShowModal(true);
-      setResponceMessage(
+      setModalMessage(
         'There can not be empty fields in Post! Must be complete before Pubishing'
       );
       setTimeout(() => {
-        setShowModal(false);
+        hideModal();
       }, 3000);
       return;
     }
     const publish = published === 'published' ? 'draft' : 'published';
 
     const response = (res: Res) => {
-      setShowModal(true);
-      console.log(res);
       if (res.status === 'success') {
         const postStatus =
           publish === 'published' ? 'Post Published' : 'Saved as Draft';
@@ -306,7 +299,7 @@ const CMSForm = ({ id }: CMSFormProps) => {
             ? 'Site ReBuilding'
             : 'Error Building Site';
 
-        setResponceMessage(
+        setModalMessage(
           `${postStatus} 
           ${message}`
         );
@@ -322,14 +315,14 @@ const CMSForm = ({ id }: CMSFormProps) => {
         }
 
         setTimeout(() => {
-          setShowModal(false);
+          hideModal();
           navigate('/posts');
         }, 1000);
       } else {
-        setResponceMessage(error || 'Something went wrong!');
+        setModalMessage(error || 'Something went wrong!');
 
         setTimeout(() => {
-          setShowModal(false);
+          hideModal();
         }, 3000);
       }
     };
@@ -372,10 +365,15 @@ const CMSForm = ({ id }: CMSFormProps) => {
   //   };
   // }, [richTextValue, firstRender, cmsFormSumbitHandler]);
 
+  ////////////////////////////////////////////////////////////////////////////////////
+  // useEffect()
+  ////////////////////////////////////////////////////////////////////////////
+
   useEffect(() => {
     if (!id) {
       return;
     }
+
     const applyPost = (data: any) => {
       setPost(data.data);
     };
@@ -409,8 +407,8 @@ const CMSForm = ({ id }: CMSFormProps) => {
       {showModal && (
         <Modal className={'modal'} onClose={showModalHandler}>
           <div className="modal__content">
-            <p>{responceMessage}</p>
-            {showButtons && (
+            <p>{modalMessage}</p>
+            {showModalButtons && (
               <div className={classes.modalMenu}>
                 <button onClick={deletePostHandler}>OK</button>
                 <button onClick={showModalHandler}>Cancel</button>
@@ -453,7 +451,11 @@ const CMSForm = ({ id }: CMSFormProps) => {
                 value={enteredTitle}
               ></input>
             </div>
-            <ImageInput response={featuredImageResponseHandler}>
+            <ImageInput
+              response={featuredImageResponseHandler}
+              website={AuthCtx.website.name}
+              id={id}
+            >
               {uploadedFile && (
                 <div className={classes.featuredImage}>
                   <p>Featured Image</p>
@@ -548,6 +550,8 @@ const CMSForm = ({ id }: CMSFormProps) => {
           <RichTextEditor
             valueChangeHandler={valueChangeHandler}
             setEditor={setEditorStore}
+            website={AuthCtx.website.name}
+            id={id}
           />
         </form>
 

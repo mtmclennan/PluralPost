@@ -20,7 +20,7 @@ const subscriberModel_1 = require("./subscriberModel");
 const connect2DB = (website) => __awaiter(void 0, void 0, void 0, function* () {
     const DB = process.env.DATABASE.replace('<password>', process.env.DATABASE_PASSWORD);
     const conn = mongoose_1.default.connection.useDb(website, { useCache: true });
-    console.log('DB 2 connected conn2');
+    // console.log('DB 2 connected conn2');
     // const conn = await mongoDb.useDb(website);
     conn.model('Subscribers', subscriberModel_1.subscriberSchema);
     conn.model('Post', contentModel_1.postSchema);

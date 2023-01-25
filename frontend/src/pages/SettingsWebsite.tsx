@@ -13,6 +13,8 @@ const SettingsUser = () => {
     setShowForm((currentState) => !currentState);
   };
 
+  console.log(AuthCtx.website);
+
   return (
     <Fragment>
       <SettingsContainer heading="Site Settings">
@@ -24,6 +26,18 @@ const SettingsUser = () => {
         <ListItem heading="Logo Url" text={AuthCtx.website.logo} />
         <ListItem heading="Site Url" text={AuthCtx.website.url} />
         <ListItem heading="Category" text={AuthCtx.website.category} />
+        <h3>Email Settings</h3>
+        <ListItem heading="Site Email Address" text={AuthCtx.website.email} />
+        <ListItem
+          heading="Email from"
+          text={AuthCtx.website.emailFromSite ? AuthCtx.website.name : 'Author'}
+        />
+        <ListItem
+          heading="Brand Slogan for Emails"
+          text={
+            AuthCtx.website.slogan ? AuthCtx.website.slogan : 'No Slogan Set'
+          }
+        />
 
         {showForm && (
           <NewWebsiteForm

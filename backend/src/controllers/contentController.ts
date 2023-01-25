@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import fs from 'fs';
 import AppError from '../utils/appError';
 import multer, { FileFilterCallback } from 'multer';
 import catchAsync from '../utils/catchAsync';
@@ -7,6 +8,12 @@ import { connect2DB } from '../models/connectModels';
 import Website from '../models/websiteModel';
 import sendBuildHook from '../utils/sendBuildHook';
 import { Post } from '../types/interfaces';
+
+const conPostModelToDB = async (website: string) => {
+  const DB = await connect2DB(website);
+  const Post = DB.model<Post>('Post');
+  return Post;
+};
 
 const multerStorage = multer.memoryStorage();
 
@@ -28,32 +35,63 @@ export const resizeContentPhoto = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) return next();
 
-    req.file.filename = `post-${req.file.originalname}-${Date.now()}.jpeg`;
+    req.file.filename = `post-${req.params.id}-${
+      req.file.originalname.split('.')[0]
+    }-${Date.now()}.jpeg`;
+    const dir = `${process.env.IMAGE_STORAGE_POSTS}${req.params.website}/posts`;
+
+    fs.mkdir(dir, { recursive: true }, (err: any) => {
+      if (err) throw new AppError(err);
+    });
 
     await sharp(req.file.buffer)
       .withMetadata()
       .resize(800, 400)
       .toFormat('jpeg')
       .jpeg({ quality: 80 })
-      .toFile(`${process.env.IMAGE_STORAGE_POSTS}${req.file.filename}`);
+      .toFile(`${dir}/${req.file.filename}`);
+
+    res.locals.dir = dir.slice(11);
 
     next();
   }
 );
 
-export const sendResponce = (
+export const sendImageResponse = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   if (!req.file) return next;
-  const photoUrl = `http://localhost:3030/img/posts/${req.file.filename}`;
+  const photoUrl = `${process.env.SERVER_URL}${res.locals.dir}/${req.file.filename}`;
 
   res.status(200).json({
     status: 'success',
     url: photoUrl,
   });
 };
+
+export const sendFeatureResponse = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.file) return next;
+    const photoUrl = `${process.env.SERVER_URL}${res.locals.dir}/${req.file.filename}`;
+
+    const Post = await conPostModelToDB(req.params.website);
+
+    await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        featuredImage: photoUrl,
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: 'success',
+      url: photoUrl,
+    });
+  }
+);
 
 export const getPost = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {

@@ -11,6 +11,9 @@ export const createWebsite = catchAsync(
       url: req.body.url,
       category: req.body.category,
       logo: req.body.logo,
+      slogan: req.body.slogan,
+      email: req.body.email,
+      emailFromSite: req.body.emailFromSiteName,
     });
 
     res.status(201).json({
@@ -29,6 +32,9 @@ export const editWebsite = catchAsync(
         url: req.body.url,
         category: req.body.category,
         logo: req.body.logo,
+        slogan: req.body.slogan,
+        email: req.body.email,
+        emailFromSite: req.body.emailFromSiteName,
       },
       { new: true }
     );

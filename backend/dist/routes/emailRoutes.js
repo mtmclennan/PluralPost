@@ -31,7 +31,6 @@ const emailController = __importStar(require("../controllers/emailController"));
 const authController = __importStar(require("../controllers/authController"));
 const router = express_1.default.Router();
 router.use(authController.protect);
-router.route('/:website/contact').post(emailController.contactFormEmail);
 router
     .route('/:website/emails')
     .post(emailController.createEmail)

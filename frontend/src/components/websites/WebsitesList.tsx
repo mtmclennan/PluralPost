@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import useHttp from '../../hooks/use-http';
 import { Website } from '../../types/interfaces';
 import LoadingSpinner from '../../UI/LoadingSpinner';
-import WebsiteListItem from '../websites/WebsiteListItem';
+import WebsiteListItem from './WebsiteListItem';
 
 const WebsitesList = () => {
   const [websites, setWebsites] = useState([]);

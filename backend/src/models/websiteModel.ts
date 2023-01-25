@@ -10,6 +10,7 @@ const websiteSchema = new mongoose.Schema({
   },
   url: {
     type: String,
+    required: true,
     trim: true,
     unique: true,
   },
@@ -17,15 +18,15 @@ const websiteSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  sloggan: {
+  slogan: {
     type: String,
     trim: true,
   },
-  emailAddress: {
+  email: {
     type: String,
     trim: true,
   },
-  emailFromSiteName: {
+  emailFromSite: {
     type: Boolean,
     default: true,
   },

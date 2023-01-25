@@ -12,32 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEmail = exports.createEmail = exports.getAllEmails = exports.getOneEmail = exports.contactFormEmail = void 0;
+exports.updateEmail = exports.createEmail = exports.getAllEmails = exports.getOneEmail = void 0;
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
 const sendEmail_1 = require("../utils/sendEmail");
 const connectModels_1 = require("../models/connectModels");
 const subscribeController_1 = require("./subscribeController");
 const appError_1 = __importDefault(require("../utils/appError"));
 const websiteController_1 = require("./websiteController");
-exports.contactFormEmail = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const website = req.params.website;
-    console.log(req.body);
-    const user = {
-        email: 'yardoasis@gmail.com',
-        name: website,
-        from: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-    };
-    yield new sendEmail_1.sendEmail(user, website).sendContactMessage({
-        subject: req.body.topic,
-        message: req.body.message,
-        sender: req.body.email,
-    });
-    res.status(200).json({
-        status: 'success',
-    });
-}));
 const emailModel = (website) => __awaiter(void 0, void 0, void 0, function* () {
     const DB = yield (0, connectModels_1.connect2DB)(website);
     const email = DB.model('Email');

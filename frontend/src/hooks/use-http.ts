@@ -43,7 +43,7 @@ const useHttp = () => {
           applyData(data);
         } else {
           const data = await response.json();
-          console.log(data);
+
           applyData(data);
         }
       } catch (err: any) {

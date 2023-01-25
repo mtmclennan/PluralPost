@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePost = exports.createPost = exports.getWebsiteUrl = exports.editPost = exports.getAllPublishedPosts = exports.getAllPosts = exports.getPostBySlug = exports.getPost = exports.sendResponce = exports.resizeContentPhoto = exports.uploadContentPhoto = void 0;
+exports.deletePost = exports.createPost = exports.getWebsiteUrl = exports.editPost = exports.getAllPublishedPosts = exports.getAllPosts = exports.getPostBySlug = exports.getPost = exports.sendFeatureResponse = exports.sendImageResponse = exports.resizeContentPhoto = exports.uploadContentPhoto = void 0;
+const fs_1 = __importDefault(require("fs"));
 const appError_1 = __importDefault(require("../utils/appError"));
 const multer_1 = __importDefault(require("multer"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
@@ -20,6 +21,11 @@ const sharp_1 = __importDefault(require("sharp"));
 const connectModels_1 = require("../models/connectModels");
 const websiteModel_1 = __importDefault(require("../models/websiteModel"));
 const sendBuildHook_1 = __importDefault(require("../utils/sendBuildHook"));
+const conPostModelToDB = (website) => __awaiter(void 0, void 0, void 0, function* () {
+    const DB = yield (0, connectModels_1.connect2DB)(website);
+    const Post = DB.model('Post');
+    return Post;
+});
 const multerStorage = multer_1.default.memoryStorage();
 const multerFilter = (req, file, cb) => {
     if (file.mimetype.startsWith('image')) {
@@ -37,25 +43,44 @@ exports.uploadContentPhoto = upload.single('upload');
 exports.resizeContentPhoto = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     if (!req.file)
         return next();
-    req.file.filename = `post-${req.file.originalname}-${Date.now()}.jpeg`;
+    req.file.filename = `post-${req.params.id}-${req.file.originalname.split('.')[0]}-${Date.now()}.jpeg`;
+    const dir = `${process.env.IMAGE_STORAGE_POSTS}${req.params.website}/posts`;
+    fs_1.default.mkdir(dir, { recursive: true }, (err) => {
+        if (err)
+            throw new appError_1.default(err);
+    });
     yield (0, sharp_1.default)(req.file.buffer)
         .withMetadata()
         .resize(800, 400)
         .toFormat('jpeg')
         .jpeg({ quality: 80 })
-        .toFile(`${process.env.IMAGE_STORAGE_POSTS}${req.file.filename}`);
+        .toFile(`${dir}/${req.file.filename}`);
+    res.locals.dir = dir.slice(11);
     next();
 }));
-const sendResponce = (req, res, next) => {
+const sendImageResponse = (req, res, next) => {
     if (!req.file)
         return next;
-    const photoUrl = `http://localhost:3030/img/posts/${req.file.filename}`;
+    const photoUrl = `${process.env.SERVER_URL}${res.locals.dir}/${req.file.filename}`;
     res.status(200).json({
         status: 'success',
         url: photoUrl,
     });
 };
-exports.sendResponce = sendResponce;
+exports.sendImageResponse = sendImageResponse;
+exports.sendFeatureResponse = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!req.file)
+        return next;
+    const photoUrl = `${process.env.SERVER_URL}${res.locals.dir}/${req.file.filename}`;
+    const Post = yield conPostModelToDB(req.params.website);
+    yield Post.findByIdAndUpdate(req.params.id, {
+        featuredImage: photoUrl,
+    }, { new: true });
+    res.status(200).json({
+        status: 'success',
+        url: photoUrl,
+    });
+}));
 exports.getPost = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const website = req.params.website;
     const DB = yield (0, connectModels_1.connect2DB)(website);

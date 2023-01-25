@@ -17,17 +17,17 @@ if (process.env.DATABASE && process.env.DATABASE_PASSWORD) {
     const mongoDb = mongoose_1.default.connect(DB).then(() => {
         console.log('DB connection successful');
     });
-    const options = {
-        // dbName: website,
-        dbName: 'yardOasis',
-    };
-    const conn2 = mongoose_1.default
-        .createConnection(DB, options)
-        .asPromise()
-        .then(() => {
-        console.log('DB 2 Connected server');
-    });
-    module.exports = conn2;
+    // const options = {
+    //   // dbName: website,
+    //   dbName: 'yardOasis',
+    // };
+    // // const conn2 = mongoose
+    // //   .createConnection(DB, options)
+    // //   .asPromise()
+    // //   .then(() => {
+    // //     console.log('DB 2 Connected server');
+    // //   });
+    // // module.exports = conn2;
     const port = process.env.PORT || 3030;
     const server = app_1.default.listen(port, () => {
         console.log(`App running on ${port}......`);

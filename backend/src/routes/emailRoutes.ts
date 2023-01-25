@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.route('/:website/contact').post(emailController.contactFormEmail);
 router
   .route('/:website/emails')
   .post(emailController.createEmail)

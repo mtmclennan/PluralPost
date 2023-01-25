@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import express from 'express';
-import path from 'path';
+import path, { dirname } from 'path';
 import userRouter from './routes/userRoutes';
 import websiteRouter from './routes/websiteRoutes';
 import subcriberRouter from './routes/subscribeRoutes';
@@ -21,13 +21,12 @@ const app = express();
 
 app.set('views', path.join(__dirname, './views/emails'));
 
-//Globel Middleware
-// Set security headers
-// app.use(
-//   helmet({ crossOriginEmbedderPolicy: false, crossOriginResourcePolicy: false })
-// );
+app.use(
+  helmet({ crossOriginEmbedderPolicy: false, crossOriginResourcePolicy: false })
+);
 const scriptSources = ["'self'", "'unsafe-inline'", 'https://unpkg.com'];
 const styleSources = [
+  "'unsafe-inline'",
   "'self'",
   'https://fonts.googleapis.com',
   'https://fonts.gstatic.com',
@@ -37,6 +36,7 @@ app.use(
   cors({
     credentials: true,
     origin: [
+      '/',
       'http://localhost:3000',
       'http://localhost:3030',
       'http://localhost:3003',
@@ -50,10 +50,12 @@ app.use(
     directives: {
       defaultSrc: [
         'self',
+        "'unsafe-inline'",
         'http://localhost:3000',
         'http://localhost:3030',
         'http://localhost:3003',
       ],
+
       fontSrc: [
         'self',
         'https://fonts.gstatic.com',
@@ -65,7 +67,8 @@ app.use(
     },
   })
 );
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'build')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Development logging
 console.log(process.env.NODE_ENV);
@@ -99,7 +102,7 @@ app.use(xss());
 app.use(hpp());
 
 // Serving static files
-app.use(express.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
 
 //Test middlware
 // app.use((req, res, next) => {
@@ -125,6 +128,12 @@ app.use('/api/v1/websites', websiteRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/content', contentRouter);
 app.use('/api/v1/email', emailRouter);
+
+app.get('/*', (req, res, next) => {
+  res.sendFile(
+    path.join(__dirname, '..', '..', 'frontend', 'build', 'index.html')
+  );
+});
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(`Can't find ${req.originalUrl} on the server!`, 404));

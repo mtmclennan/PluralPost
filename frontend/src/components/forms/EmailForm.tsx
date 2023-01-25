@@ -8,10 +8,8 @@ import useModal from '../../hooks/use-modal';
 import AuthContext from '../../store/auth-context';
 import Modal from '../../UI/Modal';
 import useHttp from '../../hooks/use-http';
-import TopBar from '../../layout/TopBar';
-import PostMenu from '../posts/PostMenu';
 import LoadingSpinner from '../../UI/LoadingSpinner';
-import { Email, EmailRes, Res } from '../../types/interfaces';
+import { Email, EmailRes } from '../../types/interfaces';
 
 const EmailForm = ({ id }: { id?: string }) => {
   const [richTextValue, setRichtextValue] = useState('');
@@ -53,7 +51,6 @@ const EmailForm = ({ id }: { id?: string }) => {
   }, [sendRequest, id, SERVER_URL]);
 
   useEffect(() => {
-    console.log(email);
     if (email) {
       if (editorStore) {
         editorStore.setData(email.message);
@@ -65,10 +62,21 @@ const EmailForm = ({ id }: { id?: string }) => {
   const emailFormHandler = (event: React.FormEvent) => {
     const messageIsvalid = () => richTextValue.trim() !== '';
     const url = `${SERVER_URL}/${id}`;
+
     if (!subjectIsValid || !messageIsvalid) {
       subjectBlurHandler();
 
       setModalMessage('The can not be empty fields in email before sending');
+      setTimeout(() => {
+        hideModal();
+      }, 3000);
+      return;
+    }
+
+    if (AuthCtx.website.emailFromSite && !AuthCtx.website.email) {
+      setModalMessage(
+        'Can not send emails without an email address set for this site'
+      );
       setTimeout(() => {
         hideModal();
       }, 3000);
@@ -106,7 +114,10 @@ const EmailForm = ({ id }: { id?: string }) => {
       },
       response
     );
+    resetSubject();
   };
+
+  ///////////////////////////////////////////////////////////////////
 
   const onSaveHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -186,7 +197,9 @@ const EmailForm = ({ id }: { id?: string }) => {
               <h3>Message</h3>
               <RichTextEditor
                 setEditor={setEditorStore}
+                website={AuthCtx.website.name}
                 valueChangeHandler={setRichtextValue}
+                id={id}
               />
             </div>
             {email?.status !== 'SENT' && (

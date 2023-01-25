@@ -22,13 +22,10 @@ const appError_1 = __importDefault(require("./utils/appError"));
 const errorController_1 = __importDefault(require("./controllers/errorController"));
 const app = (0, express_1.default)();
 app.set('views', path_1.default.join(__dirname, './views/emails'));
-//Globel Middleware
-// Set security headers
-// app.use(
-//   helmet({ crossOriginEmbedderPolicy: false, crossOriginResourcePolicy: false })
-// );
+app.use((0, helmet_1.default)({ crossOriginEmbedderPolicy: false, crossOriginResourcePolicy: false }));
 const scriptSources = ["'self'", "'unsafe-inline'", 'https://unpkg.com'];
 const styleSources = [
+    "'unsafe-inline'",
     "'self'",
     'https://fonts.googleapis.com',
     'https://fonts.gstatic.com',
@@ -36,6 +33,7 @@ const styleSources = [
 app.use((0, cors_1.default)({
     credentials: true,
     origin: [
+        '/',
         'http://localhost:3000',
         'http://localhost:3030',
         'http://localhost:3003',
@@ -46,6 +44,7 @@ app.use(helmet_1.default.contentSecurityPolicy({
     directives: {
         defaultSrc: [
             'self',
+            "'unsafe-inline'",
             'http://localhost:3000',
             'http://localhost:3030',
             'http://localhost:3003',
@@ -60,7 +59,8 @@ app.use(helmet_1.default.contentSecurityPolicy({
         styleSrc: styleSources,
     },
 }));
-app.use(express_1.default.static('public'));
+app.use(express_1.default.static(path_1.default.join(__dirname, '..', '..', 'frontend', 'build')));
+app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 // Development logging
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
@@ -87,7 +87,7 @@ app.use((0, xss_clean_1.default)());
 // Protection from HTTP paramater pollution (hpp)
 app.use((0, hpp_1.default)());
 // Serving static files
-app.use(express_1.default.static(`${__dirname}/public`));
+// app.use(express.static(`${__dirname}/public`));
 //Test middlware
 // app.use((req, res, next) => {
 //   req.requestTime = new Date().toISOString();
@@ -109,6 +109,9 @@ app.use('/api/v1/websites', websiteRoutes_1.default);
 app.use('/api/v1/users', userRoutes_1.default);
 app.use('/api/v1/content', contentRoutes_1.default);
 app.use('/api/v1/email', emailRoutes_1.default);
+app.get('/*', (req, res, next) => {
+    res.sendFile(path_1.default.join(__dirname, '..', '..', 'frontend', 'build', 'index.html'));
+});
 app.all('*', (req, res, next) => {
     next(new appError_1.default(`Can't find ${req.originalUrl} on the server!`, 404));
 });

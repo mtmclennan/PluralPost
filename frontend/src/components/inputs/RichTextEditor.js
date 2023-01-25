@@ -1,8 +1,8 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from 'ckeditor5-custom-build/build/ckeditor';
 
-const RichTextEditor = ({ setEditor, valueChangeHandler }) => {
-  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/photo`;
+const RichTextEditor = ({ setEditor, valueChangeHandler, website, id }) => {
+  const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/content/${website}/images/${id}`;
   const TOKEN = process.env.REACT_APP_PHOTO_TOKEN;
   return (
     <CKEditor

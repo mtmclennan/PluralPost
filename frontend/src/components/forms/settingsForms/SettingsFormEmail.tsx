@@ -46,7 +46,6 @@ const SettingFormEmail = ({ setEdit }: SettingsFormProps) => {
 
   const responseData = (res: UserRes) => {
     if (res.status === 'success') {
-      console.log(res);
       AuthCtx.onLogin(res.user);
       setModalMessage('Updated sucessfully!');
       setTimeout(() => {
@@ -65,7 +64,6 @@ const SettingFormEmail = ({ setEdit }: SettingsFormProps) => {
 
   const formSubmitHandler = (event: FormEvent) => {
     event.preventDefault();
-    console.log('HERE');
 
     if (!enteredEmailIsValid) {
       return;

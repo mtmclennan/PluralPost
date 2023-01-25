@@ -37,3 +37,18 @@
 .invalid {
   border: 2px solid v.$alert-color;
 }
+
+.sliderContainer {
+  @include m.flexCenter();
+  background: v.$light-background-color;
+  border-radius: 4px;
+  border: 2px solid v.$light-accent-color;
+  margin: 1rem 0 1rem;
+  padding: 1rem;
+  justify-content: space-between;
+}
+
+.sliderLabel {
+  @include m.flexCenter();
+  gap: 1rem;
+}

@@ -18,18 +18,18 @@ if (process.env.DATABASE && process.env.DATABASE_PASSWORD) {
     console.log('DB connection successful');
   });
 
-  const options = {
-    // dbName: website,
-    dbName: 'yardOasis',
-  };
-  const conn2 = mongoose
-    .createConnection(DB, options)
-    .asPromise()
-    .then(() => {
-      console.log('DB 2 Connected server');
-    });
+  // const options = {
+  //   // dbName: website,
+  //   dbName: 'yardOasis',
+  // };
+  // // const conn2 = mongoose
+  // //   .createConnection(DB, options)
+  // //   .asPromise()
+  // //   .then(() => {
+  // //     console.log('DB 2 Connected server');
+  // //   });
 
-  module.exports = conn2;
+  // // module.exports = conn2;
 
   const port = process.env.PORT || 3030;
 

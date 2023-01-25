@@ -1,3 +1,5 @@
+import { Website } from './interfaces';
+
 export type SetStateBoolean = React.Dispatch<React.SetStateAction<boolean>>;
 
 export type SetStateNumber = React.Dispatch<React.SetStateAction<number>>;
@@ -15,14 +17,14 @@ export type User = {
   photo: string;
 };
 
-export type Website = {
-  _id: string;
-  name: string;
-  url: string;
-  category: string;
-  logo: string;
-  createdAt: Date | undefined;
-};
+// export type Website = {
+//   _id: string;
+//   name: string;
+//   url: string;
+//   category: string;
+//   logo: string;
+//   createdAt: Date | undefined;
+// };
 
 export type Context = {
   isLoggedIn: boolean;

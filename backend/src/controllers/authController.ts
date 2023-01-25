@@ -12,8 +12,7 @@ import { sendEmailOne } from '../utils/sendEmailOne';
 // import { token } from 'morgan';
 
 const signToken = (id: string) => {
-  console.log('here id', id);
-  console.log(process.env.JWT_EXPIRES_IN);
+  // console.log(process.env.JWT_EXPIRES_IN);
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -24,7 +23,6 @@ const createSendToken = async (
   statusCode: number,
   res: Response
 ) => {
-  console.log('user', user);
   const token = await signToken(user._id.toString());
 
   type CookieOptions = {
@@ -41,7 +39,7 @@ const createSendToken = async (
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  console.log(token);
+  // console.log(token);
   res.cookie('jwt', token, cookieOptions);
 
   //remove password from output
@@ -63,7 +61,7 @@ export const login = catchAsync(
     // 2) check if user exists && password is correct
     const user = await UserModel.findOne({ email }).select('+password');
 
-    console.log(user);
+    // console.log(user);
     if (
       !user ||
       (user &&
@@ -161,7 +159,7 @@ export const protect = catchAsync(
       );
     }
     // 2) Validate token
-    console.log('token', token);
+    // console.log('token', token);
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
@@ -188,7 +186,7 @@ export const protect = catchAsync(
     //Grant ACCESS To PROTECTED ROUTE
     req.user = freshUser;
     res.locals.user = freshUser;
-    console.log(req.user);
+    // console.log(req.user);
     next();
   }
 );
@@ -205,7 +203,7 @@ export const isLoggedIn = async (
       // 3) Check if the user still exists
       const currentUser = await UserModel.findById(decoded.id);
       if (!currentUser) {
-        console.log('no user');
+        // console.log('no user');
         return next();
       }
 
@@ -214,13 +212,13 @@ export const isLoggedIn = async (
         currentUser.changedPasswordAfter &&
         currentUser.changedPasswordAfter(decoded.id)
       ) {
-        console.log('Password changed');
+        // console.log('Password changed');
         return next();
       }
 
       // THERE IS A LOGGED IN USER
       res.locals.user = currentUser;
-      console.log('logged in');
+      // console.log('logged in');
       return next();
     } catch (err) {
       return next();
@@ -231,7 +229,7 @@ export const isLoggedIn = async (
 };
 
 export const logout = (req: Request, res: Response) => {
-  console.log('Logged out');
+  // console.log('Logged out');
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -371,7 +369,7 @@ export const checkIfAdminExists = catchAsync(
       role: 'admin',
     });
     if (!isUser) {
-      console.log('Noadmin');
+      // console.log('Noadmin');
       req.app.locals.role = 'noAdmin';
     }
     next();

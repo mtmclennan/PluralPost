@@ -22,6 +22,9 @@ exports.createWebsite = (0, catchAsync_1.default)((req, res, next) => __awaiter(
         url: req.body.url,
         category: req.body.category,
         logo: req.body.logo,
+        slogan: req.body.slogan,
+        email: req.body.email,
+        emailFromSite: req.body.emailFromSiteName,
     });
     res.status(201).json({
         status: 'success',
@@ -34,6 +37,9 @@ exports.editWebsite = (0, catchAsync_1.default)((req, res, next) => __awaiter(vo
         url: req.body.url,
         category: req.body.category,
         logo: req.body.logo,
+        slogan: req.body.slogan,
+        email: req.body.email,
+        emailFromSite: req.body.emailFromSiteName,
     }, { new: true });
     res.status(200).json({
         status: 'success',

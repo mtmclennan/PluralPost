@@ -33,8 +33,11 @@ const router = express_1.default.Router();
 router.route('/:website/articles').get(contentController.getAllPublishedPosts);
 router.route('/:website/post/:slug').post(contentController.getPostBySlug);
 router
-    .route('/photo')
-    .post(authController.protectPhoto, contentController.uploadContentPhoto, contentController.resizeContentPhoto, contentController.sendResponce);
+    .route('/:website/images/:id')
+    .post(authController.protectPhoto, contentController.uploadContentPhoto, contentController.resizeContentPhoto, contentController.sendImageResponse);
+router
+    .route('/:website/featured-image/:id')
+    .post(authController.protectPhoto, contentController.uploadContentPhoto, contentController.resizeContentPhoto, contentController.sendFeatureResponse);
 router.use(authController.protect);
 router
     .route('/:website/posts')

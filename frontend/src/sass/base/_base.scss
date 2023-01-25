@@ -459,6 +459,7 @@ button:disabled:active {
   align-items: center;
   justify-content: space-evenly;
   padding: 0.5em;
+  gap: 1rem;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   background-color: v.$primary-color;
@@ -535,6 +536,10 @@ button:disabled:active {
   max-width: 900px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   background-color: white;
+
+  & a {
+    text-decoration: none;
+  }
 }
 
 .preview-sub__row {

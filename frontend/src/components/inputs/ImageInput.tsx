@@ -4,15 +4,19 @@ import useHttp from '../../hooks/use-http';
 type ImageInputProps = {
   response: (res: { url: string }) => void;
   children?: React.ReactNode;
+  website: string;
+  id?: string;
 };
 
-const ImageInput = ({ response, children }: ImageInputProps) => {
+const ImageInput = ({ response, children, website, id }: ImageInputProps) => {
   // drag state
   const [dragActive, setDragActive] = useState(false);
 
   const { sendRequest } = useHttp();
 
+  const postId = id ? `/${id}` : '';
   const TOKEN = process.env.REACT_APP_PHOTO_TOKEN;
+  const url = `${process.env.REACT_APP_SERVER_URL}/content/${website}/featured-image${postId}`;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,7 +39,7 @@ const ImageInput = ({ response, children }: ImageInputProps) => {
 
       sendRequest(
         {
-          url: 'http://localhost:3030/api/v1/content/photo',
+          url,
           method: 'POST',
           headers: {
             'X-CSRF-TOKEN': 'CSRF-Token',

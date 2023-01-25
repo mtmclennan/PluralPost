@@ -8,12 +8,21 @@ router.route('/:website/articles').get(contentController.getAllPublishedPosts);
 
 router.route('/:website/post/:slug').post(contentController.getPostBySlug);
 router
-  .route('/photo')
+  .route('/:website/images/:id')
   .post(
     authController.protectPhoto,
     contentController.uploadContentPhoto,
     contentController.resizeContentPhoto,
-    contentController.sendResponce
+    contentController.sendImageResponse
+  );
+
+router
+  .route('/:website/featured-image/:id')
+  .post(
+    authController.protectPhoto,
+    contentController.uploadContentPhoto,
+    contentController.resizeContentPhoto,
+    contentController.sendFeatureResponse
   );
 
 router.use(authController.protect);

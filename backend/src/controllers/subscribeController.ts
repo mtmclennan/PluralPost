@@ -20,8 +20,6 @@ export const createSubscriber = catchAsync(
       websiteFrom: req.body.website || req.hostname,
     });
 
-    console.log(data);
-
     const mailSub = {
       name: data.name,
       email: data.email,

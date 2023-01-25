@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { User } from '../types/index.type';
 
@@ -5,7 +6,7 @@ type RestrictedRouteProps = {
   user: User;
   allowedRoles: string[];
   redirectPath: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const RestrictedRoute = ({
@@ -14,11 +15,20 @@ const RestrictedRoute = ({
   redirectPath = '/start',
   children,
 }: RestrictedRouteProps) => {
-  if (!allowedRoles.includes(user.role)) {
+  const Redirect = () => {
     return <Navigate to={redirectPath} replace />;
-  }
-
-  return children ? children : <Outlet />;
+  };
+  return (
+    <Fragment>
+      {!allowedRoles.includes(user.role) ? (
+        <Redirect />
+      ) : children ? (
+        children
+      ) : (
+        <Outlet />
+      )}
+    </Fragment>
+  );
 };
 
 export default RestrictedRoute;

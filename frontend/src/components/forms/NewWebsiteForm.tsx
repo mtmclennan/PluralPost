@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useTransition } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import useHttp from '../../hooks/use-http';
 import classes from './form.module.scss';
 import Modal from '../../UI/Modal';
 import useInput from '../../hooks/use-input';
 import useModal from '../../hooks/use-modal';
 import LoadingSpinner from '../../UI/LoadingSpinner';
-import { Res, Website, WebsiteRes } from '../../types/interfaces';
+import { Website, WebsiteRes } from '../../types/interfaces';
 import SmallTextBox from '../inputs/SmallTextBox';
 import AuthContext from '../../store/auth-context';
+import SilderButton from '../../UI/SilderButton';
 
 type NewWebsiteFormProps = {
   website?: Website;
@@ -16,9 +17,12 @@ type NewWebsiteFormProps = {
 
 const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
   const { isLoading, error, sendRequest } = useHttp();
+  const [emailFromSite, setEmailFromSite] = useState(true);
   const { setModalMessage, showModal, modalMessage, hideModal } =
     useModal(error);
   const AuthCtx = useContext(AuthContext);
+
+  console.log(AuthCtx.website);
 
   const SERVER_URL = `${process.env.REACT_APP_SERVER_URL}/websites/${
     website ? website._id : ''
@@ -47,7 +51,6 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
   const {
     value: enteredLogoUrl,
     setValue: setEnteredLogoUrl,
-    isValid: enteredLogoUrlIsValid,
     hasError: logoUrlInputHasError,
     valueChangeHandler: logoUrlChangeHandler,
     inputBlurHandler: logoUrlBlurHandler,
@@ -57,12 +60,34 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
   const {
     value: enteredCategory,
     setValue: setEnteredCategory,
-    isValid: categoryIsValid,
     hasError: categoryInputHasError,
     valueChangeHandler: categoryChangeHandler,
     inputBlurHandler: categoryBlurHandler,
     reset: resetCategoryInput,
   } = useInput((value) => value.trim() !== '');
+
+  const {
+    value: enteredSlogan,
+    setValue: setEnteredSlogan,
+    hasError: sloganInputHasError,
+    valueChangeHandler: sloganChangeHandler,
+    inputBlurHandler: sloganBlurHandler,
+    reset: resetSloganInput,
+  } = useInput((value) => value.trim() !== '');
+
+  const emailValidate = (value: string) => {
+    const emailFormat = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
+    return emailFormat.test(value);
+  };
+
+  const {
+    value: enteredEmail,
+    setValue: setEnteredEmail,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    reset: resetEmailInput,
+  } = useInput(emailValidate);
 
   useEffect(() => {
     if (website) {
@@ -70,6 +95,13 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
       setEnteredWebsiteUrl(website.url);
       setEnteredCategory(website.category);
       setEnteredLogoUrl(website.logo);
+      setEnteredEmail(website.email);
+      if (website.emailFromSite) {
+        setEmailFromSite(website.emailFromSite);
+      }
+      if (website.slogan) {
+        setEnteredSlogan(website.slogan);
+      }
     }
   }, [website]);
 
@@ -85,19 +117,25 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
   const formSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (!enteredwebsiteNameIsValid || !enteredwebsiteUrlIsValid) {
+      return;
+    }
+
     const method = website ? 'PATCH' : 'POST';
 
     const response = (res: WebsiteRes) => {
       if (res.status === 'success') {
         setModalMessage(`Website ${enteredWebsiteName} Added Successfuly`);
         AuthCtx.onWebsiteSelect(res.data);
-        // props.reload((currentState) => !currentState);
+
         setTimeout(() => {
           hideModal();
           resetWebsiteNameInput();
           resetWebsiteUrlInput();
           resetCategoryInput();
           resetLogoUrlInput();
+          resetEmailInput();
+          resetSloganInput();
           if (setShowForm) {
             setShowForm();
           }
@@ -123,6 +161,9 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
           url: enteredWebsiteUrl,
           category: enteredCategory,
           logo: enteredLogoUrl,
+          email: enteredEmail,
+          emailFromSiteName: emailFromSite,
+          slogan: enteredSlogan,
         },
       },
       response
@@ -142,6 +183,14 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
     : `${classes.input}`;
 
   const categoryInputClasses = categoryInputHasError
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
+
+  const emailInputClasses = emailInputHasError
+    ? `${classes.input} ${classes.invalid}`
+    : `${classes.input}`;
+
+  const sloganInputClasses = sloganInputHasError
     ? `${classes.input} ${classes.invalid}`
     : `${classes.input}`;
 
@@ -184,6 +233,34 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
           onChange={categoryChangeHandler}
           onBlur={categoryBlurHandler}
           value={enteredCategory}
+        />
+
+        <SmallTextBox
+          className={emailInputClasses}
+          fieldName="Site Email Address"
+          onChange={emailChangeHandler}
+          onBlur={emailBlurHandler}
+          value={enteredEmail}
+        />
+        <div className={classes.sliderContainer}>
+          <p>Emails From Site Or Author</p>
+
+          <div className={classes.sliderLabel}>
+            <p>Author</p>
+            <SilderButton
+              setIsChecked={setEmailFromSite}
+              isChecked={emailFromSite}
+            />
+            <p>Site</p>
+          </div>
+        </div>
+
+        <SmallTextBox
+          className={sloganInputClasses}
+          fieldName="Brand Slogan For Emails"
+          onChange={sloganChangeHandler}
+          onBlur={sloganBlurHandler}
+          value={enteredSlogan}
         />
         <div className={classes.btnContainer}>
           <button>Save</button>

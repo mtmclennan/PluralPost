@@ -27,7 +27,6 @@ exports.createSubscriber = (0, catchAsync_1.default)((req, res, next) => __await
         email: req.body.email,
         websiteFrom: req.body.website || req.hostname,
     });
-    console.log(data);
     const mailSub = {
         name: data.name,
         email: data.email,

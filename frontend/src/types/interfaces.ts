@@ -1,5 +1,3 @@
-import WebsiteList from '../components/websites/WebsiteList';
-
 export interface Website {
   _id: string;
   name: string;
@@ -7,6 +5,9 @@ export interface Website {
   category: string;
   logo: string;
   createdAt: Date | undefined;
+  email: string;
+  emailFromSite: boolean;
+  slogan?: string;
 }
 
 export interface WebsiteData {

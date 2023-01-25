@@ -1,9 +1,10 @@
+import { Fragment } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { User } from '../types/index.type';
 
 type ProtectedRouteProps = {
   user: User;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   redirectPath: string;
 };
 
@@ -12,11 +13,11 @@ const ProtectedRoute = ({
   redirectPath = '/login',
   children,
 }: ProtectedRouteProps) => {
-  if (!user) {
-    return <Navigate to={redirectPath} replace />;
-  }
-
-  return children ? children : <Outlet />;
+  return !user?.name ? (
+    <Navigate to={redirectPath} replace />
+  ) : (
+    <Fragment>{children ? children : <Outlet />}</Fragment>
+  );
 };
 
 export default ProtectedRoute;

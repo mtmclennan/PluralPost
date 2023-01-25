@@ -1,0 +1,58 @@
+@use '../sass/abstracts/variables' as v;
+@use '../sass/abstracts/mixins' as m;
+
+.slider {
+  @include m.flexCenter();
+
+  & input[type='checkbox'] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+  }
+
+  & label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 6rem;
+    height: 3rem;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+  }
+
+  & label:after {
+    content: '';
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+  }
+
+  & label:active:after {
+    width: 9rem;
+  }
+}
+
+.unChecked {
+  & label {
+    background: grey;
+  }
+
+  // centering
+}
+
+.checked {
+  & input,
+  label {
+    background: v.$accent-color;
+  }
+  & input,
+  label:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+  }
+}

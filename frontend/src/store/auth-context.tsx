@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useHttp from '../hooks/use-http';
 import { Context } from '../types/index.type';
+import { Website } from '../types/interfaces';
 
 type LoginHandlerProps = {
   email: string;
@@ -9,14 +10,14 @@ type LoginHandlerProps = {
   photo: string;
 };
 
-type Website = {
-  _id: string;
-  name: string;
-  url: string;
-  category: string;
-  logo: string;
-  createdAt: Date | undefined;
-};
+// type Website = {
+//   _id: string;
+//   name: string;
+//   url: string;
+//   category: string;
+//   logo: string;
+//   createdAt: Date | undefined;
+// };
 
 const websiteIntial = {
   _id: '',
@@ -25,6 +26,9 @@ const websiteIntial = {
   category: '',
   logo: '',
   createdAt: undefined,
+  email: '',
+  emailFromSite: true,
+  sloggan: '',
 };
 
 const userInital = {
@@ -71,7 +75,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   };
 
   const websiteSelectHandler = (website: Website) => {
-    console.log(website);
     setWebsite({
       _id: website._id,
       name: website.name,
@@ -79,6 +82,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       category: website.category,
       logo: website.logo,
       createdAt: website.createdAt,
+      email: website.email,
+      emailFromSite: website.emailFromSite,
+      slogan: website.slogan,
     });
   };
   useEffect(() => {

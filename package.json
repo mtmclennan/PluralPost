@@ -2,7 +2,7 @@
   "name": "pluralpost",
   "version": "1.0.0",
   "description": "Complete Site Managment System (CMS)",
-  "main": "index.js",
+  "main": "index.tsx",
   "dependencies": {
     "concurrently": "^7.6.0"
   },

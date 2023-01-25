@@ -21,14 +21,12 @@ const appError_1 = __importDefault(require("../utils/appError"));
 const sendEmailOne_1 = require("../utils/sendEmailOne");
 // import { token } from 'morgan';
 const signToken = (id) => {
-    console.log('here id', id);
-    console.log(process.env.JWT_EXPIRES_IN);
+    // console.log(process.env.JWT_EXPIRES_IN);
     return jwt_promisify_1.default.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN,
     });
 };
 const createSendToken = (user, statusCode, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('user', user);
     const token = yield signToken(user._id.toString());
     const cookieOptions = {
         expires: new Date(Date.now() + +process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
@@ -36,7 +34,7 @@ const createSendToken = (user, statusCode, res) => __awaiter(void 0, void 0, voi
     };
     if (process.env.NODE_ENV === 'production')
         cookieOptions.secure = true;
-    console.log(token);
+    // console.log(token);
     res.cookie('jwt', token, cookieOptions);
     //remove password from output
     user.password = undefined;
@@ -54,7 +52,7 @@ exports.login = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, 
     }
     // 2) check if user exists && password is correct
     const user = yield userModel_1.UserModel.findOne({ email }).select('+password');
-    console.log(user);
+    // console.log(user);
     if (!user ||
         (user &&
             user.correctPassword &&
@@ -126,7 +124,7 @@ exports.protect = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0
         return next(new appError_1.default('You are not logged in!, Please log in to get access', 401));
     }
     // 2) Validate token
-    console.log('token', token);
+    // console.log('token', token);
     const decoded = yield jwt_promisify_1.default.verify(token, process.env.JWT_SECRET);
     // 3) Check if the user still exists
     const freshUser = yield userModel_1.UserModel.findById(decoded.id);
@@ -141,7 +139,7 @@ exports.protect = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0
     //Grant ACCESS To PROTECTED ROUTE
     req.user = freshUser;
     res.locals.user = freshUser;
-    console.log(req.user);
+    // console.log(req.user);
     next();
 }));
 const isLoggedIn = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -151,18 +149,18 @@ const isLoggedIn = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             // 3) Check if the user still exists
             const currentUser = yield userModel_1.UserModel.findById(decoded.id);
             if (!currentUser) {
-                console.log('no user');
+                // console.log('no user');
                 return next();
             }
             // 4) Check if user changed password after token was issued
             if (currentUser.changedPasswordAfter &&
                 currentUser.changedPasswordAfter(decoded.id)) {
-                console.log('Password changed');
+                // console.log('Password changed');
                 return next();
             }
             // THERE IS A LOGGED IN USER
             res.locals.user = currentUser;
-            console.log('logged in');
+            // console.log('logged in');
             return next();
         }
         catch (err) {
@@ -173,7 +171,7 @@ const isLoggedIn = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.isLoggedIn = isLoggedIn;
 const logout = (req, res) => {
-    console.log('Logged out');
+    // console.log('Logged out');
     res.cookie('jwt', 'loggedout', {
         expires: new Date(Date.now() + 10 * 1000),
         httpOnly: true,
@@ -283,7 +281,7 @@ exports.checkIfAdminExists = (0, catchAsync_1.default)((req, res, next) => __awa
         role: 'admin',
     });
     if (!isUser) {
-        console.log('Noadmin');
+        // console.log('Noadmin');
         req.app.locals.role = 'noAdmin';
     }
     next();

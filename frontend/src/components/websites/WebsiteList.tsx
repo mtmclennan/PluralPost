@@ -7,8 +7,8 @@ import useHttp from '../../hooks/use-http';
 import AuthContext from '../../store/auth-context';
 import LoadingSpinner from '../../UI/LoadingSpinner';
 import WebsiteListItem from './WebsiteListItem';
-import { WebsiteData } from '../../types/interfaces';
-import { LiOnClick, Website } from '../../types/index.type';
+import { WebsiteData, Website } from '../../types/interfaces';
+import { LiOnClick } from '../../types/index.type';
 
 const WebsiteList = ({ websites }: WebsiteData) => {
   const AuthCtx = useContext(AuthContext);
@@ -28,7 +28,6 @@ const WebsiteList = ({ websites }: WebsiteData) => {
         url: `${SERVER_URL}/${event.currentTarget.id}`,
       },
       ({ data }) => {
-        console.log(data);
         AuthCtx.onWebsiteSelect(data);
       }
     );
