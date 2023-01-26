@@ -24,8 +24,14 @@ app.set('views', path.join(__dirname, './views/emails'));
 app.use(
   helmet({ crossOriginEmbedderPolicy: false, crossOriginResourcePolicy: false })
 );
-const scriptSources = ["'self'", "'unsafe-inline'", 'https://unpkg.com'];
+const scriptSources = [
+  "'self'",
+  "'unsafe-inline'",
+  'https://unpkg.com',
+  'https://pluralpost.com',
+];
 const styleSources = [
+  'https://pluralpost.com',
   "'unsafe-inline'",
   "'self'",
   'https://fonts.googleapis.com',
@@ -36,7 +42,7 @@ app.use(
   cors({
     credentials: true,
     origin: [
-      '/',
+      'https://pluralpost.com',
       'http://localhost:3000',
       'http://localhost:3030',
       'http://localhost:3003',
@@ -49,6 +55,7 @@ app.use(
     useDefaults: false,
     directives: {
       defaultSrc: [
+        'https://pluralpost.com',
         'self',
         "'unsafe-inline'",
         'http://localhost:3000',

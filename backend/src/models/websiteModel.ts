@@ -32,7 +32,7 @@ const websiteSchema = new mongoose.Schema({
   },
   logo: {
     type: String,
-    default: 'http://localhost:3030/img/websites/default.svg',
+    default: `${process.env.SERVER_URL}img/websites/default.svg`,
   },
   createdAt: {
     type: Date,

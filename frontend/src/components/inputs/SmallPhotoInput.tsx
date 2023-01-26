@@ -11,6 +11,8 @@ const SmallPhotoInput = ({ response, className }: SmallPhotoInputProps) => {
   const { sendRequest } = useHttp();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const url = `${process.env.REACT_APP_SERVER_URL}/users/updateMe`;
+
   const sendImageHandler = (file: File) => {
     if (file) {
       let data = new FormData();
@@ -19,7 +21,7 @@ const SmallPhotoInput = ({ response, className }: SmallPhotoInputProps) => {
 
       sendRequest(
         {
-          url: 'http://localhost:3030/api/v1/users/updateMe',
+          url,
           method: 'PATCH',
           headers: {
             'X-CSRF-TOKEN': 'CSRF-Token',
