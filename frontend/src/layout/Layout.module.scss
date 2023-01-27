@@ -1,3 +1,5 @@
+@use '../sass/abstracts/mixins' as m;
+
 .main {
   display: flex;
   position: relative;
@@ -8,4 +10,8 @@
 
   justify-content: center;
   align-items: center;
+
+  @include m.mediaUpToDesktop {
+    grid-column: 1 / -1;
+  }
 }

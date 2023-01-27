@@ -1,17 +1,20 @@
 import React, { useContext, Fragment } from 'react';
 import NavItem from '../navItem/NavItem';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import classes from './NavSetting.module.scss';
 import { Browser, House, IdentificationCard } from 'phosphor-react';
 import AuthContext from '../../../store/auth-context';
+import Back from '../Back';
 
 const NavSetting = () => {
+  const location = useLocation();
   const iconColor = '#8626fa';
   const AuthCtx = useContext(AuthContext);
 
   return (
     <div className={classes.container}>
+      {location.pathname !== '/welcome' ? <Back /> : ''}
       <NavItem
         text="Home"
         icon={<House size={20} color={iconColor} weight="duotone" />}

@@ -1,16 +1,16 @@
 import { useState, useCallback } from 'react';
 
+interface RequestConfig {
+  url: string;
+  method?: 'POST' | 'DELETE' | 'PATCH';
+  headers?: HeadersInit;
+  body?: any;
+  photo?: Boolean;
+}
+
 const useHttp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  interface RequestConfig {
-    url: string;
-    method?: 'POST' | 'DELETE' | 'PATCH';
-    headers?: HeadersInit;
-    body?: any;
-    photo?: Boolean;
-  }
 
   type ApplyData = (Promise: any) => void;
 
@@ -25,10 +25,10 @@ const useHttp = () => {
           headers: requestConfig.headers ? requestConfig.headers : {},
           body: requestConfig.photo
             ? requestConfig.body
-            : requestConfig.body
+            : requestConfig.body && !requestConfig.photo
             ? JSON.stringify(requestConfig.body)
             : null,
-          // body: requestConfig.body,
+
           credentials: 'include',
         });
 

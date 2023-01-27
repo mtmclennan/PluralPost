@@ -2,7 +2,9 @@
 @import '../../../sass/abstracts/variables';
 
 .nav {
-  align-self: start;
+  @include mediaDesktop {
+    align-self: start;
+  }
   & ul {
     display: grid;
     grid-template-rows: repeat(5 1fr);

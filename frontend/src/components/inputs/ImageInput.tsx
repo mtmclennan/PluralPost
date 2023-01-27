@@ -36,7 +36,7 @@ const ImageInput = ({ response, children, website, id }: ImageInputProps) => {
       let data = new FormData();
       data.append('upload', file);
       // axios.post('/files', data)...
-
+      console.log(data);
       sendRequest(
         {
           url,

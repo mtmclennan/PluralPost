@@ -1,55 +1,33 @@
 import React, { Fragment, useContext } from 'react';
 import classes from './Navmain.module.scss';
-import { House, At, PenNibStraight, Gear, UsersThree } from 'phosphor-react';
-import { NavLink } from 'react-router-dom';
+import { House, Gear, UsersThree } from 'phosphor-react';
+import { NavLink, useLocation } from 'react-router-dom';
 import NavItem from '../navItem/NavItem';
 import AuthContext from '../../../store/auth-context';
+import NavWebsiteEdit from './NavWebsiteEdit';
+import Back from '../Back';
 
 const NavMain = () => {
+  const location = useLocation();
   const AuthCtx = useContext(AuthContext);
   const iconColor = '#8626fa';
+
+  console.log(location);
+
   return (
     <Fragment>
       {' '}
       {AuthCtx.isLoggedIn && (
         <nav className={classes.nav}>
           <ul>
+            {location.pathname !== '/welcome' ? <Back /> : ''}
+
             <NavItem
               to="/welcome"
               text="Home"
               icon={<House size={20} color={iconColor} weight="duotone" />}
             />
-            {AuthCtx.website.name && (
-              <Fragment>
-                <NavItem
-                  to="/subscribers"
-                  text="Subscribers"
-                  icon={<At size={20} color={iconColor} weight="duotone" />}
-                />
-                <NavItem
-                  icon={
-                    <PenNibStraight
-                      size={20}
-                      color={iconColor}
-                      weight="duotone"
-                    />
-                  }
-                  to="/new-post"
-                  text="Add New Post"
-                />
-                <NavItem
-                  icon={
-                    <PenNibStraight
-                      size={20}
-                      color={iconColor}
-                      weight="duotone"
-                    />
-                  }
-                  to="/posts"
-                  text="Posts"
-                />
-              </Fragment>
-            )}
+            {AuthCtx.website.name && <NavWebsiteEdit />}
 
             <NavItem
               icon={<Gear size={20} color={iconColor} weight="duotone" />}

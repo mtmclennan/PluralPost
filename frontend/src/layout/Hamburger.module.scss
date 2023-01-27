@@ -1,0 +1,46 @@
+@use '../sass/abstracts/mixins' as m;
+@use '../sass/abstracts/variables' as v;
+
+.ham {
+  width: 3.5rem;
+  margin: auto 1em auto;
+  right: 1em;
+  height: 3.5rem;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: space-between;
+  position: fixed;
+  top: 0.75rem;
+  @include m.mediaDesktop {
+    display: none;
+  }
+}
+
+.topBar,
+.midBar,
+.bottomBar,
+.topBarOpen,
+.midBarOpen,
+.bottomBarOpen {
+  height: 5px;
+  background-color: v.$accent-color;
+  border-radius: 5px;
+  width: 3.5rem;
+  transform-origin: left;
+  margin: 3px 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.topBarOpen {
+  transform: rotate(45deg);
+}
+
+.midBarOpen {
+  transform: translateX(-1rem);
+  transition: all 0.01s ease-out;
+  opacity: 0;
+}
+
+.bottomBarOpen {
+  transform: rotate(-45deg);
+}

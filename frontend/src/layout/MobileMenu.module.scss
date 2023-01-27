@@ -1,0 +1,36 @@
+@use '../sass/abstracts/variables' as v;
+@use '../sass/abstracts/mixins' as m;
+
+.menu {
+  height: 100vh;
+  width: 100vw;
+  @include m.flexCenter(column);
+  gap: 3rem;
+  transition: all 0.5s ease-in-out;
+  background-color: v.$light-accent-color;
+  @include m.mediaDesktop {
+    display: none;
+  }
+  /* transform: translateX(50%); */
+}
+
+.menuHidden {
+  height: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.link {
+  margin-top: 3rem;
+}
+
+.link a {
+  margin-left: 3em;
+  font-size: 2rem;
+  color: v.$light-accent-color;
+  font-weight: 600;
+  letter-spacing: 0.3rem;
+}
+
+.link:nth-child(4) {
+  margin-bottom: 3rem;
+}

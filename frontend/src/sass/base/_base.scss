@@ -38,6 +38,9 @@ code {
   display: grid;
   grid-template-columns: 210px auto 210px;
   height: 100vh;
+  @include m.mediaPhone {
+    grid-template-columns: auto;
+  }
 }
 
 .btn,
@@ -97,7 +100,9 @@ button:disabled:active {
 .container {
   align-self: center;
   height: 100%;
-  max-width: 900px;
+  @include m.mediaDesktop {
+    max-width: 900px;
+  }
 }
 
 .start-container {
@@ -107,6 +112,10 @@ button:disabled:active {
   gap: 1em;
   display: flex;
   grid-column: 2 / 4;
+  @include m.mediaPhone {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .title {
@@ -469,12 +478,6 @@ button:disabled:active {
   }
 }
 
-.preview-post__heading button {
-  // background-color: #d0ebff;
-
-  // color: #212529;
-}
-
 .preview-post__title {
   color: v.$accent-color;
   line-height: 1.9;
@@ -606,9 +609,16 @@ button:disabled:active {
   width: 100%;
   align-items: center;
   background-color: v.$light-primary-color;
-  grid-template-columns: 4fr 5fr;
   & img {
     height: 10rem;
+  }
+
+  @include m.mediaTablet {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  @include m.mediaDesktop {
+    grid-template-columns: 4fr 5fr;
   }
 }
 
@@ -621,13 +631,22 @@ button:disabled:active {
   @include m.flexCenter(column);
   width: 80%;
   margin-inline: auto;
+
+  @include m.mediaPhone {
+    width: 90%;
+  }
 }
 
 .login__hero {
   @include m.flexCenter(column);
   height: 95%;
+
   border-radius: 10px 0 0 10px;
   background: v.$gradient-color;
+
+  @include m.mediaPhone {
+    display: none;
+  }
 }
 
 .container-email {
@@ -635,4 +654,8 @@ button:disabled:active {
   justify-content: center;
   width: 100%;
   height: 100%;
+  @include m.mediaPhone {
+    flex-direction: column;
+    align-items: center;
+  }
 }
