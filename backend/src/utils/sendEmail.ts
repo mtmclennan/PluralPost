@@ -23,7 +23,7 @@ export class sendEmail {
     this.url = url;
     this.from = options.from
       ? `${options.firstName} ${options.lastName} <${options.from}>`
-      : `PluralPost<${process.env.EMAIL_FROM}>`;
+      : `${process.env.EMAIL_FROM}`;
   }
 
   newTransport() {
