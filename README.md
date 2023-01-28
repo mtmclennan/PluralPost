@@ -37,7 +37,7 @@ API Routes are located at [http://localhost:3030/api/v1/](https:localhost:3030/a
 
 ### `npm run build`
 
-Builds the frontend app for production to the `/frontend/build` folder.\
+Builds the frontend app for production to the `/frontend/build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
@@ -47,23 +47,23 @@ Your app is ready to be deployed!
 
 ### .env file in project folder /backend
 
-NODE_ENV= "production | development"
-PORT= ex. "3030"
-DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"
-DATABASE_USERNAME= MongoDB username
-DATABASE_PASSWORD= MongoDB password
-CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email
-IMAGE_STORAGE_POSTS= location to store post images in ex. "dist/public/img/"
-JWT_SECRET= JWT secret key
+NODE_ENV= "production | development"  
+PORT= ex. "3030"  
+DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"  
+DATABASE_USERNAME= MongoDB username  
+DATABASE_PASSWORD= MongoDB password  
+CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email  
+IMAGE_STORAGE_POSTS= location to store post images in ex. "dist/public/img/"  
+JWT_SECRET= JWT secret key  
 JWT_EXPIRES_IN= can be a string or number ex. "1d" = 1 day, "1h" = 1 hour, "1m" = 1 minute. Numbers = milliseconds ex. 1000 = 1000ms  
-JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"
-JWT_PHOTO= Token for photo upload route - must match REACT_APP_PHOTO_TOKEN in frontend .env
-SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"
-EMAIL_HOST= email host smtp
-EMAIL_USERNAME= email host username
-EMAIL_PASSWORD= email host password
-EMAIL_PORT= email host port
-EMAIL_FROM= sets from in emails for server to users emails ex. "PluralPost<service@pluralpost.com>"
+JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"  
+JWT_PHOTO= Token for photo upload route - must match REACT_APP_PHOTO_TOKEN in frontend .env  
+SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"  
+EMAIL_HOST= email host smtp  
+EMAIL_USERNAME= email host username  
+EMAIL_PASSWORD= email host password  
+EMAIL_PORT= email host port  
+EMAIL_FROM= sets from in emails for server to users emails ex. "PluralPost<service@pluralpost.com>"  
 REVALIDATE_TOKEN= token for NextJS On-demand Revalidation - must match NextJS site token
 
 ### .env file in project folder /frontend
