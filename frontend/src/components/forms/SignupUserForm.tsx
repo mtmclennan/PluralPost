@@ -151,7 +151,7 @@ const SignupUserForm = ({ setShowForm, setReload }: SignupUserFormProps) => {
     <Fragment>
       {showModal && (
         <Modal onClose={showModalHandler}>
-          <div className="modal">
+          <div>
             <h3>{modalMessage}</h3>
           </div>
         </Modal>

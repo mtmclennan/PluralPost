@@ -98,8 +98,8 @@ const SubscriberForm = () => {
     <Fragment>
       {showModal && (
         <Modal onClose={hideModalHandler}>
-          <div className="modal">
-            <h3>{modalMessage}</h3>
+          <div>
+            <p>{modalMessage}</p>
           </div>
         </Modal>
       )}

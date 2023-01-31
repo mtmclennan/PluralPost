@@ -3,6 +3,7 @@ import validator from 'validator';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { User } from '../types/interfaces';
+// import userDefault from '../public/img/users/default.png';
 
 const userSchema = new mongoose.Schema<User>({
   name: {
@@ -19,12 +20,12 @@ const userSchema = new mongoose.Schema<User>({
   },
   role: {
     type: String,
-    enum: ['user', 'admin', 'editor'],
+    enum: ['user', 'admin', 'editor', 'guest'],
     default: 'user',
   },
   photo: {
     type: String,
-    default: 'default.jpg',
+    default: 'default.png',
   },
   createdAt: {
     type: Number,

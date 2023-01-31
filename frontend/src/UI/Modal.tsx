@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 import { Fragment } from 'react';
-import classes from './Modal.module.css';
+import classes from './Modal.module.scss';
+import { X } from 'phosphor-react';
 
 type ModalProps = {
   onClose?: () => void;
@@ -12,10 +13,13 @@ const Backdrop = ({ onClose }: ModalProps) => {
   return <div className={classes.backdrop} onClick={onClose} />;
 };
 
-const ModalOverlay = ({ className, children }: ModalProps) => {
+const ModalOverlay = ({ className, children, onClose }: ModalProps) => {
   return (
-    <div className={className || classes.Modal}>
-      <div className={classes.content}>{children}</div>
+    <div className={className ? className : classes.modal}>
+      <span onClick={onClose} className={classes.close}>
+        <X size={32} />
+      </span>
+      {children}
     </div>
   );
 };
@@ -27,7 +31,9 @@ const Modal = ({ onClose, className, children }: ModalProps) => {
     <Fragment>
       {ReactDOM.createPortal(<Backdrop onClose={onClose} />, portalElement)}
       {ReactDOM.createPortal(
-        <ModalOverlay className={className}>{children}</ModalOverlay>,
+        <ModalOverlay onClose={onClose} className={className}>
+          {children}
+        </ModalOverlay>,
         portalElement
       )}
     </Fragment>

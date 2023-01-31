@@ -51,7 +51,9 @@ const PostPreview = ({ website, total }: PostPreviewProps) => {
                     <strong className="preview-post__draft">{draft}</strong>
                   </div>
 
-                  <p>{post.postBody.slice(0, 300)}...</p>
+                  <p className="preview-post__body">
+                    {post.postBody.slice(0, 300)}...
+                  </p>
                   <Link
                     className="preview-post__edit"
                     to={`/edit-post/${post._id}`}

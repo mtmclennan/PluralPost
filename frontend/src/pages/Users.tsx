@@ -32,9 +32,7 @@ const Users = () => {
     <Fragment>
       {showModal && (
         <Modal onClose={hideModalHandler}>
-          <div className="modal">
-            <h3>{modalMessage}</h3>
-          </div>
+          <h3>{modalMessage}</h3>
         </Modal>
       )}
       <div className="containter-flex">

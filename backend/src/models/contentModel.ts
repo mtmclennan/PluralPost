@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { Post } from '../types/interfaces';
 
 export const postSchema = new mongoose.Schema({
   title: {
@@ -45,6 +44,3 @@ export const postSchema = new mongoose.Schema({
 });
 
 export type PostType = typeof postSchema;
-// const Post = mongoose.model('Post', postSchema);
-
-// module.exports = Post;

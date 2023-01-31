@@ -102,8 +102,8 @@ const ResetPasswordForm = () => {
       )}
 
       {!isLoading && showModal && (
-        <Modal className="modal" onClose={hideModalHandler}>
-          <div className="modal__content">
+        <Modal onClose={hideModalHandler}>
+          <div>
             <p>{modalMessage}</p>
           </div>
         </Modal>

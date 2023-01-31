@@ -13,8 +13,6 @@ const SettingsUser = () => {
     setShowForm((currentState) => !currentState);
   };
 
-  console.log(AuthCtx.website);
-
   return (
     <Fragment>
       <SettingsContainer heading="Site Settings">

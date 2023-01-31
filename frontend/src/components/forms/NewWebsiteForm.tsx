@@ -198,8 +198,8 @@ const NewWebsiteForm = ({ website, setShowForm }: NewWebsiteFormProps) => {
     <div className={classes.container}>
       {showModal && (
         <Modal onClose={showModalHandler}>
-          <div className="modal">
-            <h3>{modalMessage}</h3>
+          <div>
+            <p>{modalMessage}</p>
           </div>
         </Modal>
       )}

@@ -1,0 +1,11 @@
+@use '../sass/abstracts/mixins' as m;
+@use '../sass/abstracts/variables' as v;
+
+.modalMenu {
+  @include m.flexCenter();
+}
+
+.cancelBtn {
+  background-color: v.$modal-color;
+  color: v.$text-color-dark;
+}

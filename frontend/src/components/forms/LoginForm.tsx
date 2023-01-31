@@ -62,6 +62,28 @@ const LoginForm = ({
     }
   };
 
+  const guestLoginHandler = (
+    event:
+      | React.ChangeEvent<HTMLFormElement>
+      | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    LoginRequest(
+      {
+        url: SERVER_URL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          email: 'guest@example.com',
+          password: 'pass1234',
+        },
+      },
+      response
+    );
+  };
+
   const LoginFormSubmitHandler = (
     event: React.ChangeEvent<HTMLFormElement>
   ) => {
@@ -138,6 +160,7 @@ const LoginForm = ({
           <div className={classes.btnContainer}>
             <button>Sign in</button>
           </div>
+          <button onClick={guestLoginHandler}>Sign in as Guest</button>
         </form>
       )}
       <div className={classes.btnContainer}>

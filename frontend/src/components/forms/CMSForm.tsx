@@ -11,6 +11,7 @@ import Modal from '../../UI/Modal';
 import AuthContext from '../../store/auth-context';
 import TopBar from '../../layout/TopBar';
 import useModal from '../../hooks/use-modal';
+import ModalButtons from '../../UI/ModalButtons';
 
 type CMSFormProps = {
   id?: string;
@@ -215,11 +216,6 @@ const CMSForm = ({ id }: CMSFormProps) => {
     hideModal();
   };
 
-  const featuredImageResponseHandler = (data: { url: string }) => {
-    setUploadedFile(data.url);
-    console.log(data);
-  };
-
   const confirmDeletePost = () => {
     setModalMessage('Are you sure you want to DELETE This post');
     setShowModalButtons(true);
@@ -228,9 +224,7 @@ const CMSForm = ({ id }: CMSFormProps) => {
   /////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////
 
-  const deletePostHandler = (event: React.UIEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-
+  const deletePostHandler = () => {
     interface Res {
       status: string;
     }
@@ -405,16 +399,17 @@ const CMSForm = ({ id }: CMSFormProps) => {
   return (
     <Fragment>
       {showModal && (
-        <Modal className={'modal'} onClose={showModalHandler}>
-          <div className="modal__content">
+        <Modal onClose={showModalHandler}>
+          <Fragment>
+            {showModalButtons && <h3>Delete Post?</h3>}
             <p>{modalMessage}</p>
             {showModalButtons && (
-              <div className={classes.modalMenu}>
-                <button onClick={deletePostHandler}>OK</button>
-                <button onClick={showModalHandler}>Cancel</button>
-              </div>
+              <ModalButtons
+                onCancel={showModalHandler}
+                onDelete={deletePostHandler}
+              />
             )}
-          </div>
+          </Fragment>
         </Modal>
       )}
       {isLoading && <LoadingSpinner />}
@@ -452,7 +447,9 @@ const CMSForm = ({ id }: CMSFormProps) => {
               ></input>
             </div>
             <ImageInput
-              response={featuredImageResponseHandler}
+              setModalMessage={setModalMessage}
+              hideModal={hideModal}
+              setUploadedFile={setUploadedFile}
               website={AuthCtx.website.name}
               id={id}
             >

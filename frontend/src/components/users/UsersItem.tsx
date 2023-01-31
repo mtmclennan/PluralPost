@@ -6,6 +6,7 @@ import Modal from '../../UI/Modal';
 import useModal from '../../hooks/use-modal';
 import { ButtonOnClick, SetStateBoolean } from '../../types/index.type';
 import { Res } from '../../types/interfaces';
+import ModalButtons from '../../UI/ModalButtons';
 
 type UsersItemProps = {
   reload: SetStateBoolean;
@@ -43,7 +44,7 @@ const UsersItem = ({ reload, id, name, email, role }: UsersItemProps) => {
     setUserId(event.currentTarget.id);
 
     setShowModalButtons(true);
-    setModalMessage('Are you sure you want to DELETE This User');
+    setModalMessage('Are you sure you want to delete This User');
   };
 
   const deleteUserHandler = () => {
@@ -72,15 +73,16 @@ const UsersItem = ({ reload, id, name, email, role }: UsersItemProps) => {
     <Fragment>
       {showModal && (
         <Modal onClose={showModalHandler}>
-          <div className="modal">
-            <h3>{modalMessage}</h3>
+          <Fragment>
+            <h3>Delete User?</h3>
+            <p>{modalMessage}</p>
             {showModalButtons && (
-              <div className={classes.modalMenu}>
-                <button onClick={deleteUserHandler}>OK</button>
-                <button onClick={showModalHandler}>Cancel</button>
-              </div>
+              <ModalButtons
+                onCancel={showModalHandler}
+                onDelete={deleteUserHandler}
+              />
             )}
-          </div>
+          </Fragment>
         </Modal>
       )}
       <li className="user-item" onClick={showMenuHandler}>

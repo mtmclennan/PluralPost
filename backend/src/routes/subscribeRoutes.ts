@@ -8,11 +8,17 @@ router.use(authController.protect);
 router
   .route('/:website/subscribers')
   .get(subscribeController.getAllSubscribers)
-  .post(subscribeController.createSubscriber);
+  .post(
+    authController.restrictTo('admin'),
+    subscribeController.createSubscriber
+  );
 
 router
   .route('/:website/delete/:id')
-  .delete(subscribeController.deleteSubscriber);
+  .delete(
+    authController.restrictTo('admin', 'editor'),
+    subscribeController.deleteSubscriber
+  );
 
 router.route('/:website/email').post(subscribeController.sendSubscriberEmail);
 

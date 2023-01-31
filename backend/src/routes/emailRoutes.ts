@@ -8,11 +8,17 @@ router.use(authController.protect);
 
 router
   .route('/:website/emails')
-  .post(emailController.createEmail)
+  .post(
+    authController.restrictTo('admin', 'editor', 'user'),
+    emailController.createEmail
+  )
   .get(emailController.getAllEmails);
 router
   .route('/:website/emails/:id')
-  .patch(emailController.updateEmail)
+  .patch(
+    authController.restrictTo('admin', 'editor', 'user'),
+    emailController.updateEmail
+  )
   .post(emailController.getOneEmail);
 
 export default router;

@@ -49,7 +49,7 @@ Your app is ready to be deployed!
 
 NODE_ENV= "production | development"  
 PORT= ex. "3030"  
-DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"  
+DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"   
 DATABASE_USERNAME= MongoDB username  
 DATABASE_PASSWORD= MongoDB password  
 CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email  

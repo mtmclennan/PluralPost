@@ -40,6 +40,7 @@ code {
   height: 100vh;
   @include m.mediaPhone {
     grid-template-columns: auto;
+    grid-template-rows: 50px 1fr;
   }
 }
 
@@ -179,10 +180,10 @@ button:disabled:active {
 }
 
 .modal {
-  position: fixed;
+  position: relative;
   top: 0;
-  left: 50%;
-  width: 20%;
+  // left: 50%;
+  // width: 20%;
   background-color: rgba(2, 129, 55, 0.575);
   padding: 1rem;
   border-radius: 14px;
@@ -191,6 +192,7 @@ button:disabled:active {
   animation: slide-down 300ms ease-out forwards;
   color: rgb(255, 255, 255);
 }
+
 @keyframes slide-down {
   from {
     opacity: 0;
@@ -476,6 +478,10 @@ button:disabled:active {
   & h3 {
     letter-spacing: 0.15rem;
   }
+
+  @include m.mediaPhone {
+    border-radius: 0;
+  }
 }
 
 .preview-post__title {
@@ -488,6 +494,12 @@ button:disabled:active {
   text-decoration: none;
 
   color: v.$accent-color;
+}
+
+.preview-post__body {
+  @include m.mediaPhone {
+    display: none;
+  }
 }
 
 .preview-post__draft {
@@ -524,6 +536,11 @@ button:disabled:active {
   margin: 0.5em;
   background-color: #f8f9fa;
   font-size: 1.4rem;
+
+  @include m.mediaPhone {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .preview-sub__card {
@@ -580,13 +597,24 @@ button:disabled:active {
   cursor: pointer;
   grid-template-columns: 70px 1fr 1fr 1fr;
   align-items: center;
-  gap: 1em;
+  gap: 1rem;
   border-radius: 5px;
-  padding: 1em;
+  padding: 1rem;
   border: 1px solid #d3d0d0;
-  margin: 0.5em;
+  margin: 0.5rem;
   background-color: #f8f9fa;
   font-size: 1.6rem;
+
+  & p:nth-child(2) {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: v.$accent-color;
+  }
+
+  @include m.mediaPhone {
+    @include m.flexCenter(column);
+    margin: 0;
+  }
 }
 
 .website-list__row:hover,
@@ -625,6 +653,10 @@ button:disabled:active {
 .logo {
   font-family: 'Oswald', sans-serif;
   margin-bottom: 3rem;
+
+  @include m.mediaPhone {
+    margin-bottom: 0rem;
+  }
 }
 
 .login-form__container {

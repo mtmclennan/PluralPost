@@ -1,21 +1,30 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, SetStateAction, useEffect } from 'react';
 import useHttp from '../../hooks/use-http';
 
 type ImageInputProps = {
-  response: (res: { url: string }) => void;
+  // response: (res: { url: string; status: string }) => void;
   children?: React.ReactNode;
   website: string;
   id?: string;
+  setModalMessage: (value: string) => void;
+  hideModal: () => void;
+  setUploadedFile: (value: string) => void;
 };
 
-const ImageInput = ({ response, children, website, id }: ImageInputProps) => {
+const ImageInput = ({
+  setModalMessage,
+  hideModal,
+  setUploadedFile,
+  children,
+  website,
+  id,
+}: ImageInputProps) => {
   // drag state
   const [dragActive, setDragActive] = useState(false);
 
-  const { sendRequest } = useHttp();
+  const { sendRequest, error } = useHttp();
 
   const postId = id ? `/${id}` : '';
-  const TOKEN = process.env.REACT_APP_PHOTO_TOKEN;
   const url = `${process.env.REACT_APP_SERVER_URL}/content/${website}/featured-image${postId}`;
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -31,19 +40,34 @@ const ImageInput = ({ response, children, website, id }: ImageInputProps) => {
     }
   };
 
+  useEffect(() => {
+    if (!error) return;
+    setModalMessage(error);
+  }, [error]);
+
+  const response = (res: { url: string; status: string }) => {
+    setUploadedFile(res.url);
+
+    if (res.status === 'success') {
+      setModalMessage('Image Uploaded');
+      setTimeout(() => {
+        hideModal();
+      }, 1000);
+    }
+  };
+
   const sendImageHandler = (file: File) => {
     if (file) {
       let data = new FormData();
       data.append('upload', file);
       // axios.post('/files', data)...
-      console.log(data);
+
       sendRequest(
         {
           url,
           method: 'POST',
           headers: {
             'X-CSRF-TOKEN': 'CSRF-Token',
-            Authorization: `Bearer ${TOKEN}`,
           },
           body: data,
           photo: true,
@@ -62,6 +86,8 @@ const ImageInput = ({ response, children, website, id }: ImageInputProps) => {
       // handleFiles(e.dataTransfer.files);
 
       const file = event.dataTransfer.files[0];
+      console.log(file.size);
+
       sendImageHandler(file);
     }
   };

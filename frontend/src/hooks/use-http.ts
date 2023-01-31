@@ -28,7 +28,6 @@ const useHttp = () => {
             : requestConfig.body && !requestConfig.photo
             ? JSON.stringify(requestConfig.body)
             : null,
-
           credentials: 'include',
         });
 

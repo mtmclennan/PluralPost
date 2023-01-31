@@ -10,15 +10,6 @@ type LoginHandlerProps = {
   photo: string;
 };
 
-// type Website = {
-//   _id: string;
-//   name: string;
-//   url: string;
-//   category: string;
-//   logo: string;
-//   createdAt: Date | undefined;
-// };
-
 const websiteIntial = {
   _id: '',
   name: '',

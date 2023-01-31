@@ -10,7 +10,8 @@ router.route('/:website/post/:slug').post(contentController.getPostBySlug);
 router
   .route('/:website/images/:id')
   .post(
-    authController.protectPhoto,
+    authController.protect,
+    authController.restrictTo('admin', 'editor', 'user'),
     contentController.uploadContentPhoto,
     contentController.resizeContentPhoto,
     contentController.sendImageResponse
@@ -19,7 +20,8 @@ router
 router
   .route('/:website/featured-image/:id')
   .post(
-    authController.protectPhoto,
+    authController.protect,
+    authController.restrictTo('admin', 'editor', 'user'),
     contentController.uploadContentPhoto,
     contentController.resizeContentPhoto,
     contentController.sendFeatureResponse
@@ -28,13 +30,23 @@ router
 router.use(authController.protect);
 router
   .route('/:website/posts')
-  .post(contentController.createPost)
+  .post(
+    authController.restrictTo('admin', 'editor', 'user'),
+    contentController.createPost
+  )
   .get(contentController.getAllPosts);
 
 router
   .route('/:website/posts/:id')
   .post(contentController.getPost)
-  .patch(contentController.getWebsiteUrl, contentController.editPost)
-  .delete(contentController.deletePost);
+  .patch(
+    authController.restrictTo('admin', 'editor', 'user'),
+    contentController.getWebsiteUrl,
+    contentController.editPost
+  )
+  .delete(
+    authController.restrictTo('admin', 'editor', 'user'),
+    contentController.deletePost
+  );
 
 export default router;

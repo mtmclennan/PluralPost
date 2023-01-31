@@ -164,7 +164,7 @@ const EmailForm = ({ id }: { id?: string }) => {
   return (
     <Fragment>
       {showModal && (
-        <Modal className={'modal'}>
+        <Modal onClose={hideModal}>
           <div>{modalMessage}</div>
         </Modal>
       )}

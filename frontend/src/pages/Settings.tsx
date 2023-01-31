@@ -7,10 +7,10 @@ const Settings = () => {
     <Fragment>
       <SettingsContainer heading="General">
         <ListItemContainer>
-          <p>Settings</p>
+          <p>Dark mode coming soon</p>
         </ListItemContainer>
         <ListItemContainer>
-          <p>Settings</p>
+          <p>Other general settings coming soon</p>
         </ListItemContainer>
       </SettingsContainer>
     </Fragment>

@@ -5,6 +5,7 @@ import SlideDownMenu from '../../UI/SlideDownMenu';
 import useHttp from '../../hooks/use-http';
 import { Res } from '../../types/interfaces';
 import { ButtonOnClick, SetStateBoolean } from '../../types/index.type';
+import ModalButtons from '../../UI/ModalButtons';
 
 type SubscriberPreviewItemProps = {
   website: string;
@@ -79,15 +80,16 @@ const SubscriberPreviewItem = ({
       <Fragment>
         {showModal && (
           <Modal onClose={showModalHandler}>
-            <div className="modal">
-              <h3>{modalMessage}</h3>
+            <Fragment>
+              <h3>Delete Subscriber?</h3>
+              <p>{modalMessage}</p>
               {showModalButtons && (
-                <div className="model-menu">
-                  <button onClick={deleteHandler}>OK</button>
-                  <button onClick={showModalHandler}>Cancel</button>
-                </div>
+                <ModalButtons
+                  onCancel={showModalHandler}
+                  onDelete={deleteHandler}
+                />
               )}
-            </div>
+            </Fragment>
           </Modal>
         )}
       </Fragment>

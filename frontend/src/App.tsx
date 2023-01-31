@@ -69,16 +69,26 @@ function App() {
               </Route>
             </Route>
           </Route>
+
           <Route
             element={
-              <Layout settings={true}>
-                <Outlet />
-              </Layout>
+              <ProtectedRoute
+                user={AuthCtx.user}
+                redirectPath="/login"
+              ></ProtectedRoute>
             }
           >
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/settings-user" element={<SettingsUser />} />
-            <Route path="/settings-website" element={<SettingsWebsite />} />
+            <Route
+              element={
+                <Layout settings={true}>
+                  <Outlet />
+                </Layout>
+              }
+            >
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/settings-user" element={<SettingsUser />} />
+              <Route path="/settings-website" element={<SettingsWebsite />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

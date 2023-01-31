@@ -12,8 +12,6 @@ const NavMain = () => {
   const AuthCtx = useContext(AuthContext);
   const iconColor = '#8626fa';
 
-  console.log(location);
-
   return (
     <Fragment>
       {' '}
@@ -32,7 +30,7 @@ const NavMain = () => {
             <NavItem
               icon={<Gear size={20} color={iconColor} weight="duotone" />}
               text="Settings"
-              to="/settings"
+              to="/settings-user"
             />
             {AuthCtx.user.role === 'admin' && (
               <NavItem
