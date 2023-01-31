@@ -49,7 +49,7 @@ Your app is ready to be deployed!
 
 NODE_ENV= "production | development"  
 PORT= ex. "3030"  
-DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"   
+DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"  
 DATABASE_USERNAME= MongoDB username  
 DATABASE_PASSWORD= MongoDB password  
 CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email  
@@ -57,7 +57,6 @@ IMAGE_STORAGE_POSTS= location to store post images in ex. "dist/public/img/"
 JWT_SECRET= JWT secret key  
 JWT_EXPIRES_IN= can be a string or number ex. "1d" = 1 day, "1h" = 1 hour, "1m" = 1 minute. Numbers = milliseconds ex. 1000 = 1000ms  
 JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"  
-JWT_PHOTO= Token for photo upload route - must match REACT_APP_PHOTO_TOKEN in frontend .env  
 SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"  
 EMAIL_HOST= email host smtp  
 EMAIL_USERNAME= email host username  
@@ -76,7 +75,6 @@ Do not put any sensitive information here. It is exposed on the client side.
 
 REACT_APP_SERVER_URL= ex. "http://localhost:3030/api/v1" or "https://example.com"
 REACT_APP_SERVER= ex. "http://localhost:3030/" or "https://example.com/"
-REACT_APP_PHOTO_TOKEN= token for photo upload route, must match JWT_PHOTO in backend .env (note this is a security problem, needs to be fixed)
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
