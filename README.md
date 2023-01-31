@@ -59,7 +59,7 @@ JWT_EXPIRES_IN= can be a string or number ex. "1d" = 1 day, "1h" = 1 hour, "1m" 
 JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"  
 SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"  
 EMAIL_HOST= email host smtp  
-$${\color{lightblue}$$EMAIL_USERNAME=} email host username  
+$${\color{lightblue}EMAIL_USERNAME=}$$ email host username  
 EMAIL_PASSWORD= email host password  
 EMAIL_PORT= email host port  
 EMAIL_FROM= sets from in emails for server to users emails ex. "PluralPost<service@pluralpost.com>"  
