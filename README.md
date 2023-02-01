@@ -47,23 +47,23 @@ Your app is ready to be deployed!
 
 ### .env file in project folder /backend
 
-NODE_ENV= "production | development"  
-PORT= ex. "3030"  
-DATABASE= MongoDb connection string ex "mongodb+srv://username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"  
-DATABASE_USERNAME= MongoDB username  
-DATABASE_PASSWORD= MongoDB password  
-CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email  
-IMAGE_STORAGE_POSTS= location to store post images in ex. "dist/public/img/"  
-JWT_SECRET= JWT secret key  
-JWT_EXPIRES_IN= can be a string or number ex. "1d" = 1 day, "1h" = 1 hour, "1m" = 1 minute. Numbers = milliseconds ex. 1000 = 1000ms  
-JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"  
-SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"  
-EMAIL_HOST= email host smtp  
-$${\color{lightblue}EMAIL_USERNAME=}$$ email host username  
-EMAIL_PASSWORD= email host password  
-EMAIL_PORT= email host port  
-EMAIL_FROM= sets from in emails for server to users emails ex. "PluralPost<service@pluralpost.com>"  
-REVALIDATE_TOKEN= token for NextJS On-demand Revalidation - must match NextJS site token
+- NODE_ENV= "production | development"
+- PORT= ex. "3030"
+- DATABASE= MongoDb connection string ex "mongodb+srv:// - username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"
+- DATABASE_USERNAME= MongoDB username
+- DATABASE_PASSWORD= MongoDB password
+- CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email
+- IMAGE_STORAGE_POSTS= location to store post images in ex. "dist/public/img/"
+- JWT_SECRET= JWT secret key
+- JWT_EXPIRES_IN= can be a string or number ex. "1d" = 1 day, "1h" = 1 hour, "1m" = 1 minute. Numbers = milliseconds ex. 1000 = 1000ms
+- JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"
+- SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"
+- EMAIL_HOST= email host smtp
+- EMAIL_USERNAME=email host username
+- EMAIL_PASSWORD= email host password
+- EMAIL_PORT= email host port
+- EMAIL_FROM= sets from in emails for server to users emails ex. "PluralPost<service@pluralpost.com>"
+- REVALIDATE_TOKEN= token for NextJS On-demand Revalidation - must match NextJS site token
 
 ### .env file in project folder /frontend
 
@@ -73,8 +73,8 @@ Do not put any sensitive information here. It is exposed on the client side.
 
 ##### .env.production values are built into the build package at build time.
 
-REACT_APP_SERVER_URL= ex. "http://localhost:3030/api/v1" or "https://example.com"
-REACT_APP_SERVER= ex. "http://localhost:3030/" or "https://example.com/"
+- REACT_APP_SERVER_URL= ex. "http://localhost:3030/api/v1" or "https://example.com"
+- REACT_APP_SERVER= ex. "http://localhost:3030/" or "https://example.com/"
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
