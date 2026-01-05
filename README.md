@@ -1,3 +1,7 @@
+⚠️ Archived Project  
+This repository represents an earlier Next.js project and is no longer actively maintained. It is preserved for historical and reference purposes.
+
+
 # PluralPost
 
 ## The ultimate CMS for managing and publishing content across multiple sites.
