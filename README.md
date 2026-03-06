@@ -1,113 +1,87 @@
 ⚠️ Archived Project  
-This repository represents an earlier Next.js project and is no longer actively maintained. It is preserved for historical and reference purposes.
-
+This repository represents an earlier PluralPost implementation and is no longer actively maintained. It is preserved for historical/reference purposes.
 
 # PluralPost
 
-## The ultimate CMS for managing and publishing content across multiple sites.
+PluralPost is a multi-site headless CMS for teams managing content, subscribers, and email campaigns across multiple websites from one admin app.
 
-This headless CMS project was design with content creators with multiple websites in mind. It can do it all from one spot. Switch between your projects with the click of a button. Managing all your content from one location. It will also store and manage subscriber lists. Write and send bulk email to all of each sites subscribers easily. Allows multiple users, and user roles.
+## What it does
 
-#### Current features
+- Manage multiple websites from one dashboard.
+- Create/edit/publish/unpublish/delete posts.
+- Upload post and featured images.
+- Manage subscribers per website.
+- Draft and send bulk email campaigns.
+- Support multiple user roles (`admin`, `editor`, `user`).
+- Trigger site revalidation/build hooks after post updates.
 
-    - Write, edit, publish, unpublish, delete - Posts
-    - Rich text editor CKEditor 5
-    - Store subscriber email addresses
-    - Write, edit, store, send email to all site subscribers
-    - Users, user roles "admin", "editor", "user"
-    - Sends build hook when a post is published or unpubished - for use with static site - NextJS On-Demand Incremental Static Regeneration
+## Tech stack
 
-#### Technologies
+- **Frontend:** React + TypeScript (Create React App)
+- **Backend:** Node.js + Express + TypeScript
+- **Database:** MongoDB + Mongoose
+- **Editor:** CKEditor 5 custom build
 
-ReactJS - frontend (Create React App)
-NodeJS / ExpressJS - Backend
-DB - MongoDB
+## Repository layout
 
-## Available Scripts
+- `frontend/` — React SPA admin app.
+- `backend/` — Express API, auth, business logic, templates.
+- `docs/API.md` — API reference for backend endpoints.
 
-In the project directory, you can run:
+## Local development
 
-### `npm run dev`
+From repo root:
 
-Runs the app in the development mode. watches TypeScript files and complies on changes.\
+```bash
+npm install
+npm run dev
+```
 
-Nodejs/expressjs backend TypeScript files are compiled to the `/backend/dist` folder for production.
+This starts both apps concurrently:
 
-run `npm run build` to build the frontend app for production.
+- Frontend on `http://localhost:3000`
+- Backend API on `http://localhost:3030/api/v1`
 
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Useful root scripts:
 
-API Routes are located at [http://localhost:3030/api/v1/](https:localhost:3030/api/v1/)
+- `npm run dev` — frontend + backend dev mode.
+- `npm run build` — frontend production build.
+- `npm run client` — frontend only.
+- `npm run server-dev` — backend TS watch + nodemon.
+- `npm run start` — frontend + backend start scripts.
 
-### `npm run build`
+## Environment configuration
 
-Builds the frontend app for production to the `/frontend/build` folder.
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Backend (`/backend/config.env`)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- `NODE_ENV` — `development` or `production`
+- `PORT` — e.g. `3030`
+- `DATABASE` — MongoDB URI containing `<password>` placeholder
+- `DATABASE_PASSWORD` — password for `DATABASE` URI
+- `CLIENT_URL` — frontend base URL used in password reset email links
+- `IMAGE_STORAGE_POSTS` — file-system path for post images (e.g. `dist/public/img/`)
+- `JWT_SECRET` — JWT signing key
+- `JWT_EXPIRES_IN` — token lifetime (e.g. `1d`, `1h`)
+- `JWT_COOKIE_EXPIRES_IN` — auth cookie expiry in days
+- `JWT_PHOTO` — token used by protected image upload path
+- `SERVER_URL` — backend public base URL (used for generated asset URLs)
+- `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USERNAME`, `EMAIL_PASSWORD`, `EMAIL_FROM` — SMTP settings
+- `REVALIDATE_TOKEN` — token sent to Next.js revalidation endpoint
 
-## Required .env config files
+### Frontend (`/frontend/.env.development` or `.env.production`)
 
-### .env file in project folder /backend
+Do not place secrets in frontend env files.
 
-- NODE_ENV= "production | development"
-- PORT= ex. "3030"
-- DATABASE= MongoDb connection string ex "mongodb+srv:// - username:<password>@emailcluster1.hw4qb.mongodb.net/databaseName?retryWrites=true&w=majority"
-- DATABASE_USERNAME= MongoDB username
-- DATABASE_PASSWORD= MongoDB password
-- CLIENT_URL= client side app location ex "http://localhost:3000" used for sending reset password link in email
-- IMAGE_STORAGE_POSTS= location to store post images in ex. "dist/public/img/"
-- JWT_SECRET= JWT secret key
-- JWT_EXPIRES_IN= can be a string or number ex. "1d" = 1 day, "1h" = 1 hour, "1m" = 1 minute. Numbers = milliseconds ex. 1000 = 1000ms
-- JWT_COOKIE_EXPIRES_IN= number = days ex. 1 = "1 day"
-- SERVER_URL= location of backend server ex "http://localhost:3030" or "https://example.com"
-- EMAIL_HOST= email host smtp
-- EMAIL_USERNAME=email host username
-- EMAIL_PASSWORD= email host password
-- EMAIL_PORT= email host port
-- EMAIL_FROM= sets from in emails for server to users emails ex. "PluralPost<service@pluralpost.com>"
-- REVALIDATE_TOKEN= token for NextJS On-demand Revalidation - must match NextJS site token
+- `REACT_APP_SERVER_URL` — API base URL, e.g. `http://localhost:3030/api/v1`
+- `REACT_APP_SERVER` — backend origin, e.g. `http://localhost:3030/`
 
-### .env file in project folder /frontend
+## Architecture notes
 
-Do not put any sensitive information here. It is exposed on the client side.
+- Cookie-based JWT auth (`jwt` cookie, `credentials: include` from frontend).
+- Role-based route protection in API (`restrictTo`).
+- Multi-tenant content model: website-specific collections (`Post`, `Subscribers`, `Email`) are resolved from `/:website/...` route params.
+- Website metadata and users are stored in shared collections.
 
-#### Note .env.development for development - .env.production for production
+## API docs
 
-##### .env.production values are built into the build package at build time.
-
-- REACT_APP_SERVER_URL= ex. "http://localhost:3030/api/v1" or "https://example.com"
-- REACT_APP_SERVER= ex. "http://localhost:3030/" or "https://example.com/"
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+See [docs/API.md](docs/API.md) for endpoint details, auth notes, and example payloads.
